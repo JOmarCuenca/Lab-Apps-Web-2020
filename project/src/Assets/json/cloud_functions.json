@@ -1,0 +1,5 @@
+{
+  "addUser" : "https://us-central1-paginaweb-cd983.cloudfunctions.net/addUser",
+  "deleteUser" : "https://us-central1-paginaweb-cd983.cloudfunctions.net/deleteUser",
+  "saveToLog" : "https://us-central1-paginaweb-cd983.cloudfunctions.net/saveToLog"
+}

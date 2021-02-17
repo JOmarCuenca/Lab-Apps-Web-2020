@@ -1,0 +1,406 @@
+/**  =====================
+      Variables
+==========================  **/
+$theme-background: #f4f7fa;
+$theme-heading-color: #111; 
+$theme-color: linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%);
+$theme-color2: linear-gradient(-135deg, #899FD4 0%, #A389D4 100%);
+$primary-color: #04a9f5;
+$primary-color-darker: #0279b0;
+$success-color: #1de9b6;
+/**  =====================
+      Authentication css start
+==========================  **/
+*{
+    font-family: 'Roboto', sans-serif;
+}
+
+.shadow-2 {
+    box-shadow: 0 10px 18px 0 rgba(62,57,107,.2);
+}
+
+
+.card {
+    border-radius: 0;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+    margin-bottom: 30px;
+    transition: all 0.5s ease-in-out;
+
+    .card-header {
+        background-color: transparent;
+        border-bottom: 1px solid #f1f1f1;
+        padding: 20px 25px;
+        position: relative;
+
+        + .card-block,
+        + .card-body {
+        }
+
+        h5 {
+            margin-bottom: 0;
+            color: #000;
+            font-size: 17px;
+            font-weight: 400;
+            display: inline-block;
+            margin-right: 10px;
+            line-height: 1.1;
+            position: relative;
+
+            &:after {
+                content: "";
+                background-color: $primary-color;
+                position: absolute;
+                left: -25px;
+                top: 0;
+                width: 4px;
+                height: 20px;
+            }
+        }
+
+        &.borderless {
+            border-bottom: none;
+
+            h5:after {
+                display: none;
+            }
+        }
+
+        .card-header-right {
+            right: 10px;
+            top: 10px;
+            display: inline-block;
+            float: right;
+            padding: 0;
+            position: absolute;
+            @media only screen and (max-width: 575px) {
+                display: none;
+            }
+
+            .dropdown-menu {
+                margin-top: 0;
+
+                li {
+                    a {
+                        font-size: 14px;
+                        text-transform: capitalize;
+                    }
+                }
+            }
+
+            .btn.dropdown-toggle {
+                border: none;
+                background: transparent;
+                box-shadow: none;
+                color: #888;
+
+                i {
+                    margin-right: 0;
+                }
+
+                &:after {
+                    display: none;
+                }
+
+                &:focus {
+                    box-shadow: none;
+                    outline: none;
+                }
+            }
+        }
+    }
+
+    .card-footer {
+        border-top: 1px solid #f1f1f1;
+        background: transparent;
+        padding: 25px;
+    }
+
+    .card-block,
+    .card-body {
+        padding: 30px 25px;
+    }
+
+    &.card-load {
+        position: relative;
+        overflow: hidden;
+
+        .card-loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            background-color: rgba(256, 256, 256,0.7);
+            z-index: 999;
+
+            i {
+                margin: 0 auto;
+                color: $primary-color;
+                font-size: 24px;
+                align-items: center;
+                display: flex;
+            }
+        }
+    }
+
+    &.full-card {
+        z-index: 99999;
+        border-radius: 0;
+    }
+}
+
+.btn-primary-new{
+    padding: 10px 23px;
+    background-color: $primary-color;
+    color: white;
+}
+
+.btn-primary-new:hover{
+    background-color: $primary-color-darker;
+    color: white;
+}
+
+.input-group {
+    background: $theme-background;
+
+    .input-group-text {
+        padding-left: 15px;
+        padding-right: 15px;
+        background: transparent;
+        i {
+            font-size: 20px;
+        }
+    }
+
+    .custom-file-label {
+        margin-bottom: 0;
+    }
+
+    .btn {
+        margin-bottom: 0;
+        margin-right: 0;
+    }
+}
+
+.form-control {
+    background: $theme-background;
+    padding: 10px 20px;
+    font-size: 14px;
+    height: auto;
+
+    &.form-control-lg {
+        font-size: 1.25rem;
+    }
+
+    &.form-control-sm {
+        height: calc(1.8125rem + 2px);
+        font-size: .875rem;
+    }
+
+    &.form-control-range {
+        box-shadow: none;
+    }
+
+    &:focus {
+        background: $theme-background;
+    }
+
+    &::-moz-placeholder {
+        color: #aaaeb3;
+        opacity: 1;
+    }
+
+    &:-ms-input-placeholder {
+        color: #aaaeb3;
+    }
+
+    &::-webkit-input-placeholder {
+        color: #aaaeb3;
+    }
+}   
+
+.auth-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-width: 100%;
+  min-height: 100vh;
+  background-color: $theme-background;
+  a, p > a {
+      color: $theme-heading-color;
+      font-weight: 600;
+  }
+  .btn-auth-gen {
+      .btn-icon {
+          width: 140px;
+          height: 140px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 45px;
+
+          small {
+              font-size: 15px;
+          }
+      }
+  }
+  .input-group{
+      background: transparent;
+  }
+  .card {
+      margin-bottom: 0;
+  }
+
+  > div {
+      z-index: 5;
+  }
+
+  .auth-content {
+      position: relative;
+      width: 390px;
+      padding: 15px;
+      z-index: 5;
+      &.multyform,
+      &.subscribe {
+          width: 750px;
+      }
+  }
+  @media only screen and (max-width: 768px) {
+      max-width: 360px;
+
+  }
+  @media only screen and (max-width: 575px) {
+      .card {
+          .card-body {
+              padding: 30px 15px;
+          }
+      }
+  }
+
+  .auth-icon {
+      font-size: 30px;
+      color: $theme-color;
+    //   background-image: $theme-color;
+      &:before {
+          color: $theme-color;
+          background: $theme-color;
+          background-clip: inherit;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+      }
+  }
+
+  &.offline {
+      background-image: none;
+
+      &:before {
+          display: none;
+      }
+  }
+
+  .auth-bg {
+      .r {
+          position: absolute;
+          width: 300px;
+          height: 300px;
+          border-radius: 50%;
+
+
+          &:first-child {
+              top: -100px;
+              right: -100px;
+              background: $theme-color;
+          }
+
+          &:last-child {
+              left: -100px;
+              bottom: -100px;
+              background: $theme-color2;
+
+          }
+
+          &.s {
+              width: 20px;
+              height: 20px;
+              &:nth-child(2) {
+                  top: 150px;
+                  right: -150px;
+                  background: $primary-color;
+              }
+
+              &:nth-child(3) {
+                  left: -150px;
+                  bottom: 150px;
+                  background: $success-color;
+              }
+          }
+
+          &:nth-child(odd) {
+              animation: floating 7s infinite;
+          }
+
+          &:nth-child(even) {
+              animation: floating 9s infinite;
+          }
+      }
+  }
+}
+/* image variant start */
+.aut-bg-img {
+  background-size: cover;
+  /*background-image: url('../../../images/bg-images/bg4.jpg');*/ // amit images
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.aut-bg-img-side{
+  p{
+      line-height: 2;
+  }
+}
+.aut-bg-img,
+.aut-bg-img-side{
+  .custom-select, .form-control{
+      background: transparent;
+  }
+}
+.auth-tabs{
+  .card{
+      // border-right: 10px;
+  }
+  .nav-pills{
+      // margin-top: -80px;
+  }
+  .tab-content{
+      overflow: hidden;
+      position: relative;
+      .tab-pane > *{
+          position: relative;
+          z-index: 5;
+      }
+      .auth-icon{
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: 180px;
+          transform: rotate(-30deg);
+          z-index: 1;
+          opacity: 0.2;
+      }
+  }
+}
+/* image varient start */
+@keyframes floating {
+  from {
+      transform: rotate(0deg) translate(-10px) rotate(0deg);
+  }
+
+  to {
+      transform: rotate(360deg) translate(-10px) rotate(-360deg);
+  }
+}
+/**====== Authentication css end ======**/

@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Pedidos",
+    "action": "/dashboard/pedidos",
+    "icon": "Pedidos"
+  },
+  {
+    "title": "Contactos",
+    "action": "/dashboard/agenda",
+    "icon": "Contactos"
+  },
+  {
+    "title": "Retroalimentación",
+    "action": "/dashboard/retro",
+    "icon": "Retro"
+  },
+  {
+    "title": "Cambiar Menú",
+    "action": "/dashboard/menu",
+    "icon": "Menu"
+  },
+  {
+    "title": "Cerrar sesión",
+    "action": {
+      "route": "/login",
+      "action": "logout"
+    },
+    "icon": "Logout"
+  }
+]
