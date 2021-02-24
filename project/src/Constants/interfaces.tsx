@@ -1,10 +1,3 @@
-export interface Usuario {
-    nombre: string,
-    apellido: string,
-    correo: string,
-    rol: string
-};
-
 export interface Product {
     id: string,
     name: string,
@@ -19,48 +12,61 @@ export interface Product {
     cantidad?: number
 }
 
-export interface Evento {
-    id          : string,
-    nombre      : string,
-    descripcion : string,
-    fecha       : string // Formato?
+interface Coord {
+    x : number,
+    y : number
 }
 
-// export interface Usuario {
-//     id              : string,
-//     nombre          : string,
-//     email           : string,
-//     imagen_perfil   : string // URL
-// }
+export interface Evento {
+    id              : string,
+    nombre          : string,
+    descripcion     : string,
+    fecha           : Date, // Formato
+    fecha_delete    : Date, // Formato?
+    img             : string, //URL
+    place           : string | Coord
+}
+
+export interface Usuario {
+    id              : string,
+    nombre          : string,
+    email           : string,
+    imagen_perfil   : string, // URL
+    rol?            : string
+}
 
 export interface Retos {
     id          : string,
-    // dia         : int, // Date 
-    descripcion : string
+    dia         : number, // Date 
+    descripcion : string,
+    link        : string // URL a la aplicacion de punto blanco
 }
 
-// export interface Meditacion {
-//     nombre              : string,
-//     tipo                : string,
-//     nota?               : string,
-//     estado_de_animo?    : int,
-//     fecha               : string,
-//     ritmo_cardiaco_i?   : int,
-//     ritmo_cardiaco_f?   : int
-// }
+enum TiposMeditation {
+    tipoA,
+    tipoB
+}
+
+export interface Meditacion {
+    nombre              : string,
+    tipo                : TiposMeditation,
+    nota?               : string,
+    estado_de_animo?    : number, // Carita feliz --- triste
+    fecha               : Date,
+    ritmo_cardiaco_i?   : number,
+    ritmo_cardiaco_f?   : number
+}
 
 export interface Notificacion {
     id              : string,
     descripcion     : string,
-    fecha           : Date
+    fecha           : Date,
+    lifetime?       : number // ?? default 24hrs
 }
 
-export interface UsuarioEvento {
-    id_evento   : string,
-    id_usuario  : string
-}
+/*
 
-export interface UsuarioNotificacion {
-    id_usuario      : string,
-    id_notificacion : string
-}
+los usuarios pueden tener muchos eventos
+en el historico de eventos debemos tener registros de los usuarios
+
+*/
