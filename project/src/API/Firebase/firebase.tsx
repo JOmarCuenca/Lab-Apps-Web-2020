@@ -6,6 +6,14 @@ import "firebase/storage";
 import {Usuario} from "../../Constants/interfaces";
 
 const firebaseConfig = {
+  apiKey: "AIzaSyCplhL4TQUpmTDmgDGUXzC6ipykmQ6HM_E",
+  authDomain: "punto-b84a8.firebaseapp.com",
+  databaseURL: "https://punto-b84a8.firebaseio.com",
+  projectId: "punto-b84a8",
+  storageBucket: "punto-b84a8.appspot.com",
+  messagingSenderId: "597623444685",
+  appId: "1:597623444685:web:87028dc2feeacaf6794584",
+  measurementId: "G-K8E5LDDGY2"
 };
 
 class Firebase {

@@ -7,6 +7,21 @@ import { useHistory, useParams } from "react-router-dom";
 
 import "../style.css";
 
+interface FormField {
+	label 		: string,
+	placeholder : string,
+	xs?			: number,
+	sm?			: number,
+	md?			: number,
+	lg?			: number,
+	xl?			: number,
+	controlId?	: string,
+	onChange? 	: ((event: React.ChangeEvent) => void),
+	type? 		: string,
+	value? 		: string | number | string[],
+	required?	: boolean
+}
+
 const EditForm: FC = () => {
 
 	const { id } = useParams<{ id: string }>();
@@ -120,6 +135,30 @@ const EditForm: FC = () => {
 		// });
 	}
 
+	const createFormField = (formField : FormField) => 
+	<Form.Group as={Col} xs={formField.xs} sm={formField.sm} md={formField.md} lg={formField.lg} xl={formField.xl} controlId={formField.controlId}>
+		<Form.Label>{formField.label}</Form.Label>
+		{(formField.type === "textarea") ? 
+			<Form.Control
+				as="textarea"
+				rows={3}
+				onChange={formField.onChange}
+				required={formField.required ?? false}
+				type={formField.type}
+				placeholder={formField.placeholder}
+				value={formField.value}
+			/> : 
+			<Form.Control
+				onChange={formField.onChange}
+				required={formField.required ?? false}
+				type={formField.type}
+				placeholder={formField.placeholder}
+				value={formField.value}
+			/>
+		}
+		{/* <Form.Control.Feedback>{looksGoodMessage}</Form.Control.Feedback> */}
+	</Form.Group>;
+
 	const deleteItemButtons = <>
 		<button disabled={deleting} className="button warning-button" onClick={() => setDeleteItem(true)} >{deleting ? "Borrando..." :"Borrar Producto"}</button>
 		{deleteItem ? <div style={{ paddingTop: "10px" }} ><h5>¿Seguro?</h5><button disabled={deleting} className="button danger-button" onClick={execDelete} >{deleting ? "Borrando..." :"Borrar Definitivamente"}</button></div> : <></>}
@@ -129,86 +168,38 @@ const EditForm: FC = () => {
 
 		return <div>
 			<Card style={{ borderRadius: 10 }}>
-				<Card.Header><Card.Title as="h5">Información Producto</Card.Title></Card.Header>
+				<Card.Header><Card.Title as="h5">Información</Card.Title></Card.Header>
 				<Card.Body>
 					<Form onSubmit={submitChanges} >
 						<Form.Row>
-							<Form.Group as={Col} md="5" controlId="nombre">
-								<Form.Label>Nombre</Form.Label>
-								<Form.Control
-									// onChange={(str) => setNItem({
-									// 	...product,
-									// 	name: str.target.value ?? "",
-									// })}
-									required
-									type="text"
-									placeholder="Ej. Pozole Verde"
-									// value={product.name}
-								/>
-								{/* <Form.Control.Feedback>{looksGoodMessage}</Form.Control.Feedback> */}
-							</Form.Group>
+							{/* Titulo */}
+							{createFormField({
+								label 		: "Nombre",
+								placeholder : "Ejemplo de Titulo",
+								required 	: true,
+								type		: "text",	
+								md			: 4							
+							})}
 						</Form.Row>
 						<Form.Row>
-							{/* Price */}
-							<Form.Group as={Col} md={4} controlId="precio">
-								<Form.Label>Precio (MXN)</Form.Label>
-								<Form.Control
-									// onChange={(str) => setNItem({
-									// 	...product,
-									// 	price: parseFloat(parseFloat(str.target.value).toFixed(2)) ?? 0.0,
-									// })}
-									required
-									type="number"
-									placeholder="100.00"
-									// value={product.price}
-								/>
-								{/* <Form.Control.Feedback>{looksGoodMessage}</Form.Control.Feedback> */}
-							</Form.Group>
-							{/* Discount */}
-							<Form.Group as={Col} md={4} controlId="descuento">
-								<Form.Label>Descuento</Form.Label>
-								<Form.Control
-									type="number"
-									placeholder="Ej. 10 (%)"
-									// onChange={(str) => setNItem({
-									// 	...product,
-									// 	discount: parseFloat(parseFloat(str.target.value).toFixed(2)) ?? 0,
-									// })}
-									// value={product.discount !== undefined ? product.discount:""}
-								/>
-							</Form.Group>
-							{/* Average Weight of the Product */}
-							<Form.Group as={Col} md={4} controlId="descuento">
-								<Form.Label>Peso Promedio en Kilos</Form.Label>
-								<Form.Control
-									type="number"
-									placeholder="Ej. .5 (Kg)"
-									required
-									// onChange={(str) => setNItem({
-									// 	...product,
-									// 	averageWeight: parseFloat(parseFloat(str.target.value).toFixed(2)) ?? 0.0,
-									// })}
-									// value={product.averageWeight}
-								/>
-							</Form.Group>
+							{createFormField({
+								label 		: "Fecha de publicacion en la app",
+								sm			: 12,
+								md			: 4,
+								placeholder	: "Stuff",
+								type		: "date",								
+							})}
 						</Form.Row>
 						<Form.Row>
-							{/* Product Description*/}
-							<Form.Group as={Col} md="8" controlId="description">
-								<Form.Label>Descripción</Form.Label>
-								<Form.Control
-									as="textarea"
-									placeholder="Ej. Rico pozole hecho con todo el sabor de México"
-									rows={3}
-									required
-									// value={product.description}
-									// onChange={(str) => setNItem({
-									// 	...product,
-									// 	description : str.target.value
-									// })}
-								>
-								</Form.Control>
-							</Form.Group>
+							{/* Notification Description*/}
+							{createFormField({
+								type		: "textarea",
+								placeholder	: "Here Comes the Body of the notification if you want to know more.",
+								required	: true,
+								label		:"Descripcion",
+								controlId 	: "description",
+								md 			: 8
+							})}
 						</Form.Row>
 						<button type="submit" disabled={loadingSubmit} className="submit-button" style={{float:"right",position:"relative"}}  >
 							{loadingSubmit ? "Cargando..." : "Subir Información"}
