@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles, Collapse } from "@material-ui/core";
 // import { FirebaseContext } from "../../API/Firebase";
 import { useHistory } from "react-router-dom";
@@ -12,9 +12,8 @@ import scheduleIcon from "../../Assets/img/hora.png";
 import orderIcon from "../../Assets/img/purchase.png";
 import rateIcon from "../../Assets/img/rate.png";
 import menuIcon from "../../Assets/img/menu.png";
+import { primaryColor, secondaryColor } from "../../Constants/constants";
 
-const primaryColor = "#836D6C";
-const secondaryColor = "#FAE1C8";
 const useStyles = makeStyles({
   root: {
     backgroundColor: secondaryColor,

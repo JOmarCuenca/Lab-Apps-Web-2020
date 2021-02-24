@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import Navigation from "../Navigation";
@@ -12,7 +11,9 @@ import homeIcon from "../../Assets/img/home_icon.png";
 // import { FirebaseContext } from "../../API/Firebase";
 // import firebase from "firebase";
 // import Forms from "../Forms";
-import Graphs from "../Graphs";
+import NotificationsMenu from "../Notificaciones/VisualizeMenu";
+import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
+import EditForm from "../Notificaciones/EditForm";
 
 interface Props {}
 
@@ -131,8 +132,14 @@ const Dashboard: React.FC<Props> = () => {
               </Breadcrumbs>
             </div>
             <Switch>
-              <Route path="/dashboard/historico">
+              {/* <Route path="/dashboard/historico">
                 <Graphs setBreadCrumb={setBreadCrumb} />
+              </Route> */}
+              <Route path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}>
+                <EditForm />
+              </Route>
+              <Route path="/dashboard/notifications">
+                <NotificationsMenu setBreadCrumb={setBreadCrumb} />
               </Route>
               <Route path="/dashboard/manage">
                 {/* <Forms setBreadCrumb={setBreadCrumb} /> */}
