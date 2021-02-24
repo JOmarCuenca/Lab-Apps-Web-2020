@@ -24,7 +24,9 @@ export interface Evento {
     fecha           : Date, // Formato
     fecha_delete    : Date, // Formato?
     img             : string, //URL
-    place           : string | Coord
+    place           : string | Coord,
+    maxUsers        : number,
+    currentUsers    : string[], // id de los usuarios
 }
 
 export interface Usuario {
@@ -61,7 +63,7 @@ export interface Notificacion {
     id              : string,
     descripcion     : string,
     fecha           : Date,
-    lifetime?       : number // ?? default 24hrs
+    lifetime?       : number // ?? default 24 hrs
 }
 
 /*
