@@ -45,17 +45,6 @@ const SignIn: React.FC<Props> = () => {
     }
     temp.message = "Everything is okay";
     temp.severity = "success";
-    // firebase
-    //   .doSignInWithEmailAndPassword(email, password)
-    //   .then(() => {
-    //     setAlerta(temp);
-    //     history.push("/dashboard");
-    //   })
-    //   .catch((err) => {
-    //     temp.message = err.message;
-    //     temp.severity = "error";
-    //     setAlerta(temp);
-    //   });
     history.push("/dashboard");
   };
 
@@ -68,22 +57,6 @@ const SignIn: React.FC<Props> = () => {
       });
       return;
     }
-    // firebase
-    //   .sendResetPassword(email)
-    //   .then(() =>
-    //     setAlerta({
-    //       message: "Se ha mandado un correo para resetear la contraseña",
-    //       open: true,
-    //       severity: "success",
-    //     })
-    //   )
-    //   .catch((err) =>
-    //     setAlerta({
-    //       message: err,
-    //       open: true,
-    //       severity: "error",
-    //     })
-    //   );
   };
 
   return (
