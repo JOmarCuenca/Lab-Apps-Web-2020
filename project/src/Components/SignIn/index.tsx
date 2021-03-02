@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 
 import "./style.scss";
+import { FirebaseContext } from "../../API/Firebase";
 
 interface Props {}
 
 const SignIn: React.FC<Props> = () => {
+
+  const firebase = useContext(FirebaseContext);
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +20,17 @@ const SignIn: React.FC<Props> = () => {
     open: false,
     severity: "success",
   });
+
+
+  useEffect(() => {
+    firebase.getAuthUser()
+    .then(user => {
+      if(user !== null){
+        history.push("/dashboard");
+      }
+    })
+  },[]);
+
   const Alert = (props: AlertProps) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   };
@@ -43,9 +57,23 @@ const SignIn: React.FC<Props> = () => {
       setAlerta(temp);
       return;
     }
-    temp.message = "Everything is okay";
-    temp.severity = "success";
-    history.push("/dashboard");
+    firebase.doSignInWithEmailAndPassword(email,password)
+      .then( result => {
+        if(result.user !== null){
+          // console.log("Success");
+          history.push("/dashboard"); 
+        }
+      }).catch(err => {
+        if(err.toString().includes("password")){
+          temp.message = "Wrong Password, please try again.";
+        } else {
+          temp.message = "There is no user registered";
+        }
+        setAlerta(temp);
+      });
+    // temp.message = "Everything is okay";
+    // temp.severity = "success";
+    // history.push("/dashboard");
   };
 
   const resetPass = (e: any) => {

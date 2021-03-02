@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
-import {Usuario} from "../../Constants/interfaces";
+import {Retos, Usuario} from "../../Constants/interfaces";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCplhL4TQUpmTDmgDGUXzC6ipykmQ6HM_E",
@@ -115,6 +115,31 @@ class Firebase {
       return Promise.reject(e);
     }
   };
+
+  /************************************************************************************************************************************/
+
+  private toReto = (obj : any) : Retos => {
+
+    return {
+      id          : obj.id,
+      descripcion : obj.description ?? "Este es un reto",
+      dia         : obj.dia,
+      link        : obj.link
+    };
+  }
+
+  getAllRetos = async (): Promise<Retos[]> => {
+    const docs = await this.firestore.collection("users").get();
+    docs.forEach(doc => {
+      console.log(doc.data());
+    })
+    return docs.docs.map(doc => this.toReto(doc));
+  }
+
+  setNewReto = async (obj : Retos) : Promise<void> => {
+    await this.firestore.collection("Retos").add(obj);
+  }
+
 }
 
 export default Firebase;
