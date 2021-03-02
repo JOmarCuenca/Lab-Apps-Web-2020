@@ -19,8 +19,9 @@ interface Props {}
 
 export const UsuarioObj: Usuario = {
   nombre: "some",
-  apellido: "some",
-  correo: "some",
+  id : "joifjoijf",
+  imagen_perfil : "eojoifjiojf",
+  email: "some",
   rol: "some",
 };
 
@@ -36,27 +37,6 @@ const Dashboard: React.FC<Props> = () => {
   const minSize = 768;
 
   useEffect(() => {
-    // firebase
-    //   .getAuthUser()
-    //   .then(async (userFB) => {
-    //     // console.log(userFB.uid);
-    //     // console.log(userFB.email);
-    //     try {
-    //       let user = await firebase.setUser(userFB.uid);
-    //       // console.log(user);
-    //       UsuarioObj.apellido = user.apellido ?? "";
-    //       UsuarioObj.correo = user.correo;
-    //       UsuarioObj.nombre = user.nombre;
-    //       UsuarioObj.rol = user.rol;
-    //       setReady(true);
-    //     } catch (err) {
-    //       console.error(err);
-    //       history.push("/login");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     history.push("/login");
-    //   });
   }, []);
 
   if (!ready)
@@ -132,9 +112,6 @@ const Dashboard: React.FC<Props> = () => {
               </Breadcrumbs>
             </div>
             <Switch>
-              {/* <Route path="/dashboard/historico">
-                <Graphs setBreadCrumb={setBreadCrumb} />
-              </Route> */}
               <Route path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}>
                 <EditForm />
               </Route>

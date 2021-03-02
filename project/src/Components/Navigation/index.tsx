@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { makeStyles, Collapse } from "@material-ui/core";
-// import { FirebaseContext } from "../../API/Firebase";
 import { useHistory } from "react-router-dom";
 import { useWindowSize } from "../../Constants/functions";
 import { Container, Col, Row } from "react-bootstrap";
