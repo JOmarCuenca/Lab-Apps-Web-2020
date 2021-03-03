@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import Navigation from "../Navigation";
 import { Switch, Route } from "react-router-dom";
@@ -14,6 +14,7 @@ import homeIcon from "../../Assets/img/home_icon.png";
 import NotificationsMenu from "../Notificaciones/VisualizeMenu";
 import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
 import EditForm from "../Notificaciones/EditForm";
+import { FirebaseContext } from "../../API/Firebase";
 
 interface Props {}
 
@@ -28,7 +29,7 @@ export const UsuarioObj: Usuario = {
 export const UsuarioContext = React.createContext(UsuarioObj);
 
 const Dashboard: React.FC<Props> = () => {
-  // const firebase = useContext(FirebaseContext);
+  const firebase = useContext(FirebaseContext);
   const history = useHistory();
   const [unidad, setUnidad] = useState<string>();
   const size = useWindowSize();
@@ -37,6 +38,17 @@ const Dashboard: React.FC<Props> = () => {
   const minSize = 768;
 
   useEffect(() => {
+    firebase.getAuthUser()
+    .then(user => {
+      console.log(user);
+      if(user === null){
+        history.push("/login");
+      }
+    })
+    .catch(err => {
+      history.push("/login");
+    });
+    //es-lint: disable
   }, []);
 
   if (!ready)

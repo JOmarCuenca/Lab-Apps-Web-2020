@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles, Collapse } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { useWindowSize } from "../../Constants/functions";
@@ -12,6 +12,7 @@ import orderIcon from "../../Assets/img/purchase.png";
 import rateIcon from "../../Assets/img/rate.png";
 import menuIcon from "../../Assets/img/menu.png";
 import { primaryColor, secondaryColor } from "../../Constants/constants";
+import { FirebaseContext } from "../../API/Firebase";
 
 const useStyles = makeStyles({
   root: {
@@ -47,7 +48,7 @@ const chooseIcon = (s: string) => {
 
 const Navigation: React.FC = () => {
   const styles = useStyles();
-  // const firebase = useContext(FirebaseContext);
+  const firebase = useContext(FirebaseContext);
   const history = useHistory();
   const size = useWindowSize();
   const [open, setOpen] = useState(false);
@@ -82,7 +83,7 @@ const Navigation: React.FC = () => {
               setOpen(false);
               if (typeof e.action === "string") history.push(e.action);
               else {
-                // if (e.action.action === "logout") firebase.signout();
+                if (e.action.action === "logout") firebase.signout();
                 if (e.action.action === "logout") history.push("/login");
                 history.push("/login"); //e.action.action
               }
