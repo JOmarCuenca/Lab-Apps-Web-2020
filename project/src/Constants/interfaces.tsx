@@ -13,17 +13,17 @@ export interface Product {
 }
 
 interface Coord {
-    x : number,
-    y : number
+    latitude : number,
+    longitude : number
 }
 
 export interface Evento {
     id              : string,
     nombre          : string,
     descripcion     : string,
-    fecha           : Date, // Formato
-    fecha_delete    : Date, // Formato?
-    img             : string, //URL
+    fecha           : Date,
+    fecha_delete    : Date,
+    img             : string,
     place           : string | Coord,
     maxUsers        : number,
     currentUsers    : string[], // id de los usuarios
@@ -37,7 +37,7 @@ export interface Usuario {
     rol?            : string
 }
 
-export interface Retos {
+export interface Reto {
     id          : string,
     dia         : number, // Date 
     descripcion : string,
@@ -50,6 +50,7 @@ enum TiposMeditation {
 }
 
 export interface Meditacion {
+    id                  : string,
     nombre              : string,
     tipo                : TiposMeditation,
     nota?               : string,
