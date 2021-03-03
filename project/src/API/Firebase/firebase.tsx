@@ -137,7 +137,7 @@ class Firebase {
       fecha           : data.fecha.toDate(),
       fecha_delete    : data.fecha_delete.toDate(),
       img             : data.img,
-      place           : ((data.place.latitude != undefined) ? {latitude: data.place.latitude, longitude: data.place.longitude} : data.place),
+      place           : ((data.place.latitude) ? {latitude: data.place.latitude, longitude: data.place.longitude} : data.place),
       maxUsers        : data.maxUsers,
       currentUsers    : data.currentUsers
     }
