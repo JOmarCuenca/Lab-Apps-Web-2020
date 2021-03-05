@@ -3,6 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
+import { StorageFolders } from "../../Constants/constants";
 import {Reto, Usuario, Evento, Notificacion, Meditacion} from "../../Constants/interfaces";
 
 const firebaseConfig = {
@@ -32,19 +33,6 @@ class Firebase {
     this.functions = app.functions();
     this.storage = app.storage();
   }
-
-  /**
-   * Esta functión hace un set del usuario activo
-   */
-  setUser = async (userID: string): Promise<Usuario> => {
-    try {
-      return (
-        await this.firestore.collection(`Users`).doc(userID).get()
-      ).data() as Usuario;
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  };
 
   /**
    * Regresa el usuario activo
@@ -98,7 +86,7 @@ class Firebase {
   getUserByUID = async (uid: string): Promise<Usuario> => {
     try {
       const user = (
-        await this.firestore.collection("Users").doc(uid).get()
+        await this.firestore.collection("Usuarios").doc(uid).get()
       ).data();
       return user as Usuario;
     } catch (err) {
@@ -106,17 +94,7 @@ class Firebase {
     }
   };
 
-  uploadImage = async (file: File) => {
-    try {
-      const storageRef = this.storage.ref().child(`products/${file.name}`);
-      await storageRef.put(file);
-      return storageRef.getDownloadURL();
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  };
-
-  /************************************************************************************************************************************/
+  /****************************************OPERACIONES CRUD DE NUESTRAS INTERFACES********************************************/
 
   private toReto = (obj : any) : Reto => {
     let data = obj.data();
@@ -186,6 +164,7 @@ class Firebase {
   setNewUsuario = async (obj: Usuario): Promise<void> => {
     await this.firestore.collection("Usuarios").add(obj);
   }
+
   deleteUsuariosByID = async(id: string): Promise<void> => {
     await this.firestore.collection("Usuarios").doc(id).delete();
   }
@@ -216,9 +195,13 @@ class Firebase {
     return eventos.docs.map(doc => this.toEvento(doc))
   }
 
-  setNewEvento = async(obj : Evento): Promise<void> => {
+  setNewEvento = async (obj : Evento): Promise<void> => {
+    if(obj.imgFile && typeof obj.imgFile === "object"){
+      obj.img = `${StorageFolders.image}/${obj.imgFile!.name}`;
+      obj.imgFile = await this.uploadFile(obj.imgFile!,StorageFolders.image);
+    }
     await this.firestore.collection("Eventos").add(obj);
-    
+    console.log("Done");
   }
 
   deleteEventoById = async(id: string): Promise<void> => {
@@ -237,6 +220,7 @@ class Firebase {
   setNewNotificacion = async(obj: Notificacion): Promise<void> => {
     await this.firestore.collection("Notificaciones").add(obj);
   }
+
   deleteNotificacionById = async(id: string): Promise<void> => {
     await this.firestore.collection("Notificaciones").doc(id).delete();
   }
@@ -261,6 +245,26 @@ class Firebase {
   updateMeditacion = async(obj: Meditacion): Promise<void> => {
     await this.firestore.collection("Meditaciones").doc(obj.id).update(obj);
   }
+
+  /*********************************************Extra UseFul Functions*****************************************/
+
+  private uploadFile = async (file: File, storageFolder : StorageFolders) : Promise<string> => {
+    try {
+      const storageRef = this.storage.ref().child(`${storageFolder}/${file.name}`);
+      await storageRef.put(file);
+      return storageRef.getDownloadURL();
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+
+  private deletFile = (path : string) : Promise<any> => {
+    try {
+      return this.storage.ref().child(path).delete();
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
 
 }
 

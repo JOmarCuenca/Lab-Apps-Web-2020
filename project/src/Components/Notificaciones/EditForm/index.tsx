@@ -1,9 +1,8 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, FormEvent, useContext, useEffect, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
-// import { FirebaseContext } from "../../../API/Firebase";
-// import { Product } from "../../../Constants/interfaces";
-// import { ADD_NEW_ITEM_CODE, CONFUSED_TRAVOLTA } from "../../../Constants/values";
+import { FirebaseContext } from "../../../API/Firebase";
+import { Evento } from "../../../Constants/interfaces";
 
 import "../style.css";
 
@@ -24,8 +23,20 @@ interface FormField {
 
 const EditForm: FC = () => {
 
-	const { id } = useParams<{ id: string }>();
-	// const [item, setNItem] = useState<Product>();
+	// const { id } = useParams<{ id: string }>();
+	const [item, setItem] = useState<Evento>(
+		{
+			id : "",
+			descripcion : "",
+			img : "",
+			currentUsers : [],
+			maxUsers : 100,
+			fecha : new Date(),
+			fecha_delete : new Date(),
+			nombre : "HBD",
+			place : "My house"				
+		}
+	);
 	const [image, setImage] = useState<File | undefined>();
 	const [deleteItem, setDeleteItem] = useState<boolean>(false);
 
@@ -33,7 +44,7 @@ const EditForm: FC = () => {
 	const [deleting,setDeleting] = useState<boolean>(false);
 	const [changeImage,setChangeImage] = useState<boolean>(false);
 
-	// const firebase = useContext(FirebaseContext);
+	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
 
 	useEffect(() => {
@@ -44,15 +55,17 @@ const EditForm: FC = () => {
 		// 		history.push("/dashboard/menu");
 		// 	});
 		// } else {
-		// 	setNItem({
-		// 		averageWeight : 0,
-		// 		description : "",
-		// 		id : "",
-		// 		imageURL : "",
-		// 		name : "",
-		// 		price : 0,
-		// 		active : true
-		// 	});
+			setItem({
+				id : "",
+				descripcion : "",
+				img : "",
+				currentUsers : [],
+				maxUsers : 100,
+				fecha : new Date(),
+				fecha_delete : new Date(),
+				nombre : "HBD",
+				place : "My house"				
+			});
 		// }
 		// eslint-disable-next-line
 	}, []);
@@ -64,6 +77,7 @@ const EditForm: FC = () => {
 			return;
 		}
 		setImage(files.item(0)!);
+		console.log(files.item(0)?.name);
 		return;
 	};
 
@@ -100,27 +114,23 @@ const EditForm: FC = () => {
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setLoadingSubmit(true);
-		// if(id === ADD_NEW_ITEM_CODE && (image === undefined || item!.imageURL === "")){
-		// 	window.alert("Cuando se agrega un nuevo producto, es necesario subir una imagen con este.");
-		// 	setLoadingSubmit(false);
-		// 	return;
-		// }
 		let message = "Se ha actualizado la información";
 		try {
-			// const copy = item!;
-			// if (image !== undefined) {
-			// 	copy.imageURL = await firebase.uploadImage(image);
-			// }
+			const copy = item!;
+			if (image !== undefined) {
+				copy.imgFile = image;
+			}
 			// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
 			// else await firebase.saveProduct(copy);
-			// console.log(copy);
+			await firebase.setNewEvento(copy);
+			console.log(copy);
 		} catch (e) {
 			console.log(e);
 			message = "Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet."
 		}
 		setLoadingSubmit(false);
 		window.alert(message);
-		// if(id === ADD_NEW_ITEM_CODE) history.push("/dashboard/menu");
+		history.push("/dashboard/notifications");
 	}
 
 	const execDelete = async () => {
@@ -173,13 +183,13 @@ const EditForm: FC = () => {
 					<Form onSubmit={submitChanges} >
 						<Form.Row>
 							{/* Titulo */}
-							{createFormField({
-								label 		: "Nombre",
-								placeholder : "Ejemplo de Titulo",
-								required 	: true,
-								type		: "text",	
-								md			: 4							
-							})}
+							<Form.Control
+								onChange={(str) => {setItem({...item!,nombre : str.currentTarget.value});console.log(item!.nombre)}}
+								required={true}
+								type="text"
+								placeholder="Nombre del evento"
+								value={item!.nombre}
+							/>
 						</Form.Row>
 						<Form.Row>
 							{createFormField({
@@ -209,7 +219,7 @@ const EditForm: FC = () => {
 			</Card>
 			<Card style={{ borderRadius: 10 }}>
 				<Card.Header>
-					<Card.Title as="h5">Imagen del producto</Card.Title>
+					<Card.Title as="h5">Imagen del evento</Card.Title>
 					<Card.Subtitle style={{ paddingTop: "20px" }}>
 						<Row>
 							<Col xs="6"><input type="file" onChange={saveFileLocally} /></Col>
