@@ -96,7 +96,7 @@ class Firebase {
 
   /****************************************OPERACIONES CRUD DE NUESTRAS INTERFACES********************************************/
 
-  private toReto = (obj : any) : Reto => {
+  private toReto = (obj : app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>) : Reto => {
     let data = obj.data();
     return {
       id          : obj.id,
@@ -106,7 +106,7 @@ class Firebase {
     };
   }
 
- private toEvento = (obj : any) : Evento => {
+ private toEvento = (obj : app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>) : Evento => {
     let data = obj.data();
     return  {
       id              : obj.id,
@@ -121,7 +121,7 @@ class Firebase {
     }
   }
 
-  private toNotificacion = (obj: any) : Notificacion => {
+  private toNotificacion = (obj: app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>) : Notificacion => {
     let data = obj.data();
     return {
       id              : obj.id,
@@ -131,7 +131,7 @@ class Firebase {
     }
   }
 
-  private toMeditacion = (obj: any) : Meditacion => {
+  private toMeditacion = (obj: app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>) : Meditacion => {
     let data = obj.data();
     return {
       id                  : obj.id,
@@ -145,7 +145,7 @@ class Firebase {
     }
   }
 
-  private toUsuario = (obj:any) : Usuario => {
+  private toUsuario = (obj:app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>) : Usuario => {
     let data = obj.data();
     return {
       id                  : obj.id,
@@ -218,7 +218,11 @@ class Firebase {
   }
 
   setNewNotificacion = async(obj: Notificacion): Promise<void> => {
-    await this.firestore.collection("Notificaciones").add(obj);
+    await this.firestore.collection("Notificaciones").add({
+      descripcion : obj["descripcion"], 
+      fecha       : obj["fecha"],
+      lifetime    : obj["lifetime"] 
+    });
   }
 
   deleteNotificacionById = async(id: string): Promise<void> => {

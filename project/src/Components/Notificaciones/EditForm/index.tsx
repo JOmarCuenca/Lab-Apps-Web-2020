@@ -200,55 +200,59 @@ const EditForm: FC = () => {
 					<Card.Body>
 						<Form onSubmit={submitChanges}>
 							<Form.Row>
-								<Form.Control
-									onChange={(str) => {
-										setItem({
-											...item!,
-											fecha: new Date(
-												str.currentTarget.value
-											),
-										});
-										console.log(item!.fecha);
-									}}
-									required={true}
-									type='date'
-									placeholder='Fecha'
-								/>
-							</Form.Row>
-							<Form.Row>
-								{/* Notification Description*/}
-								<Form.Control
-									onChange={(str) => {
-										setItem({
-											...item!,
-											descripcion:
-												str.currentTarget.value,
-										});
-										console.log(item!.descripcion);
-									}}
-									required={true}
-									type='textarea'
-									placeholder='Escribe el contenido de la notificacion'
-									value={item!.descripcion}
-								/>
-							</Form.Row>
-							<Form.Row>
-								{/* Notification Description*/}
-								<Form.Control
-									onChange={(str) => {
-										setItem({
-											...item!,
-											lifetime: parseInt(
-												str.currentTarget.value
-											),
-										});
-										console.log(item!.lifetime);
-									}}
-									required={false}
-									type='number'
-									placeholder='Ingresa el tiempo de vida de la notificacion en horas. 24 horas por default.'
-									value={item!.lifetime}
-								/>
+								<Form.Group as={Col} xs={12} xl={4}>
+									<Form.Label>Tiempo de Vida en horas</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												lifetime: parseInt(
+													str.currentTarget.value
+												),
+											});
+											console.log(item!.lifetime);
+										}}
+										required={false}
+										type='number'
+										placeholder='Ingresa el tiempo de vida de la notificacion en horas. 24 horas por default.'
+										value={item!.lifetime}
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} xl={4}>
+									{/* Notification Description*/}
+									<Form.Label>Contenido Notificacion</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												descripcion:
+													str.currentTarget.value,
+											});
+											console.log(item!.descripcion);
+										}}
+										required={true}
+										type='text'
+										placeholder='Escribe el contenido de la notificacion'
+										value={item!.descripcion}
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} xl={4} >
+									<Form.Label>Fecha a Publicar</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												fecha: new Date(
+													str.currentTarget.value
+												),
+											});
+											console.log(item!.fecha);
+										}}
+										required={true}
+										type='date'
+										placeholder='Fecha'
+									/>
+								</Form.Group>
 							</Form.Row>
 							<button
 								type='submit'
