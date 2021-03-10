@@ -31,8 +31,8 @@ const EventosForm: FC = () => {
 		maxUsers: 100,
 		fecha: new Date(),
 		fecha_delete: new Date(),
-		nombre: "HBD",
-		place: "My house",
+		nombre: "",
+		place: "",
 	});
 	const [image, setImage] = useState<File | undefined>();
 	const [deleteItem, setDeleteItem] = useState<boolean>(false);
@@ -60,8 +60,8 @@ const EventosForm: FC = () => {
 			maxUsers: 100,
 			fecha: new Date(),
 			fecha_delete: new Date(),
-			nombre: "HBD",
-			place: "My house",
+			nombre: "",
+			place: "",
 		});
 		// }
 		// eslint-disable-next-line
@@ -214,40 +214,102 @@ const EventosForm: FC = () => {
 						<Form onSubmit={submitChanges}>
 							<Form.Row>
 								{/* Titulo */}
-								<Form.Control
-									onChange={(str) => {
-										setItem({
-											...item!,
-											nombre: str.currentTarget.value,
-										});
-										console.log(item!.nombre);
-									}}
-									required={true}
-									type='text'
-									placeholder='Nombre del evento'
-									value={item!.nombre}
-								/>
-							</Form.Row>
-							<Form.Row>
-								{createFormField({
-									label: "Fecha de publicacion en la app",
-									sm: 12,
-									md: 4,
-									placeholder: "Stuff",
-									type: "date",
-								})}
-							</Form.Row>
-							<Form.Row>
-								{/* Notification Description*/}
-								{createFormField({
-									type: "textarea",
-									placeholder:
-										"Here Comes the Body of the notification if you want to know more.",
-									required: true,
-									label: "Descripcion",
-									controlId: "description",
-									md: 8,
-								})}
+								<Form.Group as={Col} xs={12} xl={4}>
+									<Form.Label>Nombre del evento</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												nombre: str.currentTarget.value,
+											});
+											console.log(item!.nombre);
+										}}
+										required={true}
+										type='text'
+										placeholder='Nombre del evento'
+										value={item!.nombre}
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Descripcion del evento</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												descripcion: str.currentTarget.value,
+											});
+										}}
+										required={true}
+										type='textarea'
+										placeholder='Descripcion del evento'
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Fecha del evento</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												fecha: new Date(str.currentTarget.value),
+											});
+										}}
+										required={true}
+										type='date'
+										placeholder='Fecha de publicación del evento'
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Numero máximo de usuarios</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												maxUsers: parseInt(str.currentTarget.value),
+											});
+										}}
+										required={false}
+										type='number'
+										placeholder='Cantidad máximo de usuarios'
+										value={item.maxUsers}
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Fecha de borrado del evento</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												fecha_delete: new Date(str.currentTarget.value),
+											});
+										}}
+										required={true}
+										type='date'
+										placeholder='Fecha de borrado del evento'
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Lugar del evento</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												place: str.currentTarget.value,
+											});
+										}}
+										required={true}
+										type='text'
+										placeholder='Lugar del evento'
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Imagen</Form.Label>
+									<Form.Control
+										onChange={saveFileLocally}
+										required={false}
+										type='file'
+										placeholder='Imagen'
+									/>
+								</Form.Group>
 							</Form.Row>
 							<button
 								type='submit'
@@ -255,45 +317,10 @@ const EventosForm: FC = () => {
 								className='submit-button'
 								style={{ float: "right", position: "relative" }}
 							>
-								{loadingSubmit
-									? "Cargando..."
-									: "Subir Información"}
+								{loadingSubmit ? "Cargando..." : "Subir Información"}
 							</button>
 						</Form>
 					</Card.Body>
-				</Card>
-				<Card style={{ borderRadius: 10 }}>
-					<Card.Header>
-						<Card.Title as='h5'>Imagen del evento</Card.Title>
-						<Card.Subtitle style={{ paddingTop: "20px" }}>
-							<Row>
-								<Col xs='6'>
-									<input
-										type='file'
-										onChange={saveFileLocally}
-									/>
-								</Col>
-								<Col xs='6'>
-									<button
-										disabled={
-											image === undefined || changeImage
-										}
-										className='submit-button'
-										onClick={changeOnlyImage}
-										style={{
-											position: "absolute",
-											right: "50",
-										}}
-									>
-										{changeImage
-											? "Cargando Imagen..."
-											: "Subir y Cambiar Imagen"}
-									</button>
-								</Col>
-							</Row>
-						</Card.Subtitle>
-					</Card.Header>
-					{/* <Card.Body>{product.imageURL === "" ? CONFUSED_TRAVOLTA : <img alt="productImg" style={{maxWidth : "100%"}} src={product.imageURL} />}</Card.Body> */}
 				</Card>
 				{/* {id !== ADD_NEW_ITEM_CODE ? deleteItemButtons : <></>} */}
 			</div>
