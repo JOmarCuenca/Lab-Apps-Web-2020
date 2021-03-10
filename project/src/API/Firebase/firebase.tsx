@@ -134,9 +134,17 @@ class Firebase {
 	};
 
 	private cleanEvento = (event : Evento) => {
-		const temp = JSON.parse(JSON.stringify(event));
-		delete temp["id"];
-		return temp;
+		return {
+			nombre          : event.nombre,
+			descripcion     : event.descripcion,
+			fecha           : event.fecha,
+			fecha_delete    : event.fecha_delete,
+			img             : event.img,
+			place           : event.place,
+			maxUsers        : event.maxUsers,
+			currentUsers    : event.currentUsers,
+			imgFile        	: event.nombre,
+		};
 	}
 
 	private toNotificacion = (

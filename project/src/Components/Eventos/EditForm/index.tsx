@@ -1,25 +1,10 @@
-import React, { FC, FormEvent, useContext, useEffect, useState } from "react";
-import { Card, Col, Form, Row } from "react-bootstrap";
-import { useHistory, useParams } from "react-router-dom";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { Card, Col, Form } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../../API/Firebase";
 import { Evento } from "../../../Constants/interfaces";
 
 import "../style.css";
-
-interface FormField {
-	label: string;
-	placeholder: string;
-	xs?: number;
-	sm?: number;
-	md?: number;
-	lg?: number;
-	xl?: number;
-	controlId?: string;
-	onChange?: (event: React.ChangeEvent) => void;
-	type?: string;
-	value?: string | number | string[];
-	required?: boolean;
-}
 
 const EventosForm: FC = () => {
 	// const { id } = useParams<{ id: string }>();
@@ -142,40 +127,6 @@ const EventosForm: FC = () => {
 		// 	window.alert("Ha ocurrido un error y no se ha podido borrar el objeto.");
 		// });
 	};
-
-	const createFormField = (formField: FormField) => (
-		<Form.Group
-			as={Col}
-			xs={formField.xs}
-			sm={formField.sm}
-			md={formField.md}
-			lg={formField.lg}
-			xl={formField.xl}
-			controlId={formField.controlId}
-		>
-			<Form.Label>{formField.label}</Form.Label>
-			{formField.type === "textarea" ? (
-				<Form.Control
-					as='textarea'
-					rows={3}
-					onChange={formField.onChange}
-					required={formField.required ?? false}
-					type={formField.type}
-					placeholder={formField.placeholder}
-					value={formField.value}
-				/>
-			) : (
-				<Form.Control
-					onChange={formField.onChange}
-					required={formField.required ?? false}
-					type={formField.type}
-					placeholder={formField.placeholder}
-					value={formField.value}
-				/>
-			)}
-			{/* <Form.Control.Feedback>{looksGoodMessage}</Form.Control.Feedback> */}
-		</Form.Group>
-	);
 
 	const deleteItemButtons = (
 		<>
