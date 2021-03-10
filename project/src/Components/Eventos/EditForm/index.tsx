@@ -2,7 +2,7 @@ import React, { FC, FormEvent, useContext, useEffect, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
 import { FirebaseContext } from "../../../API/Firebase";
-import { Notificacion } from "../../../Constants/interfaces";
+import { Evento } from "../../../Constants/interfaces";
 
 import "../style.css";
 
@@ -21,13 +21,18 @@ interface FormField {
 	required?: boolean;
 }
 
-const EditForm: FC = () => {
+const EventosForm: FC = () => {
 	// const { id } = useParams<{ id: string }>();
-	const [item, setItem] = useState<Notificacion>({
+	const [item, setItem] = useState<Evento>({
 		id: "",
 		descripcion: "",
+		img: "",
+		currentUsers: [],
+		maxUsers: 100,
 		fecha: new Date(),
-		lifetime: 24,
+		fecha_delete: new Date(),
+		nombre: "",
+		place: "",
 	});
 	const [image, setImage] = useState<File | undefined>();
 	const [deleteItem, setDeleteItem] = useState<boolean>(false);
@@ -50,8 +55,13 @@ const EditForm: FC = () => {
 		setItem({
 			id: "",
 			descripcion: "",
+			img: "",
+			currentUsers: [],
+			maxUsers: 100,
 			fecha: new Date(),
-			lifetime: 24,
+			fecha_delete: new Date(),
+			nombre: "",
+			place: "",
 		});
 		// }
 		// eslint-disable-next-line
@@ -101,12 +111,15 @@ const EditForm: FC = () => {
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setLoadingSubmit(true);
-		let message = "Se ha subido la notificación";
+		let message = "Se ha actualizado la información";
 		try {
 			const copy = item!;
+			if (image !== undefined) {
+				copy.imgFile = image;
+			}
 			// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
 			// else await firebase.saveProduct(copy);
-			await firebase.setNewNotificacion(copy);
+			await firebase.setNewEvento(copy);
 			console.log(copy);
 		} catch (e) {
 			console.log(e);
@@ -195,62 +208,106 @@ const EditForm: FC = () => {
 			<div>
 				<Card style={{ borderRadius: 10 }}>
 					<Card.Header>
-						<Card.Title as='h5'>Notificación nueva</Card.Title>
+						<Card.Title as='h5'>Información</Card.Title>
 					</Card.Header>
 					<Card.Body>
 						<Form onSubmit={submitChanges}>
 							<Form.Row>
+								{/* Titulo */}
 								<Form.Group as={Col} xs={12} xl={4}>
-									<Form.Label>Tiempo de Vida en horas</Form.Label>
+									<Form.Label>Nombre del evento</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setItem({
 												...item!,
-												lifetime: parseInt(
-													str.currentTarget.value
-												),
+												nombre: str.currentTarget.value,
 											});
-											console.log(item!.lifetime);
-										}}
-										required={false}
-										type='number'
-										placeholder='Ingresa el tiempo de vida de la notificacion en horas. 24 horas por default.'
-										value={item!.lifetime}
-									/>
-								</Form.Group>
-								<Form.Group as={Col} xs={12} xl={4}>
-									{/* Notification Description*/}
-									<Form.Label>Contenido Notificacion</Form.Label>
-									<Form.Control
-										onChange={(str) => {
-											setItem({
-												...item!,
-												descripcion:
-													str.currentTarget.value,
-											});
-											console.log(item!.descripcion);
+											console.log(item!.nombre);
 										}}
 										required={true}
 										type='text'
-										placeholder='Escribe el contenido de la notificacion'
-										value={item!.descripcion}
+										placeholder='Nombre del evento'
+										value={item!.nombre}
 									/>
 								</Form.Group>
-								<Form.Group as={Col} xs={12} xl={4} >
-									<Form.Label>Fecha a Publicar</Form.Label>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Descripcion del evento</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setItem({
 												...item!,
-												fecha: new Date(
-													str.currentTarget.value
-												),
+												descripcion: str.currentTarget.value,
 											});
-											console.log(item!.fecha);
+										}}
+										required={true}
+										type='textarea'
+										placeholder='Descripcion del evento'
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Fecha del evento</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												fecha: new Date(str.currentTarget.value),
+											});
 										}}
 										required={true}
 										type='date'
-										placeholder='Fecha'
+										placeholder='Fecha de publicación del evento'
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Numero máximo de usuarios</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												maxUsers: parseInt(str.currentTarget.value),
+											});
+										}}
+										required={false}
+										type='number'
+										placeholder='Cantidad máximo de usuarios'
+										value={item.maxUsers}
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Fecha de borrado del evento</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												fecha_delete: new Date(str.currentTarget.value),
+											});
+										}}
+										required={true}
+										type='date'
+										placeholder='Fecha de borrado del evento'
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Lugar del evento</Form.Label>
+									<Form.Control
+										onChange={(str) => {
+											setItem({
+												...item!,
+												place: str.currentTarget.value,
+											});
+										}}
+										required={true}
+										type='text'
+										placeholder='Lugar del evento'
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} md={8} xl={4}>
+									<Form.Label>Imagen</Form.Label>
+									<Form.Control
+										onChange={saveFileLocally}
+										required={false}
+										type='file'
+										placeholder='Imagen'
 									/>
 								</Form.Group>
 							</Form.Row>
@@ -260,9 +317,7 @@ const EditForm: FC = () => {
 								className='submit-button'
 								style={{ float: "right", position: "relative" }}
 							>
-								{loadingSubmit
-									? "Cargando..."
-									: "Subir Notificación"}
+								{loadingSubmit ? "Cargando..." : "Subir Información"}
 							</button>
 						</Form>
 					</Card.Body>
@@ -275,4 +330,4 @@ const EditForm: FC = () => {
 	return renderItem();
 };
 
-export default EditForm;
+export default EventosForm;

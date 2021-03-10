@@ -1,17 +1,3 @@
-export interface Product {
-    id: string,
-    name: string,
-    description: string,
-    averageWeight: number,
-    price: number,
-    discount?: number,
-    imageURL: string,
-    active  : boolean,
-    date    : Date,
-    receta? : string,
-    cantidad?: number
-}
-
 interface Coord {
     latitude : number,
     longitude : number
@@ -27,6 +13,7 @@ export interface Evento {
     place           : string | Coord,
     maxUsers        : number,
     currentUsers    : string[], // id de los usuarios
+    imgFile?        : File | string
 }
 
 export interface Usuario {
