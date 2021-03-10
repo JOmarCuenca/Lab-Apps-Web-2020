@@ -43,7 +43,7 @@ const Dashboard: React.FC<Props> = () => {
 		firebase
 			.getAuthUser()
 			.then((user) => {
-				console.log(user);
+				// console.log(user);
 				if (user === null) {
 					history.push("/login");
 				}
