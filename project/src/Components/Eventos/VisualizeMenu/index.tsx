@@ -13,7 +13,7 @@ import "../style.css";
 interface Props {
 	setBreadCrumb: (val: string) => void;
 }
-const NotificationsMenu: React.FC<Props> = ({ setBreadCrumb }) => {
+const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 	// const firebase          = useContext(FirebaseContext);
 	const history = useHistory();
 	// const [menu,setMenu]    = useState<Product[]>([]);
@@ -46,16 +46,16 @@ const NotificationsMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 					className='submit-button'
 					style={{ float: "right" }}
 					onClick={() =>
-						history.push(`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`)
+						history.push(`/dashboard/events/${ADD_NEW_ITEM_CODE}`)
 					}
 				>
-					Nuevo Producto
+					Nuevo Evento
 				</button>
 			</Col>
 			<Col xs='12'>
 				<Card style={{ borderRadius: 10 }}>
 					<Card.Header>
-						<Card.Title as='h5'>Productos en el Menu</Card.Title>
+						<Card.Title as='h5'>Eventos en el Menu</Card.Title>
 					</Card.Header>
 					{/* <ProductsTable rows={menu} setter={setChangeStatus} /> */}
 				</Card>
@@ -63,7 +63,7 @@ const NotificationsMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 			<Col xs='6'>
 				<Card style={{ borderRadius: 10 }}>
 					<Card.Header>
-						<Card.Title as='h5'>Productos 1</Card.Title>
+						<Card.Title as='h5'>Evento 1</Card.Title>
 					</Card.Header>
 					{/* <ProductsTable rows={menu} setter={setChangeStatus} /> */}
 				</Card>
@@ -71,7 +71,7 @@ const NotificationsMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 			<Col xs='3'>
 				<Card style={{ borderRadius: 10 }}>
 					<Card.Header>
-						<Card.Title as='h5'>Productos 2</Card.Title>
+						<Card.Title as='h5'>Evento 2</Card.Title>
 					</Card.Header>
 					{/* <ProductsTable rows={menu} setter={setChangeStatus} /> */}
 				</Card>
@@ -79,7 +79,7 @@ const NotificationsMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 			<Col xs='4'>
 				<Card style={{ borderRadius: 10 }}>
 					<Card.Header>
-						<Card.Title as='h5'>Productos 3</Card.Title>
+						<Card.Title as='h5'>Evento 3</Card.Title>
 					</Card.Header>
 					{/* <ProductsTable rows={menu} setter={setChangeStatus} /> */}
 				</Card>
@@ -88,4 +88,4 @@ const NotificationsMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 	);
 };
 
-export default NotificationsMenu;
+export default EventosMenu;

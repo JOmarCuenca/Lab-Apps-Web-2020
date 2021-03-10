@@ -2,7 +2,7 @@ import React, { FC, FormEvent, useContext, useEffect, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
 import { FirebaseContext } from "../../../API/Firebase";
-import { Notificacion } from "../../../Constants/interfaces";
+import { Evento } from "../../../Constants/interfaces";
 
 import "../style.css";
 
@@ -21,13 +21,18 @@ interface FormField {
 	required?: boolean;
 }
 
-const EditForm: FC = () => {
+const EventosForm: FC = () => {
 	// const { id } = useParams<{ id: string }>();
-	const [item, setItem] = useState<Notificacion>({
+	const [item, setItem] = useState<Evento>({
 		id: "",
 		descripcion: "",
+		img: "",
+		currentUsers: [],
+		maxUsers: 100,
 		fecha: new Date(),
-		lifetime: 24,
+		fecha_delete: new Date(),
+		nombre: "HBD",
+		place: "My house",
 	});
 	const [image, setImage] = useState<File | undefined>();
 	const [deleteItem, setDeleteItem] = useState<boolean>(false);
@@ -50,8 +55,13 @@ const EditForm: FC = () => {
 		setItem({
 			id: "",
 			descripcion: "",
+			img: "",
+			currentUsers: [],
+			maxUsers: 100,
 			fecha: new Date(),
-			lifetime: 24,
+			fecha_delete: new Date(),
+			nombre: "HBD",
+			place: "My house",
 		});
 		// }
 		// eslint-disable-next-line
@@ -101,12 +111,15 @@ const EditForm: FC = () => {
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setLoadingSubmit(true);
-		let message = "Se ha subido la notificación";
+		let message = "Se ha actualizado la información";
 		try {
 			const copy = item!;
+			if (image !== undefined) {
+				copy.imgFile = image;
+			}
 			// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
 			// else await firebase.saveProduct(copy);
-			await firebase.setNewNotificacion(copy);
+			await firebase.setNewEvento(copy);
 			console.log(copy);
 		} catch (e) {
 			console.log(e);
@@ -195,60 +208,46 @@ const EditForm: FC = () => {
 			<div>
 				<Card style={{ borderRadius: 10 }}>
 					<Card.Header>
-						<Card.Title as='h5'>Notificación nueva</Card.Title>
+						<Card.Title as='h5'>Información</Card.Title>
 					</Card.Header>
 					<Card.Body>
 						<Form onSubmit={submitChanges}>
 							<Form.Row>
+								{/* Titulo */}
 								<Form.Control
 									onChange={(str) => {
 										setItem({
 											...item!,
-											fecha: new Date(
-												str.currentTarget.value
-											),
+											nombre: str.currentTarget.value,
 										});
-										console.log(item!.fecha);
+										console.log(item!.nombre);
 									}}
 									required={true}
-									type='date'
-									placeholder='Fecha'
+									type='text'
+									placeholder='Nombre del evento'
+									value={item!.nombre}
 								/>
 							</Form.Row>
 							<Form.Row>
-								{/* Notification Description*/}
-								<Form.Control
-									onChange={(str) => {
-										setItem({
-											...item!,
-											descripcion:
-												str.currentTarget.value,
-										});
-										console.log(item!.descripcion);
-									}}
-									required={true}
-									type='textarea'
-									placeholder='Escribe el contenido de la notificacion'
-									value={item!.descripcion}
-								/>
+								{createFormField({
+									label: "Fecha de publicacion en la app",
+									sm: 12,
+									md: 4,
+									placeholder: "Stuff",
+									type: "date",
+								})}
 							</Form.Row>
 							<Form.Row>
 								{/* Notification Description*/}
-								<Form.Control
-									onChange={(str) => {
-										setItem({
-											...item!,
-											lifetime: parseInt(
-												str.currentTarget.value
-											),
-										});
-										console.log(item!.lifetime);
-									}}
-									required={false}
-									type='number'
-									placeholder='Ingresa el tiempo de vida de la notificacion en horas. 24 horas por default.'
-									value={item!.lifetime}
-								/>
+								{createFormField({
+									type: "textarea",
+									placeholder:
+										"Here Comes the Body of the notification if you want to know more.",
+									required: true,
+									label: "Descripcion",
+									controlId: "description",
+									md: 8,
+								})}
 							</Form.Row>
 							<button
 								type='submit'
@@ -258,10 +257,43 @@ const EditForm: FC = () => {
 							>
 								{loadingSubmit
 									? "Cargando..."
-									: "Subir Notificación"}
+									: "Subir Información"}
 							</button>
 						</Form>
 					</Card.Body>
+				</Card>
+				<Card style={{ borderRadius: 10 }}>
+					<Card.Header>
+						<Card.Title as='h5'>Imagen del evento</Card.Title>
+						<Card.Subtitle style={{ paddingTop: "20px" }}>
+							<Row>
+								<Col xs='6'>
+									<input
+										type='file'
+										onChange={saveFileLocally}
+									/>
+								</Col>
+								<Col xs='6'>
+									<button
+										disabled={
+											image === undefined || changeImage
+										}
+										className='submit-button'
+										onClick={changeOnlyImage}
+										style={{
+											position: "absolute",
+											right: "50",
+										}}
+									>
+										{changeImage
+											? "Cargando Imagen..."
+											: "Subir y Cambiar Imagen"}
+									</button>
+								</Col>
+							</Row>
+						</Card.Subtitle>
+					</Card.Header>
+					{/* <Card.Body>{product.imageURL === "" ? CONFUSED_TRAVOLTA : <img alt="productImg" style={{maxWidth : "100%"}} src={product.imageURL} />}</Card.Body> */}
 				</Card>
 				{/* {id !== ADD_NEW_ITEM_CODE ? deleteItemButtons : <></>} */}
 			</div>
@@ -271,4 +303,4 @@ const EditForm: FC = () => {
 	return renderItem();
 };
 
-export default EditForm;
+export default EventosForm;
