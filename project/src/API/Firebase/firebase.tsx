@@ -133,19 +133,19 @@ class Firebase {
 		};
 	};
 
-	private cleanEvento = (event : Evento) => {
+	private cleanEvento = (event: Evento) => {
 		return {
-			nombre          : event.nombre,
-			descripcion     : event.descripcion,
-			fecha           : event.fecha,
-			fecha_delete    : event.fecha_delete,
-			img             : event.img,
-			place           : event.place,
-			maxUsers        : event.maxUsers,
-			currentUsers    : event.currentUsers,
-			imgFile        	: event.nombre,
+			nombre: event.nombre,
+			descripcion: event.descripcion,
+			fecha: event.fecha,
+			fecha_delete: event.fecha_delete,
+			img: event.img,
+			place: event.place,
+			maxUsers: event.maxUsers,
+			currentUsers: event.currentUsers,
+			imgFile: event.imgFile,
 		};
-	}
+	};
 
 	private toNotificacion = (
 		obj: app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>
@@ -159,14 +159,13 @@ class Firebase {
 		};
 	};
 
-	private cleanNotificacion = (n : Notificacion) => {
-		if(n.lifetime === undefined){
-			n.lifetime = 24;
-		}
-		const temp = JSON.parse(JSON.stringify(n));
-		delete temp["id"];
-		return temp;
-	}
+	private cleanNotificacion = (n: Notificacion) => {
+		return {
+			descripcion: n.descripcion,
+			fecha: n.fecha,
+			lifetime: n.lifetime ?? 24,
+		};
+	};
 
 	private toMeditacion = (
 		obj: app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>
@@ -197,11 +196,11 @@ class Firebase {
 		};
 	};
 
-	private userClean = (usr : Usuario) => {
+	private userClean = (usr: Usuario) => {
 		const temp = JSON.parse(JSON.stringify(usr));
 		delete temp["id"];
 		return temp;
-	}
+	};
 
 	getAllUsuarios = async (): Promise<Usuario[]> => {
 		const retos = await this.firestore.collection("Usuarios").get();
@@ -217,7 +216,10 @@ class Firebase {
 	};
 
 	updateUsuario = async (obj: Usuario): Promise<void> => {
-		await this.firestore.collection("Usuarios").doc(obj.id).update(this.userClean(obj));
+		await this.firestore
+			.collection("Usuarios")
+			.doc(obj.id)
+			.update(this.userClean(obj));
 	};
 
 	getAllRetos = async (): Promise<Reto[]> => {
@@ -260,7 +262,10 @@ class Firebase {
 			obj.img = `${StorageFolders.image}/${obj.imgFile!.name}`;
 			obj.imgFile = await this.uploadFile(obj.imgFile!, StorageFolders.image);
 		}
-		await this.firestore.collection("Eventos").doc(obj.id).update(this.cleanEvento(obj));
+		await this.firestore
+			.collection("Eventos")
+			.doc(obj.id)
+			.update(this.cleanEvento(obj));
 	};
 
 	getAllNotifications = async (): Promise<Notificacion[]> => {
@@ -271,7 +276,9 @@ class Firebase {
 	};
 
 	setNewNotificacion = async (obj: Notificacion): Promise<void> => {
-		await this.firestore.collection("Notificaciones").add(this.cleanNotificacion(obj));
+		await this.firestore
+			.collection("Notificaciones")
+			.add(this.cleanNotificacion(obj));
 	};
 
 	deleteNotificacionById = async (id: string): Promise<void> => {
@@ -279,7 +286,10 @@ class Firebase {
 	};
 
 	updateNotificacion = async (obj: Notificacion): Promise<void> => {
-		await this.firestore.collection("Notificacion").doc(obj.id).update(this.cleanNotificacion(obj));
+		await this.firestore
+			.collection("Notificacion")
+			.doc(obj.id)
+			.update(this.cleanNotificacion(obj));
 	};
 
 	getAllMeditacions = async (): Promise<Meditacion[]> => {
