@@ -2,10 +2,10 @@
     font-family: Helvetica, Arial, Helvetica, sans-serif;
   }
   
-  body {
+  /* body {
     margin-left: 150px;
     padding: 100px;
-  }
+  } */
   
   main {
     display: inline-block;
@@ -41,6 +41,9 @@
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
+    border-color: #3f969c;
+    border-style: solid;
+    border-radius: 20px;
   }
   
   .parrafo {

@@ -4,7 +4,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { FirebaseContext } from "../../../API/Firebase";
 import { Notificacion } from "../../../Constants/interfaces";
 
-import "../style.css";
 import "./style.css";
 
 const EditForm: FC = () => {
@@ -46,63 +45,100 @@ const EditForm: FC = () => {
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setLoadingSubmit(true);
-		let message = "Se ha subido la notificación";
-		try {
-			const copy = item!;
-			// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
-			// else await firebase.saveProduct(copy);
-			await firebase.setNewNotificacion(copy);
-			console.log(copy);
-		} catch (e) {
-			console.log(e);
-			message =
-				"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
-		}
-		setLoadingSubmit(false);
-		window.alert(message);
-		history.push("/dashboard/notifications");
+		// let message = "Se ha subido la notificación";
+		// try {
+		// 	const copy = item!;
+		// 	// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
+		// 	// else await firebase.saveProduct(copy);
+		// 	await firebase.setNewNotificacion(copy);
+		// 	console.log(copy);
+		// } catch (e) {
+		// 	console.log(e);
+		// 	message =
+		// 		"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
+		// }
+		// setLoadingSubmit(false);
+		// window.alert(message);
+		// history.push("/dashboard/notifications");
+		console.log("Hello There!");
 	};
 
-	const execDelete = async () => {
-		setDeleting(true);
-		// firebase.firestore.collection("Products").doc(id).delete().then(e => {
-		// 	window.alert("Objeto borrado");
-		// 	history.push("/dashboard/menu");
-		// }).catch(e => {
-		// 	console.log(e);
-		// 	setDeleting(false);
-		// 	window.alert("Ha ocurrido un error y no se ha podido borrar el objeto.");
-		// });
-	};
+	// const execDelete = async () => {
+	// 	setDeleting(true);
+	// 	// firebase.firestore.collection("Products").doc(id).delete().then(e => {
+	// 	// 	window.alert("Objeto borrado");
+	// 	// 	history.push("/dashboard/menu");
+	// 	// }).catch(e => {
+	// 	// 	console.log(e);
+	// 	// 	setDeleting(false);
+	// 	// 	window.alert("Ha ocurrido un error y no se ha podido borrar el objeto.");
+	// 	// });
+	// };
 
 	const renderItem = () => {
 		return (
-			<div>
-            <h1>Punto Blanco</h1>
-            <hr />
-            <main className="title1">Notificaciones</main>
-            <main className="title2">Historial</main>
-            <div className="maindiv">
-                <main className="notif">
-                    <form className="fNotif">
+			<Row>
+				<Col xl={7} xs={12}>
+				<div className="maindiv">
+                    <Form onSubmit={submitChanges}>
                         <p className="parrafo" id="titulo">Titulo</p>
-                        <input className="select"></input>
+                        <Form.Control
+							className="select"
+							type="text"
+							placeholder="Titulo de la Notificacion"
+							// onChange={}
+							// value={item!.}
+						/>
                         <hr className="hr1"></hr>
                         <p className="parrafo" id="mensaje">Mensaje Adjuntado</p>
-                        <textarea></textarea>
+                        <Form.Control
+							// className="select"
+							as="textarea"
+							placeholder="Ej. Traer sus propios alimentos"
+							rows={3}
+							// onChange={}
+							// value={item!.}
+						/>
                         <br />
                         <p className="parrafo" id="fecha">Fecha</p>
-                        <input type="datetime-local"></input>
+                        <Form.Control
+							onChange={(str) => {
+								setItem({
+									...item!,
+									fecha: new Date(str.currentTarget.value),
+								});
+							}}
+							required={true}
+							type='date'
+						/>
                         <p className="parrafo" id="hora">Hora</p>
-                        <input type="time"></input>
+                        <Form.Control
+							onChange={(str) => {
+								setItem({
+									...item!,
+									fecha: new Date(str.currentTarget.value),
+								});
+							}}
+							required={true}
+							type='time'
+						/>
                         <hr className="hr1"></hr>
                         <button type="submit" className="publicar">PUBLICAR</button>
-                    </form>
-                </main>
-                <main className="historial"> 
-                </main>
-            </div>
-        </div>
+					</Form>
+            	</div>
+				</Col>
+				<Col xl={1}/>
+				<Col xl={4} xs={12}>
+					<h1>Hello World</h1>
+				</Col>
+			</Row>
+		// 	<div>
+        //     <hr />
+        //     {/* <main className="title1">Notificaciones</main> */}
+        //     {/* <main className="title2">Historial</main> */}
+		// 	{/* <main className="historial"> 
+        //         </main> */}
+        // </div>
 		);
 	};
 
