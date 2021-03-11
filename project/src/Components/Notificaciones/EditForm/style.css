@@ -1,0 +1,138 @@
+* {
+    font-family: Helvetica, Arial, Helvetica, sans-serif;
+  }
+  
+  body {
+    margin-left: 150px;
+    padding: 100px;
+  }
+  
+  main {
+    display: inline-block;
+  }
+  
+  .notif {
+    border-color: #3f969c;
+    border-style: solid; 
+    height: 420px;
+    width: 600px;
+    border-radius: 5px;
+  }
+  
+  .historial {
+    border-color: #3f969c;
+    border-style: solid;
+    height: 420px;
+    width: 400px;
+    margin-left: 50px;
+    vertical-align: top;
+    border-radius: 5px;
+  }
+  
+  .fNotif {
+    margin-top: 40px;
+    margin-left: 50px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  .maindiv {
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  
+  .parrafo {
+    display: inline-block;
+    font-weight: 600;
+  }
+  
+  #hora {
+    margin-left: 15px;
+    margin-right: 10px;
+  }
+  
+  #fecha {
+    margin-right: 10px;
+  }
+  
+  #mensaje {
+    margin-right: 50px;
+    vertical-align: top;
+  }
+  
+  #titulo {
+    margin-right: 110px;
+  }
+  
+  .select {
+    width: 300px;
+    height: 22px;
+    border-radius: 6cm;
+  }
+  
+  .hr1 {
+    margin-right: 50px;
+    margin-bottom: 20px;
+  }
+  
+  textarea {
+    height: 80px;
+    width: 250px;
+    margin-bottom: 10px;
+  }
+  
+  .publicar {
+    background-color: #4bafeb;
+    border-style: solid;
+    border-color: #4bafeb;
+    align-self: center;
+    height: 40px;
+    width: 90px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    margin-left: 200px;
+  }
+  
+  .title1 {
+    font-size: 25px;
+    margin-bottom: 10px;
+    border-style: outset;
+    margin-left: 350px;
+    margin-right: 550px;
+    width: 300px;
+    border-radius: 5px;
+    height: 40px;
+    text-align: center;
+    padding-top: 10px;
+  }
+  
+  .lis {
+    margin-left: 20px;
+    list-style-type: none;
+  }
+  
+  .ON {
+    background-color: #11a81f;
+    border-color: #11a81f;
+    border-radius: 5px;
+    color: white;
+  }
+  
+  .OFF {
+    border-color: black;
+    border-radius: 5px;
+  }
+  
+  .title2 {
+    background-color: #3f969c;
+    margin-left: 815px;
+    color: white;
+    height: 20px;
+    width: 100px;
+    text-align: center;
+    padding-top: 7px
+  }

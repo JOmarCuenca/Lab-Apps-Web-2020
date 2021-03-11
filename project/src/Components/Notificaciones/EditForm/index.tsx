@@ -5,6 +5,7 @@ import { FirebaseContext } from "../../../API/Firebase";
 import { Notificacion } from "../../../Constants/interfaces";
 
 import "../style.css";
+import "./style.css";
 
 const EditForm: FC = () => {
 	// const { id } = useParams<{ id: string }>();
@@ -42,47 +43,6 @@ const EditForm: FC = () => {
 		// eslint-disable-next-line
 	}, []);
 
-	const saveFileLocally = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const files = event.target.files;
-		if (files === null || files.length === 0) {
-			setImage(undefined);
-			return;
-		}
-		setImage(files.item(0)!);
-		console.log(files.item(0)?.name);
-		return;
-	};
-
-	const changeOnlyImage = async () => {
-		if (image !== undefined && image !== null) {
-			setChangeImage(true);
-			// firebase.uploadImage(image).then(url => {
-			// 	if (typeof url === "string") {
-			// 		if(id !== ADD_NEW_ITEM_CODE){
-			// 			firebase.firestore.collection("Products").doc(id).update({ imageURL: url })
-			// 			.then(a => {
-			// 				window.alert("La imagen se ha cambiado con exito");
-			// 				setNItem({
-			// 					...item!,
-			// 					imageURL : url
-			// 				})
-			// 			})
-			// 			.catch(e => {console.log(e);window.alert("La imagen no ha podido actualizarse");});
-			// 		} else {
-			// 			window.alert("La imagen se ha cambiado con exito");
-			// 			setNItem({
-			// 				...item!,
-			// 				imageURL : url
-			// 			})
-			// 		}
-			// 	} else {
-			// 		console.log(url);
-			// 	}
-			// }).catch(e => {console.log(e);window.alert("La imagen no ha podido cargarse");})
-			// .finally(() => setChangeImage(false));
-		}
-	};
-
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setLoadingSubmit(true);
@@ -115,111 +75,34 @@ const EditForm: FC = () => {
 		// });
 	};
 
-	const deleteItemButtons = (
-		<>
-			<button
-				disabled={deleting}
-				className='button warning-button'
-				onClick={() => setDeleteItem(true)}
-			>
-				{deleting ? "Borrando..." : "Borrar Producto"}
-			</button>
-			{deleteItem ? (
-				<div style={{ paddingTop: "10px" }}>
-					<h5>¿Seguro?</h5>
-					<button
-						disabled={deleting}
-						className='button danger-button'
-						onClick={execDelete}
-					>
-						{deleting ? "Borrando..." : "Borrar Definitivamente"}
-					</button>
-				</div>
-			) : (
-				<></>
-			)}
-		</>
-	);
-
 	const renderItem = () => {
 		return (
 			<div>
-				<Card style={{ borderRadius: 10 }}>
-					<Card.Header>
-						<Card.Title as='h5'>Notificación nueva</Card.Title>
-					</Card.Header>
-					<Card.Body>
-						<Form onSubmit={submitChanges}>
-							<Form.Row>
-								<Form.Group as={Col} xs={12} xl={4}>
-									<Form.Label>Tiempo de Vida en horas</Form.Label>
-									<Form.Control
-										onChange={(str) => {
-											setItem({
-												...item!,
-												lifetime: parseInt(
-													str.currentTarget.value
-												),
-											});
-											console.log(item!.lifetime);
-										}}
-										required={false}
-										type='number'
-										placeholder='Ingresa el tiempo de vida de la notificacion en horas. 24 horas por default.'
-										value={item!.lifetime}
-									/>
-								</Form.Group>
-								<Form.Group as={Col} xs={12} xl={4}>
-									{/* Notification Description*/}
-									<Form.Label>Contenido Notificacion</Form.Label>
-									<Form.Control
-										onChange={(str) => {
-											setItem({
-												...item!,
-												descripcion:
-													str.currentTarget.value,
-											});
-											console.log(item!.descripcion);
-										}}
-										required={true}
-										type='text'
-										placeholder='Escribe el contenido de la notificacion'
-										value={item!.descripcion}
-									/>
-								</Form.Group>
-								<Form.Group as={Col} xs={12} xl={4} >
-									<Form.Label>Fecha a Publicar</Form.Label>
-									<Form.Control
-										onChange={(str) => {
-											setItem({
-												...item!,
-												fecha: new Date(
-													str.currentTarget.value
-												),
-											});
-											console.log(item!.fecha);
-										}}
-										required={true}
-										type='date'
-										placeholder='Fecha'
-									/>
-								</Form.Group>
-							</Form.Row>
-							<button
-								type='submit'
-								disabled={loadingSubmit}
-								className='submit-button'
-								style={{ float: "right", position: "relative" }}
-							>
-								{loadingSubmit
-									? "Cargando..."
-									: "Subir Notificación"}
-							</button>
-						</Form>
-					</Card.Body>
-				</Card>
-				{/* {id !== ADD_NEW_ITEM_CODE ? deleteItemButtons : <></>} */}
-			</div>
+            <h1>Punto Blanco</h1>
+            <hr />
+            <main className="title1">Notificaciones</main>
+            <main className="title2">Historial</main>
+            <div className="maindiv">
+                <main className="notif">
+                    <form className="fNotif">
+                        <p className="parrafo" id="titulo">Titulo</p>
+                        <input className="select"></input>
+                        <hr className="hr1"></hr>
+                        <p className="parrafo" id="mensaje">Mensaje Adjuntado</p>
+                        <textarea></textarea>
+                        <br />
+                        <p className="parrafo" id="fecha">Fecha</p>
+                        <input type="datetime-local"></input>
+                        <p className="parrafo" id="hora">Hora</p>
+                        <input type="time"></input>
+                        <hr className="hr1"></hr>
+                        <button type="submit" className="publicar">PUBLICAR</button>
+                    </form>
+                </main>
+                <main className="historial"> 
+                </main>
+            </div>
+        </div>
 		);
 	};
 
