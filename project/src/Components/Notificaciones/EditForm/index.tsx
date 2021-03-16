@@ -78,7 +78,9 @@ const EditForm: FC = () => {
 	const renderItem = () => {
 		return (
 			<Row>
-				<Col xl={7} xs={12}>
+				<Col xl={6} xs={12}>
+					<h4 className="usuario">Usuario</h4>
+					<h4 className="not">Notificaciones</h4>
 				<div className="maindiv">
                     <Form onSubmit={submitChanges}>
                         <p className="parrafo" id="titulo">Titulo</p>
@@ -92,7 +94,7 @@ const EditForm: FC = () => {
                         <hr className="hr1"></hr>
                         <p className="parrafo" id="mensaje">Mensaje Adjuntado</p>
                         <Form.Control
-							// className="select"
+							className="select"
 							as="textarea"
 							placeholder="Ej. Traer sus propios alimentos"
 							rows={3}
@@ -102,6 +104,7 @@ const EditForm: FC = () => {
                         <br />
                         <p className="parrafo" id="fecha">Fecha</p>
                         <Form.Control
+							className="select2"
 							onChange={(str) => {
 								setItem({
 									...item!,
@@ -113,6 +116,7 @@ const EditForm: FC = () => {
 						/>
                         <p className="parrafo" id="hora">Hora</p>
                         <Form.Control
+							className="select1"
 							onChange={(str) => {
 								setItem({
 									...item!,
@@ -123,22 +127,19 @@ const EditForm: FC = () => {
 							type='time'
 						/>
                         <hr className="hr1"></hr>
-                        <button type="submit" className="publicar">PUBLICAR</button>
+						<button type="submit" className="publicar">PUBLICAR</button>
 					</Form>
             	</div>
 				</Col>
-				<Col xl={1}/>
+				<Col xl={1}>
+				</Col>
 				<Col xl={4} xs={12}>
-					<h1>Hello World</h1>
+					<h4 className="h">Historial</h4>
+					<div className="maindiv1">
+
+					</div>
 				</Col>
 			</Row>
-		// 	<div>
-        //     <hr />
-        //     {/* <main className="title1">Notificaciones</main> */}
-        //     {/* <main className="title2">Historial</main> */}
-		// 	{/* <main className="historial"> 
-        //         </main> */}
-        // </div>
 		);
 	};
 
