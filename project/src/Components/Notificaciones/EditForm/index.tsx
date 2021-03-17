@@ -6,10 +6,14 @@ import { Notificacion } from "../../../Constants/interfaces";
 
 import "./style.css";
 
-const EditForm: FC = () => {
+interface Props {
+	setBreadCrumb: (val: string) => void;
+}
+const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 	// const { id } = useParams<{ id: string }>();
 	const [item, setItem] = useState<Notificacion>({
 		id: "",
+		title : "",
 		descripcion: "",
 		fecha: new Date(),
 		lifetime: 24,
@@ -25,15 +29,10 @@ const EditForm: FC = () => {
 	const history = useHistory();
 
 	useEffect(() => {
-		// if(id !== ADD_NEW_ITEM_CODE){
-		// 	firebase.getProductFromId("Products/"+id).then(product => setNItem(product)).catch(e => {
-		// 		console.log(e);
-		// 		window.alert("This item appears to be non-existant");
-		// 		history.push("/dashboard/menu");
-		// 	});
-		// } else {
+		setBreadCrumb("Notificaciones");
 		setItem({
 			id: "",
+			title : "",
 			descripcion: "",
 			fecha: new Date(),
 			lifetime: 24,
@@ -46,17 +45,28 @@ const EditForm: FC = () => {
 		event.preventDefault();
 		setLoadingSubmit(true);
 		let message = "Se ha subido la notificación";
+		let failure = false;
 		try {
 		const copy = item!;
 			await firebase.setNewNotificacion(copy);
 			console.log(copy);
 		} catch (e) {
 			console.log(e);
+			failure = true;
 			message =
 				"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
 		}
 		setLoadingSubmit(false);
 		window.alert(message);
+		if(!failure){
+			setItem({
+				id: "",
+				title : "",
+				descripcion: "",
+				fecha: new Date(),
+				lifetime: 24
+			});
+		}
 	};
 
 	// const execDelete = async () => {
@@ -84,8 +94,8 @@ const EditForm: FC = () => {
 							className="select"
 							type="text"
 							placeholder="Titulo de la Notificacion"
-							// onChange={}
-							// value={item!.}
+							onChange={(target) => setItem({...item!,title : target.currentTarget.value})}
+							value={item!.title}
 						/>
                         <hr className="hr1"></hr>
                         <p className="parrafo" id="mensaje">Mensaje Adjuntado</p>
@@ -94,8 +104,8 @@ const EditForm: FC = () => {
 							as="textarea"
 							placeholder="Ej. Traer sus propios alimentos"
 							rows={3}
-							// onChange={}
-							// value={item!.}
+							onChange={(target) => setItem({...item!,descripcion : target.currentTarget.value})}
+							value={item!.descripcion}
 						/>
                         <br />
                         <p className="parrafo" id="fecha">Fecha</p>
@@ -113,12 +123,12 @@ const EditForm: FC = () => {
                         <p className="parrafo" id="hora">Hora</p>
                         <Form.Control
 							className="select1"
-							onChange={(str) => {
-								setItem({
-									...item!,
-									fecha: new Date(str.currentTarget.value),
-								});
-							}}
+							// onChange={(str) => {
+							// 	setItem({
+							// 		...item!,
+							// 		fecha: new Date(str.currentTarget.value),
+							// 	});
+							// }}
 							required={true}
 							type='time'
 						/>

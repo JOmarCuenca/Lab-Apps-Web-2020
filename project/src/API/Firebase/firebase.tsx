@@ -154,6 +154,7 @@ class Firebase {
 		return {
 			id: obj.id,
 			descripcion: data.descripcion,
+			title : data.title,
 			fecha: data.fecha.toDate(),
 			lifetime: data.lifetime ?? 24,
 		};
@@ -161,6 +162,7 @@ class Firebase {
 
 	private cleanNotificacion = (n: Notificacion) => {
 		return {
+			title: n.title,
 			descripcion: n.descripcion,
 			fecha: n.fecha,
 			lifetime: n.lifetime ?? 24,
