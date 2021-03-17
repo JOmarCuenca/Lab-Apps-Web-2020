@@ -45,22 +45,18 @@ const EditForm: FC = () => {
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setLoadingSubmit(true);
-		// let message = "Se ha subido la notificación";
-		// try {
-		// 	const copy = item!;
-		// 	// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
-		// 	// else await firebase.saveProduct(copy);
-		// 	await firebase.setNewNotificacion(copy);
-		// 	console.log(copy);
-		// } catch (e) {
-		// 	console.log(e);
-		// 	message =
-		// 		"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
-		// }
-		// setLoadingSubmit(false);
-		// window.alert(message);
-		// history.push("/dashboard/notifications");
-		console.log("Hello There!");
+		let message = "Se ha subido la notificación";
+		try {
+		const copy = item!;
+			await firebase.setNewNotificacion(copy);
+			console.log(copy);
+		} catch (e) {
+			console.log(e);
+			message =
+				"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
+		}
+		setLoadingSubmit(false);
+		window.alert(message);
 	};
 
 	// const execDelete = async () => {
