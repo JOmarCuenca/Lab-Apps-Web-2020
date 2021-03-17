@@ -122,11 +122,8 @@ const Dashboard: React.FC<Props> = () => {
 							</Breadcrumbs>
 						</div>
 						<Switch>
-							<Route path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}>
-								<EditForm />
-							</Route>
 							<Route path='/dashboard/notifications'>
-								<NotificationsMenu setBreadCrumb={setBreadCrumb} />
+								<EditForm setBreadCrumb={setBreadCrumb} />
 							</Route>
 							<Route path={`/dashboard/events/${ADD_NEW_ITEM_CODE}`}>
 								<EventosForm />
