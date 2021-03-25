@@ -20,6 +20,11 @@
     "icon": "Retro"
   },
   {
+    "title": "Configuración",
+    "action": "/dashboard/settings",
+    "icon": "Logout"
+  },
+  {
     "title": "Cerrar sesión",
     "action": {
       "route": "/login",

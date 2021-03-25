@@ -13,12 +13,14 @@ import rateIcon from "../../Assets/img/rate.png";
 import menuIcon from "../../Assets/img/menu.png";
 import { primaryColor, secondaryColor } from "../../Constants/constants";
 import { FirebaseContext } from "../../API/Firebase";
+import AvatarIcon from "../../Assets/img/avatar.jpg";
+
+import "./style.css";
 
 const useStyles = makeStyles({
   root: {
     backgroundColor: secondaryColor,
     height: "100vh",
-    // width: "18%", //Test
     width: "250px",
     boxShadow: "1px 4px 50px 0px rgba(64,77,103,0.88)",
     float: "left",
@@ -53,6 +55,24 @@ const Navigation: React.FC = () => {
   const size = useWindowSize();
   const [open, setOpen] = useState(false);
 
+  const [selected, setSelected] = useState(0);
+
+  const clickedNavElement = (i : number, action :
+    | string
+    | {
+      route: string;
+      action: string;
+    }) => {
+    setSelected(i);
+    setOpen(false);
+    if (typeof action === "string") history.push(action);
+    else {
+      if (action.action === "logout") firebase.signout();
+      if (action.action === "logout") history.push("/login");
+      history.push("/login"); //e.action.action
+    }
+  }
+
   const createElement = (
     e: {
       title: string;
@@ -67,58 +87,21 @@ const Navigation: React.FC = () => {
     },
     i: number
   ) => {
-    return (
-      <>
-        <Col key={i} md={12} >
-          <img
-            style={{ filter: primaryColor, cursor: "pointer" }}
-            width="20"
-            alt="icon"
-            src={chooseIcon(e.icon)}
-          // require(e.icon)
-          />
-          &nbsp;&nbsp;
-          <span
-            onClick={() => {
-              setOpen(false);
-              if (typeof e.action === "string") history.push(e.action);
-              else {
-                if (e.action.action === "logout") firebase.signout();
-                if (e.action.action === "logout") history.push("/login");
-                history.push("/login"); //e.action.action
-              }
-            }}
-            style={{ color: primaryColor, fontSize: 18, cursor: "pointer" }}
-          >
-            {e.title}
-          </span>
-        </Col>
-        {/* {e.children ? (
-          <Col className="mt-2" md={12}>
-            <img
-              style={{ filter: primaryColor }}
-              width="15"
-              alt="icon"
-              src={require(e.icon)}
-            />
-            &nbsp;&nbsp;
-            <span
-              onClick={() => {
-                setOpen(false);
-                if (typeof e.action === "string") history.push(e.action);
-                else {
-                  if (e.action.action === "logout") firebase.signout();
-                  history.push(e.action.action);
-                }
-              }}
-              style={{ color: primaryColor, fontSize: 14, cursor: "pointer" }}
-            >
-              Tiempo Real
-            </span>
-          </Col>
-        ) : null} */}
-      </>
-    );
+    return <Col key={i} md={12} className={selected === i ? "navElement elementSelected" : "navElement"} onClick={() => clickedNavElement(i,e.action)} >
+      <img
+        style={{ filter: primaryColor}}
+        width="20"
+        alt="icon"
+        src={chooseIcon(e.icon)}
+      // require(e.icon)
+      />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <span
+        style={{ color: primaryColor}}
+      >
+        {e.title}
+      </span>
+    </Col>;
   };
 
   const navElements = () => {
@@ -138,14 +121,14 @@ const Navigation: React.FC = () => {
             padding: 20,
           }}
         >
-          {/* <img
+          <img
             width={35}
             style={{
               borderRadius: 10,
             }}
             alt="logo"
-            src={require("../../Assets/img/dashbooard.png")}
-          /> */}
+            src={require("../../Assets/img/dashboard.png")}
+          />
           <div
             style={{
               display: "inline-block",
@@ -202,27 +185,18 @@ const Navigation: React.FC = () => {
     <div className={styles.root}>
       <Container>
         <Row>
-          {/* <Col md={3}>
+          <Col md={3}>
             <img
               width={35}
               style={{
                 borderRadius: 10,
               }}
               alt="logo"
-              src={require("../../Assets/img/dashbooard.png")}
+              src={AvatarIcon}
             />
-          </Col> */}
-          <Col md={12} className="mt-1">
-            <span
-              style={{
-                color: primaryColor,
-                fontSize: 35,
-                fontWeight: 900,
-                marginLeft: -10,
-              }}
-            >
-              Dashboard
-            </span>
+          </Col>
+          <Col className="userName" md={9}>
+            <p>Usuario</p>
           </Col>
           <br />
           <br />
