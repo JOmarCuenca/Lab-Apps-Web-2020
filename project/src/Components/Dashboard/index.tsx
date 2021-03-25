@@ -8,15 +8,12 @@ import { useWindowSize } from "../../Constants/functions";
 import { Spinner } from "react-bootstrap";
 import { Usuario } from "../../Constants/interfaces";
 import homeIcon from "../../Assets/img/home_icon.png";
-// import { FirebaseContext } from "../../API/Firebase";
-// import firebase from "firebase";
-// import Forms from "../Forms";
-import NotificationsMenu from "../Notificaciones/VisualizeMenu";
 import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
 import EditForm from "../Notificaciones/EditForm";
 import { FirebaseContext } from "../../API/Firebase";
 import EventosForm from "../Eventos/EditForm";
 import EventosMenu from "../Eventos/VisualizeMenu";
+import HomeScreen from "../Home";
 
 interface Props {}
 
@@ -35,7 +32,7 @@ const Dashboard: React.FC<Props> = () => {
 	const history = useHistory();
 	const [unidad, setUnidad] = useState<string>();
 	const size = useWindowSize();
-	const [ready, setReady] = useState(true);
+	const [ready] = useState(true);
 	const [breadCrumb, setBreadCrumb] = useState("Dashboard");
 	const minSize = 768;
 
@@ -51,7 +48,7 @@ const Dashboard: React.FC<Props> = () => {
 			.catch((err) => {
 				history.push("/login");
 			});
-		//es-lint: disable
+	// eslint-disable-next-line
 	}, []);
 
 	if (!ready)
@@ -96,7 +93,7 @@ const Dashboard: React.FC<Props> = () => {
 								size.width && size.width < minSize ? "" : "ml-3"
 							}`}
 						>
-							Dashboard
+							Punto Blanco
 						</h5>
 						<div
 							className={`mb-4 ${
@@ -122,6 +119,9 @@ const Dashboard: React.FC<Props> = () => {
 							</Breadcrumbs>
 						</div>
 						<Switch>
+							<Route exact path='/dashboard'>
+								<HomeScreen setBreadCrumb={setBreadCrumb} />
+							</Route>
 							<Route path='/dashboard/notifications'>
 								<EditForm setBreadCrumb={setBreadCrumb} />
 							</Route>

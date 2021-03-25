@@ -1,5 +1,10 @@
 [
   {
+    "title": "Home",
+    "action": "/dashboard",
+    "icon": "Pedidos"
+  },
+  {
     "title": "Notificaciones",
     "action": "/dashboard/notifications",
     "icon": "Pedidos"
