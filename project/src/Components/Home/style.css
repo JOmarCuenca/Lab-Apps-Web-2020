@@ -1,0 +1,19 @@
+
+.personalCard {
+    background-color: rgb(52, 157, 153);
+    color: white;
+}
+
+.whitePersonalCard {
+    color: rgb(52, 157, 153);
+}
+
+.dayTime {
+    max-height: 100px;
+}
+
+.verticalHr { 
+    border-left:    4px solid white;
+    height:         100px;
+    width:          1px;       
+}
