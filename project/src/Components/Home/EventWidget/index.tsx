@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, { FC } from "react";
 import { Coord, Evento } from "../../../Constants/interfaces";
 import infoIcon from "../../../Assets/img/info.png";
 

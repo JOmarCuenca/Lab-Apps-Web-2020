@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import ClockTime from "./Clock";
 import EventWidget from "./EventWidget";
+import NotificationWidget from "./NotificationWidget";
 
 import "./style.css";
 
@@ -135,7 +136,30 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 							</Card.Header>
 							<Card.Body >
 								{/* <img height="300px" src="https://thumbs.gfycat.com/AccurateUnfinishedBergerpicard-size_restricted.gif" alt="travolta" /> */}
-								<h3>De momento no hay notificaciones...</h3>
+								{/* <h3>De momento no hay notificaciones...</h3> */}
+								<Row>
+									<Col xs={12}>
+										<NotificationWidget notification={{
+											id : "someId",
+											descripcion : "Some Text",
+											fecha : new Date(),
+											title : "The Title"
+										}}/>
+									</Col>
+									<Col xs={12}>
+										<NotificationWidget notification={{
+											id : "someId",
+											descripcion : "Some Text",
+											fecha : new Date(),
+											title : "The Title"
+										}}/>
+									</Col>
+									<Col xs={12}>
+										<div className="expanded">
+											<h1 className="moreEventsBtn">...</h1>
+										</div>
+									</Col>
+								</Row>
 							</Card.Body>
 						</Card>
 					</Col>
