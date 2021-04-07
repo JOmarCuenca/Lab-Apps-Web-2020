@@ -86,7 +86,6 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 			<Row>
 				<Col xl={6} xs={12}>
 					<h4 className="usuario">Usuario</h4>
-					<h4 className="not">Notificaciones</h4>
 				<div className="maindiv">
                     <Form onSubmit={submitChanges}>
                         <p className="parrafo" id="titulo">Titulo</p>
@@ -141,8 +140,8 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 				</Col>
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
-					<div className="maindiv1">
-
+					<div className="maindiv1 overflow-auto">
+					
 					</div>
 				</Col>
 			</Row>
