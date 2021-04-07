@@ -22,8 +22,10 @@ const ClockTime: FC = () => {
 
     const intermitentDots = (seconds : number) => (seconds % 2 === 0) ? ":" : " ";
 
+    const hourReformat = (hours : number, ampm : string) => (hours === 0 && ampm === "pm") ? 12 : hours;
+
     return <div>
-        <span>{hours}</span>{intermitentDots(seconds)}<span>{minuteFixer(minutes)+" "}</span><span>{ampm}</span>
+        <span>{hourReformat(hours,ampm)}</span>{intermitentDots(seconds)}<span>{minuteFixer(minutes)+" "}</span><span>{ampm}</span>
     </div>;
 }
 
