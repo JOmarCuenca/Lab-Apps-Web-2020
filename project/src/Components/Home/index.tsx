@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import ClockTime from "./Clock";
+import EventWidget from "./EventWidget";
 
 import "./style.css";
 
@@ -77,7 +78,40 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 					</Card.Header>
 					<Card.Body >
 						{/* <img height="300px" src="https://thumbs.gfycat.com/AccurateUnfinishedBergerpicard-size_restricted.gif" alt="travolta" /> */}
-						<h1>De momento no hay eventos...</h1>
+						{/* <h1>De momento no hay eventos...</h1> */}
+						<Row>
+							<Col xs={12}>
+								<EventWidget event={{
+									id              : "infinite Power!!!!",
+									nombre          : "Somebody",
+									descripcion     : "some... body",
+									fecha           : new Date(),
+									fecha_delete    : new Date(),
+									img             : "some link",
+									place           : "some Link",
+									maxUsers        : 100,
+									currentUsers    : []}
+								} />
+							</Col>
+							<Col xs={12}>
+								<EventWidget event={{
+									id              : "infinite Power!!!!",
+									nombre          : "Once Told Me..",
+									descripcion     : "some... body",
+									fecha           : new Date(),
+									fecha_delete    : new Date(),
+									img             : "some link",
+									place           : "some Link",
+									maxUsers        : 100,
+									currentUsers    : []}
+								} />
+							</Col>
+							<Col xs={12}>
+								<div className="expanded">
+									<h1 className="moreEventsBtn">...</h1>
+								</div>
+							</Col>
+						</Row>
 					</Card.Body>
 				</Card>
 			</Col>
@@ -99,6 +133,10 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 							<Card.Header>
 								<h6>Ultimas Notificaciones</h6>
 							</Card.Header>
+							<Card.Body >
+								{/* <img height="300px" src="https://thumbs.gfycat.com/AccurateUnfinishedBergerpicard-size_restricted.gif" alt="travolta" /> */}
+								<h3>De momento no hay notificaciones...</h3>
+							</Card.Body>
 						</Card>
 					</Col>
 				</Row>

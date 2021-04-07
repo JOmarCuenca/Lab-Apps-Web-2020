@@ -17,3 +17,11 @@
     height:         100px;
     width:          1px;       
 }
+
+.moreEventsBtn {
+    cursor: pointer;
+    margin: auto;
+    padding: 1px;
+    width: 50%;
+    text-align: center;
+}
