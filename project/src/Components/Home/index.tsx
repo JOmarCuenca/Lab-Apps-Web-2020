@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
+import { Evento } from "../../Constants/interfaces";
 import ClockTime from "./Clock";
 import EventWidget from "./EventWidget";
 import NotificationWidget from "./NotificationWidget";
@@ -15,10 +16,49 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 	
 	const [loaded, setLoaded] = useState(false);
 	const [user]	 = useState("Usuario");
+	const [recentEvents,setRecentEvents] = useState<Evento[]>([]);
 
 	useEffect(() => {
 		setLoaded(true);
 		setBreadCrumb("");
+		// load from API las 2 events
+		let loadedEvents : Evento[] = [
+			{
+				id              : "infinite Power!!!!",
+				nombre          : "Somebody",
+				descripcion     : "some... body",
+				fecha           : new Date(),
+				fecha_delete    : new Date(),
+				img             : "some link",
+				place           : "some Link",
+				maxUsers        : 100,
+				currentUsers    : []
+			},
+			{
+				id              : "infinite Power!!!!",
+				nombre          : "Once Told Me..",
+				descripcion     : "some... body",
+				fecha           : new Date(),
+				fecha_delete    : new Date(),
+				img             : "some link",
+				place           : "some Link",
+				maxUsers        : 100,
+				currentUsers    : []
+			},
+			// {
+			// 	id              : "infinite Power!!!!",
+			// 	nombre          : "The world is gonna roll me",
+			// 	descripcion     : "some... body",
+			// 	fecha           : new Date(),
+			// 	fecha_delete    : new Date(),
+			// 	img             : "some link",
+			// 	place           : "some Link",
+			// 	maxUsers        : 100,
+			// 	currentUsers    : []
+			// }
+
+		];
+		setRecentEvents(loadedEvents);
 		// eslint-disable-next-line
 	}, []);
 
@@ -80,39 +120,21 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 					<Card.Body >
 						{/* <img height="300px" src="https://thumbs.gfycat.com/AccurateUnfinishedBergerpicard-size_restricted.gif" alt="travolta" /> */}
 						{/* <h1>De momento no hay eventos...</h1> */}
+
+					{recentEvents === undefined || recentEvents.length === 0 ? <p></p> : 
 						<Row>
-							<Col xs={12}>
-								<EventWidget event={{
-									id              : "infinite Power!!!!",
-									nombre          : "Somebody",
-									descripcion     : "some... body",
-									fecha           : new Date(),
-									fecha_delete    : new Date(),
-									img             : "some link",
-									place           : "some Link",
-									maxUsers        : 100,
-									currentUsers    : []}
-								} />
-							</Col>
-							<Col xs={12}>
-								<EventWidget event={{
-									id              : "infinite Power!!!!",
-									nombre          : "Once Told Me..",
-									descripcion     : "some... body",
-									fecha           : new Date(),
-									fecha_delete    : new Date(),
-									img             : "some link",
-									place           : "some Link",
-									maxUsers        : 100,
-									currentUsers    : []}
-								} />
-							</Col>
+							{recentEvents.map((e) => {
+								return <Col xs={12}>
+									<EventWidget event={e}/>
+								</Col>;
+							})}
 							<Col xs={12}>
 								<div className="expanded">
-									<h1 className="moreEventsBtn">...</h1>
+									<h1 className="moreEventsBtn"><a href="/dashboard/events">...</a></h1>
 								</div>
 							</Col>
 						</Row>
+					}
 					</Card.Body>
 				</Card>
 			</Col>
