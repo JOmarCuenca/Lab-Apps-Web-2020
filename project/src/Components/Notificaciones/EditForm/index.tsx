@@ -141,7 +141,27 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
-					
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
+						<li>HOLA</li>
 					</div>
 				</Col>
 			</Row>
