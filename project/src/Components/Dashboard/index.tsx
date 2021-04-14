@@ -93,7 +93,8 @@ const Dashboard: React.FC<Props> = () => {
 								size.width && size.width < minSize ? "" : "ml-6"
 							}`}
 						>
-							Punto Blanco
+							<img src="../../Assets/img/PuntoBlanco_icon.png" alt="Falta logo" />
+
 						</h5>
 						<div
 							className={`mb-4 ${
