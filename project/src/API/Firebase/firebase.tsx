@@ -126,7 +126,10 @@ class Firebase {
 			fecha_delete: data.fecha_delete.toDate(),
 			img: data.img,
 			place: data.place.latitude
-				? { latitude: data.place.latitude, longitude: data.place.longitude }
+				? {
+						latitude: data.place.latitude,
+						longitude: data.place.longitude,
+				  }
 				: data.place,
 			maxUsers: data.maxUsers,
 			currentUsers: data.currentUsers,
@@ -188,7 +191,7 @@ class Firebase {
 	): Usuario => {
 		let data = obj.data();
 		return {
-			id: obj.id,
+			uid: data.uid,
 			nombre: data.nombre,
 			email: data.email,
 			imagen_perfil: data.imagen_perfil,
@@ -208,7 +211,10 @@ class Firebase {
 	};
 
 	setNewUsuario = async (obj: Usuario): Promise<void> => {
-		await this.firestore.collection("Usuarios").add(this.userClean(obj));
+		await this.firestore
+			.collection("Usuarios")
+			.doc(obj.uid)
+			.set(this.userClean(obj));
 	};
 
 	deleteUsuariosByID = async (id: string): Promise<void> => {
@@ -218,7 +224,7 @@ class Firebase {
 	updateUsuario = async (obj: Usuario): Promise<void> => {
 		await this.firestore
 			.collection("Usuarios")
-			.doc(obj.id)
+			.doc(obj.uid)
 			.update(this.userClean(obj));
 	};
 
@@ -247,7 +253,10 @@ class Firebase {
 	setNewEvento = async (obj: Evento): Promise<void> => {
 		if (obj.imgFile && typeof obj.imgFile === "object") {
 			obj.img = `${StorageFolders.image}/${obj.imgFile!.name}`;
-			obj.imgFile = await this.uploadFile(obj.imgFile!, StorageFolders.image);
+			obj.imgFile = await this.uploadFile(
+				obj.imgFile!,
+				StorageFolders.image
+			);
 		}
 		await this.firestore.collection("Eventos").add(this.cleanEvento(obj));
 		console.log("Done");
@@ -260,7 +269,10 @@ class Firebase {
 	updateEvento = async (obj: Evento): Promise<void> => {
 		if (obj.imgFile && typeof obj.imgFile === "object") {
 			obj.img = `${StorageFolders.image}/${obj.imgFile!.name}`;
-			obj.imgFile = await this.uploadFile(obj.imgFile!, StorageFolders.image);
+			obj.imgFile = await this.uploadFile(
+				obj.imgFile!,
+				StorageFolders.image
+			);
 		}
 		await this.firestore
 			.collection("Eventos")
@@ -293,7 +305,9 @@ class Firebase {
 	};
 
 	getAllMeditacions = async (): Promise<Meditacion[]> => {
-		const meditaciones = await this.firestore.collection("Meditaciones").get();
+		const meditaciones = await this.firestore
+			.collection("Meditaciones")
+			.get();
 		return meditaciones.docs.map((doc) => this.toMeditacion(doc));
 	};
 
