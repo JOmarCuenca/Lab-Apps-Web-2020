@@ -89,8 +89,8 @@ const Dashboard: React.FC<Props> = () => {
 						}} //19%
 					>
 						<h5
-							className={`mb-4 ${
-								size.width && size.width < minSize ? "" : "ml-3"
+							className={`mb-7 ${
+								size.width && size.width < minSize ? "" : "ml-6"
 							}`}
 						>
 							Punto Blanco
@@ -100,7 +100,7 @@ const Dashboard: React.FC<Props> = () => {
 								size.width && size.width < minSize ? "" : "ml-3"
 							}`}
 						>
-							<Breadcrumbs aria-label='breadcrumb'>
+							{/* <Breadcrumbs aria-label='breadcrumb'>
 								<Link className='aTag' to='/dashboard'>
 									<img className='mb-1' width={15} alt='home' src={homeIcon} />
 								</Link>
@@ -116,7 +116,7 @@ const Dashboard: React.FC<Props> = () => {
 										{unidad.toUpperCase()}
 									</Link>
 								) : null}
-							</Breadcrumbs>
+							</Breadcrumbs> */}
 						</div>
 						<Switch>
 							<Route exact path='/dashboard'>
