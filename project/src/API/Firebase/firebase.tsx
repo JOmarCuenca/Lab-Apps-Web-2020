@@ -323,14 +323,31 @@ class Firebase {
 		await this.firestore.collection("Meditaciones").doc(obj.id).update(obj);
 	};
 
-	getLimitedNotification = async (limit : number, initial = 0) : Promise<Notificacion[]> => {
-		const notif = await this.firestore.collection("Notificacion")
-			.orderBy("fecha")
+	getLimitedNotification = async (
+		limit: number,
+		initial = 0
+	): Promise<Notificacion[]> => {
+		const notif = await this.firestore
+			.collection("Notificacion")
+			.orderBy("fecha", "desc")
 			.startAt(initial)
 			.limit(limit)
-			.get()
-		return notif.docs.map(n => this.toNotificacion(n))
-	}
+			.get();
+		return notif.docs.map((n) => this.toNotificacion(n));
+	};
+
+	getLimitedEvento = async (
+		limit: number,
+		initial = 0
+	): Promise<Evento[]> => {
+		const eventos = await this.firestore
+			.collection("Eventos")
+			.orderBy("fecha", "desc")
+			.startAt(initial)
+			.limit(limit)
+			.get();
+		return eventos.docs.map((n) => this.toEvento(n));
+	};
 
 	/*********************************************Extra UseFul Functions*****************************************/
 
