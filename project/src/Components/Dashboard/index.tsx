@@ -17,18 +17,10 @@ import EditForm from "../Notificaciones/EditForm";
 import { FirebaseContext } from "../../API/Firebase";
 import EventosForm from "../Eventos/EditForm";
 import EventosMenu from "../Eventos/VisualizeMenu";
+import Configuracion from "../Configuracion";
+import profilepicture from "../../Assets/img/profilepicture.png";
 
 interface Props {}
-
-export const UsuarioObj: Usuario = {
-	nombre: "some",
-	id: "joifjoijf",
-	imagen_perfil: "eojoifjiojf",
-	email: "some",
-	rol: "some",
-};
-
-export const UsuarioContext = React.createContext(UsuarioObj);
 
 const Dashboard: React.FC<Props> = () => {
 	const firebase = useContext(FirebaseContext);
@@ -37,15 +29,25 @@ const Dashboard: React.FC<Props> = () => {
 	const size = useWindowSize();
 	const [ready, setReady] = useState(true);
 	const [breadCrumb, setBreadCrumb] = useState("Dashboard");
+	const [user, setUser] = useState<Usuario>({
+		nombre: "",
+		uid: "",
+		imagen_perfil: profilepicture,
+		email: "",
+		rol: "",
+	});
 	const minSize = 768;
 
 	useEffect(() => {
 		firebase
 			.getAuthUser()
 			.then((user) => {
-				// console.log(user);
 				if (user === null) {
 					history.push("/login");
+				} else {
+					firebase.getUserByUID(user.uid).then((usuario) => {
+						setUser(usuario);
+					});
 				}
 			})
 			.catch((err) => {
@@ -71,69 +73,88 @@ const Dashboard: React.FC<Props> = () => {
 
 	return (
 		<div style={{ height: "100%" }}>
-			<UsuarioContext.Provider value={UsuarioObj}>
-				<Navigation />
+			<Navigation />
+			<div
+				style={{
+					padding: 30,
+					minHeight: "100vh",
+					display: "flex",
+					backgroundColor: "#F5F7FA",
+					flexDirection: "column",
+					position: "relative",
+					paddingBottom: "2.5rem",
+				}}
+			>
 				<div
 					style={{
-						padding: 30,
-						minHeight: "100vh",
-						display: "flex",
-						backgroundColor: "#F5F7FA",
-						flexDirection: "column",
-						position: "relative",
-						paddingBottom: "2.5rem",
-					}}
+						minHeight: "100%",
+						display: "block",
+						marginLeft:
+							size.width && size.width < minSize ? "0" : "250px",
+					}} //19%
 				>
-					<div
-						style={{
-							minHeight: "100%",
-							display: "block",
-							marginLeft: size.width && size.width < minSize ? "0" : "250px",
-						}} //19%
+					<h5
+						className={`mb-4 ${
+							size.width && size.width < minSize ? "" : "ml-3"
+						}`}
 					>
-						<h5
-							className={`mb-4 ${
-								size.width && size.width < minSize ? "" : "ml-3"
-							}`}
-						>
-							Dashboard
-						</h5>
-						<div
-							className={`mb-4 ${
-								size.width && size.width < minSize ? "" : "ml-3"
-							}`}
-						>
-							<Breadcrumbs aria-label='breadcrumb'>
-								<Link className='aTag' to='/dashboard'>
-									<img className='mb-1' width={15} alt='home' src={homeIcon} />
-								</Link>
+						Dashboard
+					</h5>
+					<div
+						className={`mb-4 ${
+							size.width && size.width < minSize ? "" : "ml-3"
+						}`}
+					>
+						<Breadcrumbs aria-label='breadcrumb'>
+							<Link className='aTag' to='/dashboard'>
+								<img
+									className='mb-1'
+									width={15}
+									alt='home'
+									src={homeIcon}
+								/>
+							</Link>
+							<Link
+								className='aTag'
+								to='/dashboard'
+								onClick={() => setUnidad(undefined)}
+							>
+								{breadCrumb}
+							</Link>
+							{unidad ? (
 								<Link
 									className='aTag'
-									to='/dashboard'
-									onClick={() => setUnidad(undefined)}
+									to={`/dashboard/${unidad}`}
 								>
-									{breadCrumb}
+									{unidad.toUpperCase()}
 								</Link>
-								{unidad ? (
-									<Link className='aTag' to={`/dashboard/${unidad}`}>
-										{unidad.toUpperCase()}
-									</Link>
-								) : null}
-							</Breadcrumbs>
-						</div>
-						<Switch>
-							<Route path='/dashboard/notifications'>
-								<EditForm setBreadCrumb={setBreadCrumb} />
-							</Route>
-							<Route path={`/dashboard/events/${ADD_NEW_ITEM_CODE}`}>
-								<EventosForm />
-							</Route>
-							<Route path='/dashboard/events'>
-								<EventosMenu setBreadCrumb={setBreadCrumb} />
-							</Route>
-						</Switch>
+							) : null}
+						</Breadcrumbs>
 					</div>
-					{/* <footer
+					<Switch>
+						<Route
+							path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}
+						>
+							<EditForm setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path='/dashboard/notifications'>
+							<NotificationsMenu setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path={`/dashboard/events/${ADD_NEW_ITEM_CODE}`}>
+							<EventosForm />
+						</Route>
+						<Route path='/dashboard/events'>
+							<EventosMenu setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path='/dashboard/configuracion'>
+							<Configuracion
+								setBreadCrumb={setBreadCrumb}
+								usuario={user}
+							/>
+						</Route>
+					</Switch>
+				</div>
+				{/* <footer
             style={{
               fontSize: 8,
               color: "grey",
@@ -158,8 +179,7 @@ const Dashboard: React.FC<Props> = () => {
             </div>
           </footer>
          */}
-				</div>
-			</UsuarioContext.Provider>
+			</div>
 		</div>
 	);
 };

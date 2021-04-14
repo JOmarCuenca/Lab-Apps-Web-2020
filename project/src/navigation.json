@@ -1,25 +1,30 @@
 [
-  {
-    "title": "Notificaciones",
-    "action": "/dashboard/notifications",
-    "icon": "Pedidos"
-  },
-  {
-    "title": "Eventos",
-    "action": "/dashboard/events",
-    "icon": "Contactos"
-  },
-  {
-    "title": "Noticias",
-    "action": "/dashboard/news",
-    "icon": "Retro"
-  },
-  {
-    "title": "Cerrar sesión",
-    "action": {
-      "route": "/login",
-      "action": "logout"
-    },
-    "icon": "Logout"
-  }
+	{
+		"title": "Notificaciones",
+		"action": "/dashboard/notifications",
+		"icon": "Pedidos"
+	},
+	{
+		"title": "Eventos",
+		"action": "/dashboard/events",
+		"icon": "Contactos"
+	},
+	{
+		"title": "Noticias",
+		"action": "/dashboard/news",
+		"icon": "Retro"
+	},
+	{
+		"title": "Configuracion",
+		"action": "/dashboard/configuracion",
+		"icon": "Retro"
+	},
+	{
+		"title": "Cerrar sesión",
+		"action": {
+			"route": "/login",
+			"action": "logout"
+		},
+		"icon": "Logout"
+	}
 ]
