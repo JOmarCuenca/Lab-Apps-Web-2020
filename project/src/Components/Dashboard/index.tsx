@@ -135,7 +135,7 @@ const Dashboard: React.FC<Props> = () => {
 						<Route
 							path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}
 						>
-							<EditForm />
+							<EditForm setBreadCrumb={setBreadCrumb} />
 						</Route>
 						<Route path='/dashboard/notifications'>
 							<NotificationsMenu setBreadCrumb={setBreadCrumb} />

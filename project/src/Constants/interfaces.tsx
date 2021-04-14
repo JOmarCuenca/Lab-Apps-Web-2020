@@ -49,6 +49,7 @@ export interface Meditacion {
 
 export interface Notificacion {
 	id: string;
+	title: string;
 	descripcion: string;
 	fecha: Date;
 	lifetime?: number; // ?? default 24 hrs
