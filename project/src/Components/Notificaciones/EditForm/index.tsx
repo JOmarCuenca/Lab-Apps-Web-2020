@@ -1,5 +1,5 @@
 import React, { FC, FormEvent, useContext, useEffect, useState } from "react";
-import { Card, Col, Form, Row } from "react-bootstrap";
+import { Card, Col, Form, Row, Button, Modal} from "react-bootstrap";
 import { useHistory, useParams } from "react-router-dom";
 import { FirebaseContext } from "../../../API/Firebase";
 import { Notificacion } from "../../../Constants/interfaces";
@@ -41,8 +41,13 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 		// eslint-disable-next-line
 	}, []);
 
+	const [show, setShow] = useState(false);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+
 		setLoadingSubmit(true);
 		let message = "Se ha subido la notificación";
 		let failure = false;
@@ -99,7 +104,7 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
                         <hr className="hr1"></hr>
                         <p className="parrafo" id="mensaje">Mensaje Adjuntado</p>
                         <Form.Control
-							className="select"
+							className="select11"
 							as="textarea"
 							placeholder="Ej. Traer sus propios alimentos"
 							rows={3}
@@ -141,27 +146,24 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
-						<li>HOLA</li>
+						<Button variant="primary" onClick={handleShow}>
+							Prueba
+						</Button>
+					
+						<Modal show={show} onHide={handleClose}>
+							<Modal.Header closeButton>
+							<Modal.Title></Modal.Title>
+							</Modal.Header>
+							<Modal.Body></Modal.Body>
+							<Modal.Footer>
+							<Button variant="secondary" onClick={handleClose}>
+								Cancelar
+							</Button>
+							<Button variant="primary" onClick={handleClose}>
+								Guardar
+							</Button>
+							</Modal.Footer>
+						</Modal>
 					</div>
 				</Col>
 			</Row>
