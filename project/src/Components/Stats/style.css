@@ -13,6 +13,37 @@
 .statsWindow {
     padding: 1%;
     border-radius: 16px;
+    max-height: 75vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+#FilterBar {
+    width: 100%;
+    border-radius: 16px;
+    height: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
+#FilterHead {
+    background-color: #227980;
+    border-radius: 4px;
+    width: 75%;
+    margin: auto;
+    color: white;
+    font-weight: 600;
+    font-size: 3vh;
+}
+
+#Filter {
+    cursor: pointer;
+    padding: 16px;
+    font-size: 2.5vh;
+    border-radius: 8px;
     -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
     -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
     box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;

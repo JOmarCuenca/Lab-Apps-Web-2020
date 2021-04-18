@@ -38,6 +38,11 @@ const StatsScreen : FC<Props> = ({ setBreadCrumb }) => {
         {createStatsWidgets()}
     </Row>;
 
+    const filterBar = () => <div id="FilterBar">
+        <div id="FilterHead">Filtrar por</div>
+        <div id="Filter">Esta Semana</div>
+    </div>;
+
     return <div>
         <Row>
             <Col xs={12}>
@@ -48,7 +53,7 @@ const StatsScreen : FC<Props> = ({ setBreadCrumb }) => {
                 </div>
             </Col>
             <Col md={8}><div className="statsWindow">{createStats()}</div></Col>
-            <Col md={4}><h3>Aqui iran otras cosas</h3></Col>
+            <Col md={4}>{filterBar()}</Col>
         </Row>
     </div>;
 }
