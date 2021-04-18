@@ -19,6 +19,7 @@ import EventosForm from "../Eventos/EditForm";
 import EventosMenu from "../Eventos/VisualizeMenu";
 import Configuracion from "../Configuracion";
 import profilepicture from "../../Assets/img/profilepicture.png";
+import StatsScreen from "../Stats";
 
 interface Props {}
 
@@ -139,6 +140,9 @@ const Dashboard: React.FC<Props> = () => {
 						</Route>
 						<Route path='/dashboard/notifications'>
 							<NotificationsMenu setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path='/dashboard/stats'>
+							<StatsScreen setBreadCrumb={setBreadCrumb} />
 						</Route>
 						<Route path={`/dashboard/events/${ADD_NEW_ITEM_CODE}`}>
 							<EventosForm />

@@ -55,6 +55,11 @@ export interface Notificacion {
 	lifetime?: number; // ?? default 24 hrs
 }
 
+export interface StatisticObj {
+	value 		: string,
+	description : string
+}
+
 /*
 
 los usuarios pueden tener muchos eventos

@@ -10,6 +10,11 @@
 		"icon": "Contactos"
 	},
 	{
+		"title": "Estadisticas",
+		"action": "/dashboard/stats",
+		"icon": "Contactos"
+	},
+	{
 		"title": "Noticias",
 		"action": "/dashboard/news",
 		"icon": "Retro"
