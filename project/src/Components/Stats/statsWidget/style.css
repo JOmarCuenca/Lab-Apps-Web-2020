@@ -1,0 +1,25 @@
+
+.statWidget {
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.statWidget > * {
+    color: white;
+    text-align: center;
+    cursor: default;
+}
+
+.statValue {
+    font-size: max(4vw,40px);
+}
+
+.statDescription {
+    font-size: max(2vw,24px);
+    padding-bottom: 4%;
+}
+
+.customDivider {
+    border-top: 3px solid white;
+    margin: auto 10%;
+}
