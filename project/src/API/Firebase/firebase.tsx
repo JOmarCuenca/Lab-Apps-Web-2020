@@ -183,13 +183,13 @@ class Firebase {
 
 	updateUsuario = async (obj: Usuario): Promise<void> => {
 		if (obj.imgFile && typeof obj.imgFile === "object") {
+			const fileName = `${obj.uid}.png`;
 			obj.imagen_perfil = await this.uploadFile(
-				obj.imgFile!,
+				new File([obj.imgFile!],fileName, { type: 'image/png' }),
 				StorageFolders.image
 			);
-			obj.imgFile = `${StorageFolders.image}/${obj.imgFile!.name}`;
+			obj.imgFile = `${StorageFolders.image}/${fileName}`;
 		}
-		console.log(obj);
 		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, obj);
 	};
 
@@ -367,7 +367,7 @@ class Firebase {
 		}
 	};
 
-	private deletFile = (path: string): Promise<any> => {
+	private deleteFile = (path: string): Promise<any> => {
 		try {
 			return this.dataAccess.storageAccess.ref().child(path).delete();
 		} catch (e) {
