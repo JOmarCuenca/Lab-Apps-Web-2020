@@ -6,6 +6,8 @@ import { Notificacion } from "../../../Constants/interfaces";
 
 import "./style.css";
 
+const limit = 4;
+
 interface Props {
 	setBreadCrumb: (val: string) => void;
 }
@@ -24,6 +26,7 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 	const [deleting, setDeleting] = useState<boolean>(false);
 	const [changeImage, setChangeImage] = useState<boolean>(false);
+	const [historyNotif, sethistoryNotif] = useState<Notificacion[]>([]);
 
 	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
@@ -37,6 +40,9 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 			fecha: new Date(),
 			lifetime: 24,
 		});
+		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => {
+			console.log(lista); 
+			sethistoryNotif(lista);});
 		// }
 		// eslint-disable-next-line
 	}, []);

@@ -140,7 +140,6 @@ export class DataAccess {
         orderDirection? : app.firestore.OrderByDirection ) => 
             this.firestore.collection(coll)
             .orderBy(orderAttr,orderDirection)
-            .startAt(startAt)
             .limit(amountLimit)
             .get();
 }
