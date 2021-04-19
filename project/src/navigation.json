@@ -1,5 +1,10 @@
 [
 	{
+		"title": "Principal",
+		"action": "/dashboard",
+		"icon": "Pedidos"
+	},
+	{
 		"title": "Notificaciones",
 		"action": "/dashboard/notifications",
 		"icon": "Pedidos"
@@ -13,11 +18,6 @@
 		"title": "Estadisticas",
 		"action": "/dashboard/stats",
 		"icon": "Contactos"
-	},
-	{
-		"title": "Noticias",
-		"action": "/dashboard/news",
-		"icon": "Retro"
 	},
 	{
 		"title": "Configuracion",
