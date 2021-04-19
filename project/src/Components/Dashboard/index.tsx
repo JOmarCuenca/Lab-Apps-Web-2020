@@ -11,7 +11,6 @@ import homeIcon from "../../Assets/img/home_icon.png";
 // import { FirebaseContext } from "../../API/Firebase";
 // import firebase from "firebase";
 // import Forms from "../Forms";
-import NotificationsMenu from "../Notificaciones/VisualizeMenu";
 import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
 import EditForm from "../Notificaciones/EditForm";
 import { FirebaseContext } from "../../API/Firebase";
@@ -20,6 +19,7 @@ import EventosMenu from "../Eventos/VisualizeMenu";
 import Configuracion from "../Configuracion";
 import profilepicture from "../../Assets/img/profilepicture.png";
 import StatsScreen from "../Stats";
+import NotificationForm from "../Notificaciones/EditForm";
 
 interface Props {}
 
@@ -139,7 +139,7 @@ const Dashboard: React.FC<Props> = () => {
 							<EditForm setBreadCrumb={setBreadCrumb} />
 						</Route>
 						<Route path='/dashboard/notifications'>
-							<NotificationsMenu setBreadCrumb={setBreadCrumb} />
+							<NotificationForm setBreadCrumb={setBreadCrumb} />
 						</Route>
 						<Route path='/dashboard/stats'>
 							<StatsScreen setBreadCrumb={setBreadCrumb} />

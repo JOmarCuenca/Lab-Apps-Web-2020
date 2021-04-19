@@ -1,8 +1,8 @@
-import React, { FC, FormEvent, useContext, useEffect, useState } from "react";
-import { Card, Col, Form, Row, Button, Modal} from "react-bootstrap";
-import { useHistory, useParams } from "react-router-dom";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { Col, Form, Row, Button, Modal} from "react-bootstrap";
 import { FirebaseContext } from "../../../API/Firebase";
 import { Notificacion } from "../../../Constants/interfaces";
+import NotifWidget from "./NotifTile";
 
 import "./style.css";
 
@@ -11,7 +11,7 @@ const limit = 4;
 interface Props {
 	setBreadCrumb: (val: string) => void;
 }
-const EditForm: FC<Props> = ({ setBreadCrumb }) => {
+const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 	// const { id } = useParams<{ id: string }>();
 	const [item, setItem] = useState<Notificacion>({
 		id: "",
@@ -20,16 +20,11 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 		fecha: new Date(),
 		lifetime: 24,
 	});
-	const [image, setImage] = useState<File | undefined>();
-	const [deleteItem, setDeleteItem] = useState<boolean>(false);
-
 	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 	const [deleting, setDeleting] = useState<boolean>(false);
-	const [changeImage, setChangeImage] = useState<boolean>(false);
 	const [historyNotif, sethistoryNotif] = useState<Notificacion[]>([]);
 
 	const firebase = useContext(FirebaseContext);
-	const history = useHistory();
 
 	useEffect(() => {
 		setBreadCrumb("Notificaciones");
@@ -152,6 +147,9 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
+
+						{historyNotif.map( n => <NotifWidget child={n} alterScreen={setItem} />)}
+
 						<Button variant="primary" onClick={handleShow}>
 							Prueba
 						</Button>
@@ -179,4 +177,4 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 	return renderItem();
 };
 
-export default EditForm;
+export default NotificationForm;
