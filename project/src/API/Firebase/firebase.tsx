@@ -6,6 +6,7 @@ import {
 	Evento,
 	Notificacion,
 	Meditacion,
+	StatisticObj,
 } from "../../Constants/interfaces";
 import { DataAccess } from "./data";
 
@@ -14,6 +15,7 @@ const RETOS_COLLECTION_TAG = "Retos";
 const EVENTOS_COLLECTION_TAG = "Eventos";
 const NOTIFICACIONES_COLLECTION_TAG = "Notificaciones";
 const MEDITACIONES_COLLECTION_TAG = "Meditaciones";
+const STATISTICS_COLLECTION_TAG = "Statistics";
 
 class Firebase {
 	private dataAccess: DataAccess;
@@ -164,6 +166,16 @@ class Firebase {
 		return temp;
 	};
 
+	private toStatisticObj = (
+		obj: app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>
+	): StatisticObj => {
+		let data = obj.data();
+		return {
+			value		: data.value,
+			description : data.description
+		}
+	}
+
 	// USUARIOS SECTION
 
 	setNewUsuario = async (obj: Usuario): Promise<void> => {
@@ -313,6 +325,15 @@ class Firebase {
 	deleteMeditacionByID = async (id: string): Promise<void> => {
 		await this.dataAccess.deleteDoc(MEDITACIONES_COLLECTION_TAG, id);
 	};
+
+	// Statistics Section
+
+	getStats = async () => {
+		const values = await this.dataAccess.getAllFromCollection(STATISTICS_COLLECTION_TAG);
+		return values.docs.map(s => this.toStatisticObj(s));
+	}
+
+	// Limited Queries Section Section
 
 	getLimitedNotification = async (
 		limit: number,
