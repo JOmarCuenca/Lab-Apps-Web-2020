@@ -182,12 +182,15 @@ const EventosForm: FC = () => {
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} md={8} xl={4}>
-									<Form.Label>Descripcion del evento</Form.Label>
+									<Form.Label>
+										Descripcion del evento
+									</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setItem({
 												...item!,
-												descripcion: str.currentTarget.value,
+												descripcion:
+													str.currentTarget.value,
 											});
 										}}
 										required={true}
@@ -201,7 +204,9 @@ const EventosForm: FC = () => {
 										onChange={(str) => {
 											setItem({
 												...item!,
-												fecha: new Date(str.currentTarget.value),
+												fecha: new Date(
+													str.currentTarget.value
+												),
 											});
 										}}
 										required={true}
@@ -210,12 +215,16 @@ const EventosForm: FC = () => {
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} md={8} xl={4}>
-									<Form.Label>Numero máximo de usuarios</Form.Label>
+									<Form.Label>
+										Numero máximo de usuarios
+									</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setItem({
 												...item!,
-												maxUsers: parseInt(str.currentTarget.value),
+												maxUsers: parseInt(
+													str.currentTarget.value
+												),
 											});
 										}}
 										required={false}
@@ -225,12 +234,16 @@ const EventosForm: FC = () => {
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} md={8} xl={4}>
-									<Form.Label>Fecha de borrado del evento</Form.Label>
+									<Form.Label>
+										Fecha de borrado del evento
+									</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setItem({
 												...item!,
-												fecha_delete: new Date(str.currentTarget.value),
+												fecha_delete: new Date(
+													str.currentTarget.value
+												),
 											});
 										}}
 										required={true}
@@ -268,7 +281,9 @@ const EventosForm: FC = () => {
 								className='submit-button'
 								style={{ float: "right", position: "relative" }}
 							>
-								{loadingSubmit ? "Cargando..." : "Subir Información"}
+								{loadingSubmit
+									? "Cargando..."
+									: "Subir Información"}
 							</button>
 						</Form>
 					</Card.Body>
