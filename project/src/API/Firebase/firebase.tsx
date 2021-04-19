@@ -16,8 +16,7 @@ const NOTIFICACIONES_COLLECTION_TAG = "Notificaciones";
 const MEDITACIONES_COLLECTION_TAG = "Meditaciones";
 
 class Firebase {
-	
-	private dataAccess : DataAccess;
+	private dataAccess: DataAccess;
 
 	constructor() {
 		this.dataAccess = new DataAccess();
@@ -33,7 +32,8 @@ class Firebase {
 	 * @param email Correo del usuario
 	 * @param password Contraseña del usuario
 	 */
-	doSignInWithEmailAndPassword = (email: string, password: string) => this.dataAccess.doSignInWithEmailAndPassword(email,password);
+	doSignInWithEmailAndPassword = (email: string, password: string) =>
+		this.dataAccess.doSignInWithEmailAndPassword(email, password);
 
 	/**
 	 * Cierra la sesión actual
@@ -44,15 +44,18 @@ class Firebase {
 	 * Resetea la contraseña
 	 * @param email Manda el mensaje de reinicio de la contraseña al email dado
 	 */
-	sendResetPassword = async (email: string): Promise<void> => this.dataAccess.sendResetPassword(email);
+	sendResetPassword = async (email: string): Promise<void> =>
+		this.dataAccess.sendResetPassword(email);
 
-	sendPassReset = async (userMail: string) => this.dataAccess.sendPassReset(userMail);
+	sendPassReset = async (userMail: string) =>
+		this.dataAccess.sendPassReset(userMail);
 
 	/**
 	 * Get the Uer
 	 * @param uid UID del usuario
 	 */
-	getUserByUID = async (uid: string): Promise<Usuario> => this.dataAccess.getUserByUID(uid);
+	getUserByUID = async (uid: string): Promise<Usuario> =>
+		this.dataAccess.getUserByUID(uid);
 
 	/****************************************OPERACIONES CRUD DE NUESTRAS INTERFACES********************************************/
 
@@ -111,7 +114,7 @@ class Firebase {
 		return {
 			id: obj.id,
 			descripcion: data.descripcion,
-			title : data.title,
+			title: data.title,
 			fecha: data.fecha.toDate(),
 			lifetime: data.lifetime ?? 24,
 		};
@@ -164,39 +167,55 @@ class Firebase {
 	// USUARIOS SECTION
 
 	setNewUsuario = async (obj: Usuario): Promise<void> => {
-		await this.dataAccess.writeDoc(USER_COLLECTION_TAG,this.userClean(obj),obj.uid);
+		await this.dataAccess.writeDoc(
+			USER_COLLECTION_TAG,
+			this.userClean(obj),
+			obj.uid
+		);
 	};
 
 	getAllUsuarios = async (): Promise<Usuario[]> => {
-		const retos = await this.dataAccess.getAllFromCollection(USER_COLLECTION_TAG);
+		const retos = await this.dataAccess.getAllFromCollection(
+			USER_COLLECTION_TAG
+		);
 		return retos.docs.map((doc) => this.toUsuario(doc));
 	};
 
 	updateUsuario = async (obj: Usuario): Promise<void> => {
-		await this.dataAccess.updateDoc(USER_COLLECTION_TAG,obj.uid,obj);
+		if (obj.imgFile && typeof obj.imgFile === "object") {
+			// obj.imagen_perfil = `${StorageFolders.image}/${obj.imgFile!.name}`;
+			obj.imgFile = await this.uploadFile(
+				obj.imgFile!,
+				StorageFolders.image
+			);
+			obj.imagen_perfil = obj.imgFile;
+		}
+		await this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, obj);
 	};
 
 	deleteUsuariosByID = async (id: string): Promise<void> => {
-		await this.dataAccess.deleteDoc(USER_COLLECTION_TAG,id);
+		await this.dataAccess.deleteDoc(USER_COLLECTION_TAG, id);
 	};
 
 	// RETOS SECTION
 
 	setNewReto = async (obj: Reto): Promise<void> => {
-		await this.dataAccess.writeDoc(RETOS_COLLECTION_TAG,obj);
+		await this.dataAccess.writeDoc(RETOS_COLLECTION_TAG, obj);
 	};
 
 	getAllRetos = async (): Promise<Reto[]> => {
-		const retos = await this.dataAccess.getAllFromCollection(RETOS_COLLECTION_TAG);
+		const retos = await this.dataAccess.getAllFromCollection(
+			RETOS_COLLECTION_TAG
+		);
 		return retos.docs.map((doc) => this.toReto(doc));
 	};
 
 	updateReto = async (obj: Reto): Promise<void> => {
-		await this.dataAccess.updateDoc(RETOS_COLLECTION_TAG,obj.id,obj);
+		await this.dataAccess.updateDoc(RETOS_COLLECTION_TAG, obj.id, obj);
 	};
 
 	deleteRetoByID = async (id: string): Promise<void> => {
-		await this.dataAccess.deleteDoc(RETOS_COLLECTION_TAG,id);
+		await this.dataAccess.deleteDoc(RETOS_COLLECTION_TAG, id);
 	};
 
 	// Eventos Section
@@ -209,12 +228,17 @@ class Firebase {
 				StorageFolders.image
 			);
 		}
-		await this.dataAccess.writeDoc(EVENTOS_COLLECTION_TAG,this.cleanEvento(obj));
+		await this.dataAccess.writeDoc(
+			EVENTOS_COLLECTION_TAG,
+			this.cleanEvento(obj)
+		);
 		console.log("Done");
 	};
 
 	getAllEventos = async (): Promise<Evento[]> => {
-		const eventos = await this.dataAccess.getAllFromCollection(EVENTOS_COLLECTION_TAG);
+		const eventos = await this.dataAccess.getAllFromCollection(
+			EVENTOS_COLLECTION_TAG
+		);
 		return eventos.docs.map((doc) => this.toEvento(doc));
 	};
 
@@ -226,56 +250,81 @@ class Firebase {
 				StorageFolders.image
 			);
 		}
-		await this.dataAccess.updateDoc(EVENTOS_COLLECTION_TAG,obj.id,this.cleanEvento(obj));
+		await this.dataAccess.updateDoc(
+			EVENTOS_COLLECTION_TAG,
+			obj.id,
+			this.cleanEvento(obj)
+		);
 	};
 
 	deleteEventoById = async (id: string): Promise<void> => {
-		await this.dataAccess.deleteDoc(EVENTOS_COLLECTION_TAG,id);
+		await this.dataAccess.deleteDoc(EVENTOS_COLLECTION_TAG, id);
 	};
 
 	// Notifications section
 
 	setNewNotificacion = async (obj: Notificacion): Promise<void> => {
-		await this.dataAccess.writeDoc(NOTIFICACIONES_COLLECTION_TAG,this.cleanNotificacion(obj));
+		await this.dataAccess.writeDoc(
+			NOTIFICACIONES_COLLECTION_TAG,
+			this.cleanNotificacion(obj)
+		);
 	};
 
 	getAllNotifications = async (): Promise<Notificacion[]> => {
-		const notifications = await this.dataAccess.getAllFromCollection(NOTIFICACIONES_COLLECTION_TAG);
+		const notifications = await this.dataAccess.getAllFromCollection(
+			NOTIFICACIONES_COLLECTION_TAG
+		);
 		return notifications.docs.map((doc) => this.toNotificacion(doc));
 	};
 
 	updateNotificacion = async (obj: Notificacion): Promise<void> => {
-		await this.dataAccess.updateDoc(NOTIFICACIONES_COLLECTION_TAG,obj.id,this.cleanNotificacion(obj));
+		await this.dataAccess.updateDoc(
+			NOTIFICACIONES_COLLECTION_TAG,
+			obj.id,
+			this.cleanNotificacion(obj)
+		);
 	};
 
 	deleteNotificacionById = async (id: string): Promise<void> => {
-		await this.dataAccess.deleteDoc(NOTIFICACIONES_COLLECTION_TAG,id);
+		await this.dataAccess.deleteDoc(NOTIFICACIONES_COLLECTION_TAG, id);
 	};
 
 	// Meditaciones section
 
 	setNewMeditacion = async (obj: Meditacion): Promise<void> => {
-		await this.dataAccess.writeDoc(MEDITACIONES_COLLECTION_TAG,obj);
+		await this.dataAccess.writeDoc(MEDITACIONES_COLLECTION_TAG, obj);
 	};
 
 	getAllMeditacions = async (): Promise<Meditacion[]> => {
-		const meditaciones = await this.dataAccess.getAllFromCollection(MEDITACIONES_COLLECTION_TAG);
+		const meditaciones = await this.dataAccess.getAllFromCollection(
+			MEDITACIONES_COLLECTION_TAG
+		);
 		return meditaciones.docs.map((doc) => this.toMeditacion(doc));
 	};
 
 	updateMeditacion = async (obj: Meditacion): Promise<void> => {
-		await this.dataAccess.updateDoc(MEDITACIONES_COLLECTION_TAG,obj.id,obj);
+		await this.dataAccess.updateDoc(
+			MEDITACIONES_COLLECTION_TAG,
+			obj.id,
+			obj
+		);
 	};
 
 	deleteMeditacionByID = async (id: string): Promise<void> => {
-		await this.dataAccess.deleteDoc(MEDITACIONES_COLLECTION_TAG,id);
+		await this.dataAccess.deleteDoc(MEDITACIONES_COLLECTION_TAG, id);
 	};
 
 	getLimitedNotification = async (
 		limit: number,
 		initial = 0
 	): Promise<Notificacion[]> => {
-		const notif = await this.dataAccess.getLimitedFromCollection(NOTIFICACIONES_COLLECTION_TAG,"fecha",limit,initial,"desc");
+		const notif = await this.dataAccess.getLimitedFromCollection(
+			NOTIFICACIONES_COLLECTION_TAG,
+			"fecha",
+			limit,
+			initial,
+			"desc"
+		);
 		return notif.docs.map((n) => this.toNotificacion(n));
 	};
 
@@ -283,7 +332,13 @@ class Firebase {
 		limit: number,
 		initial = 0
 	): Promise<Evento[]> => {
-		const eventos = await this.dataAccess.getLimitedFromCollection(EVENTOS_COLLECTION_TAG,"fecha",limit,initial,"desc");
+		const eventos = await this.dataAccess.getLimitedFromCollection(
+			EVENTOS_COLLECTION_TAG,
+			"fecha",
+			limit,
+			initial,
+			"desc"
+		);
 		return eventos.docs.map((n) => this.toEvento(n));
 	};
 
