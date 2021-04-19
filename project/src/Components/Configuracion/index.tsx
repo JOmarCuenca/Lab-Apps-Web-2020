@@ -1,7 +1,5 @@
-import { fireEvent } from "@testing-library/dom";
 import React, { FC, useContext, useEffect, useState } from "react";
 import { Card, Col, Form, Image } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../API/Firebase";
 import { Usuario } from "../../Constants/interfaces";
 import profilepicture from "../../Assets/img/profilepicture.png";
@@ -14,14 +12,12 @@ interface Props {
 }
 
 const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
-	// const { id } = useParams<{ id: string }>();
 	const [user, setUser] = useState<Usuario>(usuario);
 	const [image, setImage] = useState<File | undefined>();
 
 	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 
 	const firebase = useContext(FirebaseContext);
-	const history = useHistory();
 
 	useEffect(() => {
 		setBreadCrumb("Configuración");
@@ -35,11 +31,9 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 			return;
 		}
 		setImage(files.item(0)!);
-		console.log(files.item(0)?.name);
 		const imgSrc = (window.URL || window.webkitURL).createObjectURL(
 			files.item(0)!
 		);
-		console.log(imgSrc);
 		return imgSrc;
 	};
 
@@ -52,22 +46,16 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 			if (image !== undefined) {
 				copy.imgFile = image;
 			}
-			// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
-			// else await firebase.saveProduct(copy);
 			await firebase.updateUsuario(copy);
-			console.log(copy);
 		} catch (e) {
 			console.log(e);
-			message =
-				"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
+			message = "Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
 		}
 		setLoadingSubmit(false);
 		window.alert(message);
-		history.push("/dashboard/configuracion");
 	};
 
 	const renderItem = () => {
-		console.log(usuario);
 		var imgSrc = usuario.imagen_perfil;
 		var inputElement: HTMLInputElement;
 		var imgElement: HTMLImageElement;
@@ -146,7 +134,7 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} xl={6}>
-									<Form.Label>email</Form.Label>
+									<Form.Label>Email</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setUser({

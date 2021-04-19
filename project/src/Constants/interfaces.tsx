@@ -22,7 +22,7 @@ export interface Usuario {
 	email: string;
 	imagen_perfil: string; // URL
 	rol?: string;
-	imgFile?: File | string;
+	imgFile?: File | string; // Archivo o Firestorage Ref de donde sacar el documento
 }
 
 export interface Reto {

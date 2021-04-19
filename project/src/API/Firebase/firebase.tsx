@@ -183,14 +183,14 @@ class Firebase {
 
 	updateUsuario = async (obj: Usuario): Promise<void> => {
 		if (obj.imgFile && typeof obj.imgFile === "object") {
-			// obj.imagen_perfil = `${StorageFolders.image}/${obj.imgFile!.name}`;
-			obj.imgFile = await this.uploadFile(
+			obj.imagen_perfil = await this.uploadFile(
 				obj.imgFile!,
 				StorageFolders.image
 			);
-			obj.imagen_perfil = obj.imgFile;
+			obj.imgFile = `${StorageFolders.image}/${obj.imgFile!.name}`;
 		}
-		await this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, obj);
+		console.log(obj);
+		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, obj);
 	};
 
 	deleteUsuariosByID = async (id: string): Promise<void> => {
@@ -344,6 +344,14 @@ class Firebase {
 
 	/*********************************************Extra UseFul Functions*****************************************/
 
+	/**
+	 * This function sends the file to the Firebase Storage Service and returns the URL to render it
+	 * in the web application.
+	 * 
+	 * @param file File to upload to Firebase Storage
+	 * @param storageFolder Path of firebase where the file will be
+	 * @returns Returns URL where to get the file from.
+	 */
 	private uploadFile = async (
 		file: File,
 		storageFolder: StorageFolders
