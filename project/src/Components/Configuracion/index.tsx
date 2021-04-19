@@ -1,7 +1,5 @@
-import { fireEvent } from "@testing-library/dom";
 import React, { FC, useContext, useEffect, useState } from "react";
 import { Card, Col, Form, Image } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../API/Firebase";
 import { Usuario } from "../../Constants/interfaces";
 import profilepicture from "../../Assets/img/profilepicture.png";
@@ -14,14 +12,12 @@ interface Props {
 }
 
 const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
-	// const { id } = useParams<{ id: string }>();
 	const [user, setUser] = useState<Usuario>(usuario);
 	const [image, setImage] = useState<File | undefined>();
 
 	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 
 	const firebase = useContext(FirebaseContext);
-	const history = useHistory();
 
 	useEffect(() => {
 		setBreadCrumb("Configuración");
@@ -35,8 +31,10 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 			return;
 		}
 		setImage(files.item(0)!);
-		console.log(files.item(0)?.name);
-		return;
+		const imgSrc = (window.URL || window.webkitURL).createObjectURL(
+			files.item(0)!
+		);
+		return imgSrc;
 	};
 
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -46,27 +44,21 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 		try {
 			const copy = user!;
 			if (image !== undefined) {
-				copy.imagen_perfil = image;
+				copy.imgFile = image;
 			}
-			// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
-			// else await firebase.saveProduct(copy);
 			await firebase.updateUsuario(copy);
-			console.log(copy);
 		} catch (e) {
 			console.log(e);
-			message =
-				"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
+			message = "Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
 		}
 		setLoadingSubmit(false);
 		window.alert(message);
-		history.push("/dashboard/configuracion");
 	};
 
 	const renderItem = () => {
-		var imgSrc =
-			typeof usuario.imagen_perfil === "string"
-				? usuario.imagen_perfil
-				: profilepicture;
+		var imgSrc = usuario.imagen_perfil;
+		var inputElement: HTMLInputElement;
+		var imgElement: HTMLImageElement;
 		return (
 			<div>
 				<Card style={{ borderRadius: 10 }}>
@@ -89,17 +81,39 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 										md={12}
 										xl={12}
 									>
-										Imagen de perfil
+										<input
+											type='file'
+											id='imgupload'
+											ref={(input) =>
+												(inputElement = input!)
+											}
+											style={{ display: "none" }}
+											onChange={(event) => {
+												imgSrc = saveFileLocally(
+													event
+												)!;
+												imgElement.src = imgSrc;
+											}}
+										/>
+										<Image
+											onClick={() => {}}
+											style={{
+												maxWidth: "150px",
+												cursor: "pointer",
+											}}
+											ref={(img) => {
+												imgElement = img!;
+											}}
+											src={imgSrc}
+											roundedCircle
+											onClickCapture={(event) => {
+												inputElement.click();
+											}}
+											onError={(event) =>
+												(event.currentTarget.src = profilepicture)
+											}
+										/>
 									</Form.Label>
-									<Image
-										onClick={() => {}}
-										style={{ maxWidth: "150px" }}
-										src={imgSrc}
-										roundedCircle
-										onError={(event) =>
-											(event.currentTarget.src = profilepicture)
-										}
-									/>
 								</Form.Group>
 							</Form.Row>
 							<Form.Row>
@@ -116,11 +130,11 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 										required={true}
 										type='text'
 										placeholder='Nombre'
-										value={usuario!.nombre}
+										value={user!.nombre}
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} xl={6}>
-									<Form.Label>email</Form.Label>
+									<Form.Label>Email</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setUser({
@@ -131,7 +145,7 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 										required={true}
 										type='text'
 										placeholder='Email'
-										value={usuario!.email}
+										value={user!.email}
 									/>
 								</Form.Group>
 							</Form.Row>

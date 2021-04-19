@@ -151,10 +151,12 @@ const Dashboard: React.FC<Props> = () => {
 							<EventosMenu setBreadCrumb={setBreadCrumb} />
 						</Route>
 						<Route path='/dashboard/configuracion'>
-							<Configuracion
-								setBreadCrumb={setBreadCrumb}
-								usuario={user}
-							/>
+							{user.nombre !== "" ? (
+								<Configuracion
+									setBreadCrumb={setBreadCrumb}
+									usuario={user}
+								/>
+							) : null}
 						</Route>
 					</Switch>
 				</div>
