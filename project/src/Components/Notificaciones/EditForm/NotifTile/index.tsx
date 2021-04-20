@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
+import { Col, Form, Row, Button, Modal} from "react-bootstrap";
 import { Notificacion } from "../../../../Constants/interfaces";
 
 import "./style.css";
@@ -15,15 +16,30 @@ const NotifWidget : FC<Props> = (p) => {
         return now.getTime() < timeOfDeath;
     }
 
+        const [show, setShow] = useState(false);
+        const handleClose = () => setShow(false);
+        const handleShow = () => setShow(true);
+
     return <div className="NotifWidget" onClick={() => p.alterScreen(p.child)}>
         <div>
             <h5 className="Child">{p.child.title}</h5>
         </div>
         <div>
-            {isAlive() ? <h6 className="On">ON</h6> : <></>}
+            {isAlive() ? <button className="On" onClick={handleShow}>ON</button> : <></>}
+            <Modal className="modalp" show={show} onHide={handleClose} backdrop="static">
+                <Modal.Header closeButton>
+                    <Modal.Title>{p.child.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{p.child.descripcion}</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary">
+                        Modificar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
         <div>
-            <h6 className="X">X</h6>
+            <button className="X">X</button>
         </div>
         <hr></hr>
     </div>;
