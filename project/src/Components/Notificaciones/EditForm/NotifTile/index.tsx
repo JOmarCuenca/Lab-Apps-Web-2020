@@ -16,9 +16,16 @@ const NotifWidget : FC<Props> = (p) => {
     }
 
     return <div className="NotifWidget" onClick={() => p.alterScreen(p.child)}>
-        <h3>{p.child.title}</h3>
-        {isAlive() ? <h5>On</h5> : <></>}
-        <h5>X</h5>
+        <div>
+            <h5 className="Child">{p.child.title}</h5>
+        </div>
+        <div>
+            {isAlive() ? <h6 className="On">ON</h6> : <></>}
+        </div>
+        <div>
+            <h6 className="X">X</h6>
+        </div>
+        <hr></hr>
     </div>;
 };
 

@@ -6,7 +6,7 @@ import NotifWidget from "./NotifTile";
 
 import "./style.css";
 
-const limit = 4;
+var limit = 4;
 
 interface Props {
 	setBreadCrumb: (val: string) => void;
@@ -35,16 +35,11 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 			fecha: new Date(),
 			lifetime: 24,
 		});
-		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => {
-			console.log(lista); 
+		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
 			sethistoryNotif(lista);});
 		// }
 		// eslint-disable-next-line
 	}, []);
-
-	const [show, setShow] = useState(false);
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
 
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -91,7 +86,7 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 		return (
 			<Row>
 				<Col xl={6} xs={12}>
-					<h4 className="usuario">Usuario</h4>
+					<h4 className="usuario">Notificación</h4>
 				<div className="maindiv">
                     <Form onSubmit={submitChanges}>
                         <p className="parrafo" id="titulo">Titulo</p>
@@ -147,27 +142,7 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
-
 						{historyNotif.map( n => <NotifWidget child={n} alterScreen={setItem} />)}
-
-						<Button variant="primary" onClick={handleShow}>
-							Prueba
-						</Button>
-					
-						<Modal show={show} onHide={handleClose}>
-							<Modal.Header closeButton>
-							<Modal.Title></Modal.Title>
-							</Modal.Header>
-							<Modal.Body></Modal.Body>
-							<Modal.Footer>
-							<Button variant="secondary" onClick={handleClose}>
-								Cancelar
-							</Button>
-							<Button variant="primary" onClick={handleClose}>
-								Guardar
-							</Button>
-							</Modal.Footer>
-						</Modal>
 					</div>
 				</Col>
 			</Row>

@@ -1,5 +1,34 @@
 .NotifWidget {
-    border-radius: 16px;
-    background-color: red;
     margin: 5px;
+    display: inline-block;
+}
+
+div {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.On {
+    background: green;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+}
+
+.X {
+    background: red;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
 }
