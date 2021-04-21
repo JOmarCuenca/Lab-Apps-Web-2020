@@ -3,7 +3,7 @@
     display: inline-block;
 }
 
-div {
+.divB {
     display: inline-block;
     margin-right: 20px;
 }
@@ -17,6 +17,10 @@ div {
     font-weight: bold;
 }
 
+.On:hover {
+    background: darkgreen;
+}
+
 .X {
     background: red;
     border-radius: 50%;
@@ -25,6 +29,6 @@ div {
     font-weight: bold;
 }
 
-.modalP {
-    align-content: center;
+.X:hover {
+    background: darkred;
 }

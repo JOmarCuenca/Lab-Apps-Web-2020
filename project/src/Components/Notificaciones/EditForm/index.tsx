@@ -6,7 +6,7 @@ import NotifWidget from "./NotifTile";
 
 import "./style.css";
 
-var limit = 4;
+var limit = 6;
 
 interface Props {
 	setBreadCrumb: (val: string) => void;
@@ -81,6 +81,10 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 	// 	// 	window.alert("Ha ocurrido un error y no se ha podido borrar el objeto.");
 	// 	// });
 	// };
+
+	const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
 	const renderItem = () => {
 		return (

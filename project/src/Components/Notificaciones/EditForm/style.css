@@ -4,6 +4,7 @@
   
   main {
     display: inline-block;
+    display: flex;
   }
   
   .notif {
@@ -22,6 +23,7 @@
     margin-left: 50px;
     vertical-align: top;
     border-radius: 5px;
+    display: flex;
   }
   
   /*.fNotif {
@@ -40,6 +42,7 @@
     border-style: solid;
     border-radius: 20px;
     padding: 30px;
+    display: flex;
   }
 
   .maindiv1 {
@@ -119,6 +122,11 @@
     text-align: center;
     display: flex;
     margin: 0 auto;
+  }
+
+  .publicar:hover {
+    background-color: darkblue;
+    border-color: darkblue;
   }
   
   .title1 {
