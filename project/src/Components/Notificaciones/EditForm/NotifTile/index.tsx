@@ -20,12 +20,12 @@ const NotifWidget : FC<Props> = (p) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    return <div className="NotifWidget" onClick={() => p.alterScreen(p.child)}>
+    return <div className="NotifWidget">
         <div className="divB">
             <h5 className="Child">{p.child.title}</h5>
         </div>
         <div className="divB">
-            {isAlive() ? <button className="On" onClick={handleShow}>ON</button> : <></>}
+            {isAlive() ? <button className="On">ON</button> : <></>}
             <Modal className="modalp" show={show} onHide={handleClose} backdrop="static">
                 <Modal.Header closeButton>
                         <Modal.Title>{p.child.title}</Modal.Title>
@@ -37,6 +37,9 @@ const NotifWidget : FC<Props> = (p) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+        </div>
+        <div className="divB">
+            <button className="Info" onClick={handleShow}>Info</button>
         </div>
         <div className="divB">
             <button className="X">X</button>
