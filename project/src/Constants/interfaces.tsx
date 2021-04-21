@@ -61,6 +61,10 @@ export interface StatisticObj {
 	description : string
 }
 
+/**
+ * Ignore this beautiful comment
+ */
+
 /*
 
 los usuarios pueden tener muchos eventos
