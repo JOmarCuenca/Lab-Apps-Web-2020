@@ -14,6 +14,7 @@ import { FirebaseContext } from "../../API/Firebase";
 import EventosForm from "../Eventos/EditForm";
 import EventosMenu from "../Eventos/VisualizeMenu";
 import HomeScreen from "../Home";
+import pbIcon from "../../Assets/img/PuntoBlanco_icon.png";
 
 interface Props {}
 
@@ -67,12 +68,21 @@ const Dashboard: React.FC<Props> = () => {
 		);
 
 	return (
+		
 		<div style={{ height: "100%" }}>
+			
 			<UsuarioContext.Provider value={UsuarioObj}>
+				
 				<Navigation />
+				<div className="shadow-dreamy" >
+				     <div className="image-container">
+								<img className="imgLogo" src= {pbIcon} alt="Falta logo" />
+								</div>
+					</div>
 				<div
 					style={{
-						padding: 30,
+						paddingLeft: 30,
+                        paddingRight: 30,
 						minHeight: "100vh",
 						display: "flex",
 						backgroundColor: "#F5F7FA",
@@ -87,15 +97,8 @@ const Dashboard: React.FC<Props> = () => {
 							display: "block",
 							marginLeft: size.width && size.width < minSize ? "0" : "250px",
 						}} //19%
-					>
-						<h5
-							className={`mb-7 ${
-								size.width && size.width < minSize ? "" : "ml-6"
-							}`}
-						>
-							<img src="../../Assets/img/PuntoBlanco_icon.png" alt="Falta logo" />
-
-						</h5>
+					>   
+					
 						<div
 							className={`mb-4 ${
 								size.width && size.width < minSize ? "" : "ml-3"
