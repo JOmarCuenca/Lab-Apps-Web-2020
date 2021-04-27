@@ -5,7 +5,6 @@ import { Switch, Route } from "react-router-dom";
 import "./style.scss";
 import { Breadcrumbs } from "@material-ui/core";
 import { useWindowSize } from "../../Constants/functions";
-import { Spinner } from "react-bootstrap";
 import { Usuario } from "../../Constants/interfaces";
 import homeIcon from "../../Assets/img/home_icon.png";
 // import { FirebaseContext } from "../../API/Firebase";
@@ -28,7 +27,6 @@ const Dashboard: React.FC<Props> = () => {
 	const history = useHistory();
 	const [unidad, setUnidad] = useState<string>();
 	const size = useWindowSize();
-	const [ready, setReady] = useState(true);
 	const [breadCrumb, setBreadCrumb] = useState("Dashboard");
 	const [user, setUser] = useState<Usuario>({
 		nombre: "",
@@ -54,23 +52,8 @@ const Dashboard: React.FC<Props> = () => {
 			.catch((err) => {
 				history.push("/login");
 			});
-		//es-lint: disable
+	    // eslint-disable-next-line
 	}, []);
-
-	if (!ready)
-		return (
-			<div
-				style={{
-					justifyContent: "center",
-					alignItems: "center",
-					display: "flex",
-					height: "100vh",
-					width: "100%",
-				}}
-			>
-				<Spinner animation='border' variant='info' />
-			</div>
-		);
 
 	return (
 		<div style={{ height: "100%" }}>

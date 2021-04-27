@@ -29,6 +29,7 @@ const SignIn: React.FC<Props> = () => {
         history.push("/dashboard");
       }
     })
+    // eslint-disable-next-line
   },[]);
 
   const Alert = (props: AlertProps) => {
