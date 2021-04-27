@@ -37,7 +37,6 @@ export class DataAccess {
         return this.storage;
     }
     
-
     /**
 	 * Regresa el usuario activo
 	 */
@@ -142,4 +141,6 @@ export class DataAccess {
             .orderBy(orderAttr,orderDirection)
             .limit(amountLimit)
             .get();
+
+    createAuthUser = (mail : string, pass : string) => this.auth.createUserWithEmailAndPassword(mail,pass);
 }

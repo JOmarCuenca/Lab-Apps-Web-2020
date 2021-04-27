@@ -16,6 +16,7 @@ const EVENTOS_COLLECTION_TAG = "Eventos";
 const NOTIFICACIONES_COLLECTION_TAG = "Notificaciones";
 const MEDITACIONES_COLLECTION_TAG = "Meditaciones";
 const STATISTICS_COLLECTION_TAG = "Statistics";
+const PERMITS_COLLECTION_TAG = "Permits";
 
 class Firebase {
 	private dataAccess: DataAccess;
@@ -178,13 +179,12 @@ class Firebase {
 
 	// USUARIOS SECTION
 
-	setNewUsuario = async (obj: Usuario): Promise<void> => {
-		await this.dataAccess.writeDoc(
+	setNewUsuario = (obj: Usuario): Promise<void> | Promise<app.firestore.DocumentReference<app.firestore.DocumentData>> => 
+		this.dataAccess.writeDoc(
 			USER_COLLECTION_TAG,
 			this.userClean(obj),
 			obj.uid
 		);
-	};
 
 	getAllUsuarios = async (): Promise<Usuario[]> => {
 		const retos = await this.dataAccess.getAllFromCollection(
@@ -196,10 +196,7 @@ class Firebase {
 	updateUsuario = async (obj: Usuario): Promise<void> => {
 		if (obj.imgFile && typeof obj.imgFile === "object") {
 			const fileName = `${obj.uid}.png`;
-			obj.imagen_perfil = await this.uploadFile(
-				new File([obj.imgFile!],fileName, { type: 'image/png' }),
-				StorageFolders.image
-			);
+			obj.imagen_perfil = await this.uploadUserProfileImage(obj.uid, obj.imgFile!);		
 			obj.imgFile = `${StorageFolders.image}/${fileName}`;
 		}
 		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, obj);
@@ -363,6 +360,28 @@ class Firebase {
 		return eventos.docs.map((n) => this.toEvento(n));
 	};
 
+	getPermit = (id : string) : Promise<app.firestore.DocumentSnapshot<app.firestore.DocumentData>> => this.dataAccess.readDoc(PERMITS_COLLECTION_TAG, id);
+
+	registerNewSubAdmin = async (mail : string, pass : string, name : string) : Promise<app.auth.UserCredential> => {
+		try {
+			// Try to create the new User
+			const authUser = await this.dataAccess.createAuthUser(mail,pass);
+			if(authUser.user === undefined || authUser.user === null) throw new Error("AUTH_ERROR");
+			// Save the new User to the DB.
+			const usuarioObj : Usuario = {
+				email : mail,
+				nombre : name,
+				uid : authUser.user.uid,
+				imagen_perfil : "",
+				rol: "SUB_ADMIN"
+			};
+			await this.setNewUsuario(usuarioObj);
+			return authUser;
+		} catch (e) {
+			return Promise.reject(e);
+		}
+	}
+
 	/*********************************************Extra UseFul Functions*****************************************/
 
 	/**
@@ -387,6 +406,14 @@ class Firebase {
 			return Promise.reject(e);
 		}
 	};
+
+	private uploadUserProfileImage = async (docId : string, file : File) => {
+		const fileName = `${docId}.png`;
+		return this.uploadFile(
+			new File([file],fileName, { type: 'image/png' }),
+			StorageFolders.image
+		);
+	}
 
 	private deleteFile = (path: string): Promise<any> => {
 		try {
