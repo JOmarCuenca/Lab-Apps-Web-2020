@@ -6,15 +6,15 @@
     display: inline-block;
   }
   
-  .notif {
+  /*.notif {
     border-color: #3f969c;
     border-style: solid; 
-    height: 420px;
-    width: 600px;
+    height: 100%;
+    width: 100%;
     border-radius: 5px;
-  }
+  }*/
   
-  .historial {
+  /*.historial {
     border-color: #3f969c;
     border-style: solid;
     height: 420px;
@@ -23,7 +23,7 @@
     vertical-align: top;
     border-radius: 5px;
     display: flex;
-  }
+  }*/
   
   /*.fNotif {
     margin-top: 40px;
@@ -49,8 +49,8 @@
     border-style: solid;
     border-radius: 5px;
     padding: 20px;
-    height: 355px;
-    width: 365px;
+    height: 65%;
+    width: 100%;
   }
   
   .parrafo {
@@ -77,12 +77,6 @@
   }
   
   .select {
-    width: 300px;
-    height: 22px;
-    display: inline-block;
-  }
-
-  .select11 {
     width: 300px;
     height: 22px;
     display: inline-block;
@@ -170,17 +164,16 @@
 
   .h {
     background-color: #3f969c;
-    margin-bottom: 0px;
-    margin-left: 30px;
-    margin-right: 40px;
+    margin: auto;
+    margin-left: 3%;
+    margin-right: 200px;
+    width: 40%;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    padding-left: 115px;
-    padding-right: 130px;
     color: white;
     height: 50px;
-    padding-top: 11px;
-    display: flex;
+    text-align: center;
+    padding-top: 10px;
   }
 
   .not {

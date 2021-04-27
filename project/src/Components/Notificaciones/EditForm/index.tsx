@@ -104,7 +104,7 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
                         <hr className="hr1"></hr>
                         <p className="parrafo" id="mensaje">Mensaje Adjuntado</p>
                         <Form.Control
-							className="select11"
+							className="select"
 							as="textarea"
 							placeholder="Ej. Traer sus propios alimentos"
 							rows={3}
