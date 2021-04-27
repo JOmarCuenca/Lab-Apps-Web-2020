@@ -34,13 +34,9 @@ const NotifWidget : FC<Props> = (p) => {
 		await this.dataAccess.deleteDoc(NOTIFICACIONES_COLLECTION_TAG, id);
 	};*/
 
-    /*updateNotificacion = async (obj: Notificacion): Promise<void> => {
-		await this.dataAccess.updateDoc(
-			NOTIFICACIONES_COLLECTION_TAG,
-			obj.id,
-			this.cleanNotificacion(obj)
-		);
-	};*/
+    const deleteNot = () => {
+        firebase.deleteNotificacionById(p.child.id);
+    }
 
     const handleClose1 = () => {
         var valorDesc = String($("#descNot").val());
@@ -84,7 +80,7 @@ const NotifWidget : FC<Props> = (p) => {
             </Modal>
         </div>
         <div className="divB">
-            <button className="X">
+            <button className="X" onClick={deleteNot}>
                 X
             </button>
         </div>
