@@ -31,7 +31,7 @@ function main() {
     //     console.log("Done");
     // });
 }
-async function upload() {
+async function uploadStatistics() {
     var db = admin.firestore();
     const batch = db.batch();
     // Statistics
@@ -50,4 +50,71 @@ async function upload() {
     })
     await batch.commit();
 }
-upload().then(() => console.log("Done"));
+
+/*
+interface Notificacion {
+	id: string;
+	title: string;
+	descripcion: string;
+	fecha: Date;
+	lifetime?: number; // ?? default 24 hrs
+}
+*/
+
+async function uploadNotif() {
+    var db = admin.firestore();
+    const batch = db.batch();
+    // Statistics
+    const docs = [
+        {
+            title : "Ejemplo 1",
+            descripcion : "Lorem Ipsum sit amet",
+            fecha : new Date(),
+            lifetime : 24
+        },
+        {
+            title : "Ejemplo 2",
+            descripcion : "Lorem Ipsum sit amet",
+            fecha : new Date(),
+            lifetime : 24
+        },
+        {
+            title : "Ejemplo 3",
+            descripcion : "Lorem Ipsum sit amet",
+            fecha : new Date(),
+            lifetime : 24
+        },
+        {
+            title : "Ejemplo 4",
+            descripcion : "Lorem Ipsum sit amet",
+            fecha : new Date(),
+            lifetime : 24
+        }
+    ];
+    docs.forEach((d,i) => {
+        const temp = {
+            ...d,
+            date : new Date()
+        }
+        batch.create(db.collection("Notificaciones").doc(`Test_Doc_${i}`),temp);
+    })
+    await batch.commit();
+}
+
+async function getLimited(){
+    const db = admin.firestore();
+    // const notif = await db.collection("Notificaciones")
+    // .orderBy("fecha","desc")
+    // .startAt(0)
+    // .limit(4)
+    // .get();
+    const notif = await db.collection("Notificaciones")
+    .startAt(0)
+    .orderBy("fecha","desc")
+    .limit(4)
+    .get();
+    notif.docs.forEach( d => console.log(d.id));
+}
+// uploadStatistics().then(() => console.log("Done"));
+// uploadNotif().then(() => console.log("Done"));
+getLimited();

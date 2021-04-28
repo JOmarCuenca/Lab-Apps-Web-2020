@@ -37,6 +37,7 @@
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-timer-hook": "^2.0.7",
     "react-widgets": "^4.5.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",

@@ -136,7 +136,7 @@ export class DataAccess {
      */
     getLimitedFromCollection = 
     (   coll : string, orderAttr : string, 
-        amountLimit : number, startAt = 0, 
+        amountLimit : number, startAt = 0,
         orderDirection? : app.firestore.OrderByDirection ) => 
             this.firestore.collection(coll)
             .orderBy(orderAttr,orderDirection)

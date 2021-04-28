@@ -3,6 +3,8 @@ name: Deployment To Firebase WebSite
 on:
   push:
     branches : [master]
+    paths :
+     - project/**
   
 jobs:
   deploy:
