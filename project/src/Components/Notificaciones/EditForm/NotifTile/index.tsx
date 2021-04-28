@@ -7,10 +7,10 @@ import { Notificacion } from "../../../../Constants/interfaces";
 
 import "./style.css";
 
-var ID = 0;
-
 interface Props {
     child : Notificacion,
+    index : number,
+    deleteFromList : (i: number) => void,
     alterScreen : (val: Notificacion) => void;
 }
 const NotifWidget : FC<Props> = (p) => {
@@ -30,12 +30,10 @@ const NotifWidget : FC<Props> = (p) => {
     const [show1, setShow1] = useState(false);
     const handleShow1 = () => setShow1(true);
 
-    /*deleteNotificacionById = async (id: string): Promise<void> => {
-		await this.dataAccess.deleteDoc(NOTIFICACIONES_COLLECTION_TAG, id);
-	};*/
-
     const deleteNot = () => {
-        firebase.deleteNotificacionById(p.child.id);
+        firebase.deleteNotificacionById(p.child.id).then(() =>{
+            p.deleteFromList(p.index);
+        });
     }
 
     const handleClose1 = () => {
@@ -47,7 +45,7 @@ const NotifWidget : FC<Props> = (p) => {
         setShow1(false);
     } 
 
-    return <li className="NotifWidget" id={"list-"+ID}>
+    return <li className="NotifWidget" id="list">
         <div className="divB">
             <h5 className="Child">{p.child.title}</h5>
         </div>

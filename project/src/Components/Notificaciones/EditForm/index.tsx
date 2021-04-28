@@ -47,8 +47,8 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 		setLoadingSubmit(true);
 		let message = "Se ha subido la notificación";
 		let failure = false;
-		try {
 		const copy = item!;
+		try {
 			await firebase.setNewNotificacion(copy);
 			console.log(copy);
 		} catch (e) {
@@ -60,6 +60,10 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 		setLoadingSubmit(false);
 		window.alert(message);
 		if(!failure){
+			sethistoryNotif([
+				copy,
+				...historyNotif
+			]);
 			setItem({
 				id: "",
 				title : "",
@@ -82,9 +86,11 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 	// 	// });
 	// };
 
-	const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+	const deleteFromList = (index : number) => {
+		const copy = Array.from(historyNotif);
+		copy.splice(index, 1);
+		sethistoryNotif(copy);
+	}
 
 	const renderItem = () => {
 		return (
@@ -124,18 +130,6 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 							required={true}
 							type='date'
 						/>
-                        <p className="parrafo" id="hora">Hora</p>
-                        <Form.Control
-							className="select1"
-							// onChange={(str) => {
-							// 	setItem({
-							// 		...item!,
-							// 		fecha: new Date(str.currentTarget.value),
-							// 	});
-							// }}
-							required={true}
-							type='time'
-						/>
                         <hr className="hr1"></hr>
 						<button type="submit" className="publicar">PUBLICAR</button>
 					</Form>
@@ -146,7 +140,7 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
-						{historyNotif.map( n => <NotifWidget child={n} alterScreen={setItem} />)}
+						{historyNotif.map( (n, i) => <NotifWidget index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
 					</div>
 				</Col>
 			</Row>

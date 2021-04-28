@@ -1,12 +1,12 @@
 .NotifWidget {
     margin: 5px;
-    display: inline-block;
+    display: block;
     list-style-type: none;
 }
 
 .divB {
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 .Info {
