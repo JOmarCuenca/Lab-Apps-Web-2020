@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Navigation from "../Navigation";
 import { Switch, Route } from "react-router-dom";
 import "./style.scss";
@@ -22,10 +22,9 @@ interface Props {}
 const Dashboard: React.FC<Props> = () => {
 	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
-	const [unidad, setUnidad] = useState<string>();
 	const size = useWindowSize();
 	const [ready] = useState(true);
-	const [breadCrumb, setBreadCrumb] = useState("Dashboard");
+	const [, setBreadCrumb] = useState("Dashboard");
 	const [user, setUser] = useState<Usuario>({
 		nombre: "",
 		uid: "",
