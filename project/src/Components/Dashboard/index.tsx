@@ -3,13 +3,10 @@ import { useHistory, Link } from "react-router-dom";
 import Navigation from "../Navigation";
 import { Switch, Route } from "react-router-dom";
 import "./style.scss";
-import { Breadcrumbs } from "@material-ui/core";
 import { useWindowSize } from "../../Constants/functions";
 import { Spinner } from "react-bootstrap";
 import { Usuario } from "../../Constants/interfaces";
-import homeIcon from "../../Assets/img/home_icon.png";
 import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
-import EditForm from "../Notificaciones/EditForm";
 import { FirebaseContext } from "../../API/Firebase";
 import EventosForm from "../Eventos/EditForm";
 import EventosMenu from "../Eventos/VisualizeMenu";
@@ -81,23 +78,17 @@ const Dashboard: React.FC<Props> = () => {
 				</div>
 				<div
 					style={{
+						paddingTop: 30,
 						paddingLeft: 30,
                         paddingRight: 30,
-						minHeight: "100vh",
+						minHeight: "80vh",
 						display: "flex",
 						backgroundColor: "#F5F7FA",
 						flexDirection: "column",
 						position: "relative",
-						paddingBottom: "2.5rem",
+						// paddingBottom: "2.5rem",
 					}}
 				>
-					<h5
-						className={`mb-4 ${
-							size.width && size.width < minSize ? "" : "ml-3"
-						}`}
-					>
-						Dashboard
-					</h5>
 					<div
 						style={{
 							minHeight: "100%",
@@ -111,45 +102,10 @@ const Dashboard: React.FC<Props> = () => {
 								size.width && size.width < minSize ? "" : "ml-3"
 							}`}
 						>
-							{/* <Breadcrumbs aria-label='breadcrumb'>
-								<Link className='aTag' to='/dashboard'>
-									<img className='mb-1' width={15} alt='home' src={homeIcon} />
-								</Link>
-								<Link
-									className='aTag'
-									to={`/dashboard/${unidad}`}
-								>
-									{unidad.toUpperCase()}
-								</Link>
-								{unidad ? (
-									<Link className='aTag' to={`/dashboard/${unidad}`}>
-										{unidad.toUpperCase()}
-									</Link>
-								) : null}
-							</Breadcrumbs> 
-						</div>
-						<Switch>
-							
-							<Route path='/dashboard/notifications'>
-								<EditForm setBreadCrumb={setBreadCrumb} />
-							</Route>
-							<Route path={`/dashboard/events/${ADD_NEW_ITEM_CODE}`}>
-								<EventosForm />
-							</Route>
-							<Route path='/dashboard/events'>
-								<EventosMenu setBreadCrumb={setBreadCrumb} />
-							</Route>
-						</Switch>
-					</div> */}
 					<Switch>
 					<Route exact path='/dashboard'>
 								<HomeScreen setBreadCrumb={setBreadCrumb} />
 							</Route>
-						<Route
-							path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}
-						>
-							<EditForm setBreadCrumb={setBreadCrumb} />
-						</Route>
 						<Route path='/dashboard/notifications'>
 							<NotificationForm setBreadCrumb={setBreadCrumb} />
 						</Route>

@@ -18,9 +18,8 @@ const EventWidget : FC<Props> = ({event}) => {
     }
 
     const getImage = () : string => {
-        console.log(event)
-        if ( event.imgFile === undefined || event.imgFile && typeof event.imgFile === "object") {
-              return EXAMPLE_IMG;
+        if ( event.imgFile === undefined || (event.imgFile && typeof event.imgFile === "object")){
+            return EXAMPLE_IMG;
 		}
         return event.imgFile!;
     }
