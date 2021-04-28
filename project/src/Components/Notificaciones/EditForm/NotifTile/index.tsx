@@ -49,9 +49,11 @@ const NotifWidget : FC<Props> = (p) => {
         <div className="divB">
             <h5 className="Child">{p.child.title}</h5>
         </div>
-        <div className="divB">
-            {isAlive() ? <button className="On">ON</button> : <></>}
-        </div>
+            {isAlive() ? 
+                <div className="divB">
+                    <button className="On">ON</button>
+                </div>  : <></>
+            }
         <div className="divB">
             <button className="Info" onClick={handleShow}>Info</button>
             <Modal className="modalp" show={show} onHide={handleClose} backdrop="static">
