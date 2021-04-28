@@ -1,8 +1,4 @@
 import app from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/functions";
-import "firebase/storage";
 import { StorageFolders } from "../../Constants/constants";
 import {
 	Reto,
@@ -10,46 +6,28 @@ import {
 	Evento,
 	Notificacion,
 	Meditacion,
+	StatisticObj,
 } from "../../Constants/interfaces";
+import { DataAccess } from "./data";
 
-const firebaseConfig = {
-	apiKey: "AIzaSyCplhL4TQUpmTDmgDGUXzC6ipykmQ6HM_E",
-	authDomain: "punto-b84a8.firebaseapp.com",
-	databaseURL: "https://punto-b84a8.firebaseio.com",
-	projectId: "punto-b84a8",
-	storageBucket: "punto-b84a8.appspot.com",
-	messagingSenderId: "597623444685",
-	appId: "1:597623444685:web:87028dc2feeacaf6794584",
-	measurementId: "G-K8E5LDDGY2",
-};
+const USER_COLLECTION_TAG = "Usuarios";
+const RETOS_COLLECTION_TAG = "Retos";
+const EVENTOS_COLLECTION_TAG = "Eventos";
+const NOTIFICACIONES_COLLECTION_TAG = "Notificaciones";
+const MEDITACIONES_COLLECTION_TAG = "Meditaciones";
+const STATISTICS_COLLECTION_TAG = "Statistics";
 
 class Firebase {
-	auth: firebase.auth.Auth;
-	firestore: firebase.firestore.Firestore;
-	types: typeof app.firestore;
-	user: Usuario | undefined;
-	functions: firebase.functions.Functions;
-	storage: firebase.storage.Storage;
+	private dataAccess: DataAccess;
 
 	constructor() {
-		app.initializeApp(firebaseConfig);
-		this.auth = app.auth();
-		this.firestore = app.firestore();
-		this.types = app.firestore;
-		this.functions = app.functions();
-		this.storage = app.storage();
+		this.dataAccess = new DataAccess();
 	}
 
 	/**
 	 * Regresa el usuario activo
 	 */
-	getAuthUser = (): Promise<firebase.User> =>
-		new Promise((resolve, reject) => {
-			this.auth.onAuthStateChanged((authUser) => {
-				if (authUser) resolve(authUser);
-				reject("No logged user!");
-			});
-		});
+	getAuthUser = (): Promise<firebase.User> => this.dataAccess.getAuthUser();
 
 	/**
 	 * Inicia sesión con correo y contraseña
@@ -57,48 +35,29 @@ class Firebase {
 	 * @param password Contraseña del usuario
 	 */
 	doSignInWithEmailAndPassword = (email: string, password: string) =>
-		this.auth.signInWithEmailAndPassword(email, password);
+		this.dataAccess.doSignInWithEmailAndPassword(email, password);
 
 	/**
 	 * Cierra la sesión actual
 	 */
-	signout = () => this.auth.signOut();
+	signout = () => this.dataAccess.signout();
 
 	/**
 	 * Resetea la contraseña
 	 * @param email Manda el mensaje de reinicio de la contraseña al email dado
 	 */
-	sendResetPassword = async (email: string): Promise<void> => {
-		try {
-			await this.auth.sendPasswordResetEmail(email);
-		} catch (err) {
-			return Promise.reject(err);
-		}
-	};
+	sendResetPassword = async (email: string): Promise<void> =>
+		this.dataAccess.sendResetPassword(email);
 
-	sendPassReset = async (userMail: string) => {
-		try {
-			await this.auth.sendPasswordResetEmail(userMail);
-			return true;
-		} catch (e) {
-			return false;
-		}
-	};
+	sendPassReset = async (userMail: string) =>
+		this.dataAccess.sendPassReset(userMail);
 
 	/**
 	 * Get the Uer
 	 * @param uid UID del usuario
 	 */
-	getUserByUID = async (uid: string): Promise<Usuario> => {
-		try {
-			const user = (
-				await this.firestore.collection("Usuarios").doc(uid).get()
-			).data();
-			return user as Usuario;
-		} catch (err) {
-			return Promise.reject(err);
-		}
-	};
+	getUserByUID = async (uid: string): Promise<Usuario> =>
+		this.dataAccess.getUserByUID(uid);
 
 	/****************************************OPERACIONES CRUD DE NUESTRAS INTERFACES********************************************/
 
@@ -127,7 +86,10 @@ class Firebase {
 			img: data.img,
 			imgFile : data.imgFile,
 			place: data.place.latitude
-				? { latitude: data.place.latitude, longitude: data.place.longitude }
+				? {
+						latitude: data.place.latitude,
+						longitude: data.place.longitude,
+				  }
 				: data.place,
 			maxUsers: data.maxUsers,
 			currentUsers: data.currentUsers,
@@ -155,7 +117,7 @@ class Firebase {
 		return {
 			id: obj.id,
 			descripcion: data.descripcion,
-			title : data.title,
+			title: data.title,
 			fecha: data.fecha.toDate(),
 			lifetime: data.lifetime ?? 24,
 		};
@@ -191,7 +153,7 @@ class Firebase {
 	): Usuario => {
 		let data = obj.data();
 		return {
-			id: obj.id,
+			uid: data.uid,
 			nombre: data.nombre,
 			email: data.email,
 			imagen_perfil: data.imagen_perfil,
@@ -205,121 +167,219 @@ class Firebase {
 		return temp;
 	};
 
+	private toStatisticObj = (
+		obj: app.firestore.QueryDocumentSnapshot<app.firestore.DocumentData>
+	): StatisticObj => {
+		let data = obj.data();
+		return {
+			value		: data.value,
+			description : data.description
+		}
+	}
+
+	// USUARIOS SECTION
+
+	setNewUsuario = async (obj: Usuario): Promise<void> => {
+		await this.dataAccess.writeDoc(
+			USER_COLLECTION_TAG,
+			this.userClean(obj),
+			obj.uid
+		);
+	};
+
 	getAllUsuarios = async (): Promise<Usuario[]> => {
-		const retos = await this.firestore.collection("Usuarios").get();
+		const retos = await this.dataAccess.getAllFromCollection(
+			USER_COLLECTION_TAG
+		);
 		return retos.docs.map((doc) => this.toUsuario(doc));
 	};
 
-	setNewUsuario = async (obj: Usuario): Promise<void> => {
-		await this.firestore.collection("Usuarios").add(this.userClean(obj));
+	updateUsuario = async (obj: Usuario): Promise<void> => {
+		if (obj.imgFile && typeof obj.imgFile === "object") {
+			const fileName = `${obj.uid}.png`;
+			obj.imagen_perfil = await this.uploadFile(
+				new File([obj.imgFile!],fileName, { type: 'image/png' }),
+				StorageFolders.image
+			);
+			obj.imgFile = `${StorageFolders.image}/${fileName}`;
+		}
+		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, obj);
 	};
 
 	deleteUsuariosByID = async (id: string): Promise<void> => {
-		await this.firestore.collection("Usuarios").doc(id).delete();
+		await this.dataAccess.deleteDoc(USER_COLLECTION_TAG, id);
 	};
 
-	updateUsuario = async (obj: Usuario): Promise<void> => {
-		await this.firestore
-			.collection("Usuarios")
-			.doc(obj.id)
-			.update(this.userClean(obj));
+	// RETOS SECTION
+
+	setNewReto = async (obj: Reto): Promise<void> => {
+		await this.dataAccess.writeDoc(RETOS_COLLECTION_TAG, obj);
 	};
 
 	getAllRetos = async (): Promise<Reto[]> => {
-		const retos = await this.firestore.collection("Retos").get();
+		const retos = await this.dataAccess.getAllFromCollection(
+			RETOS_COLLECTION_TAG
+		);
 		return retos.docs.map((doc) => this.toReto(doc));
 	};
 
-	setNewReto = async (obj: Reto): Promise<void> => {
-		await this.firestore.collection("Retos").add(obj);
+	updateReto = async (obj: Reto): Promise<void> => {
+		await this.dataAccess.updateDoc(RETOS_COLLECTION_TAG, obj.id, obj);
 	};
 
 	deleteRetoByID = async (id: string): Promise<void> => {
-		await this.firestore.collection("Retos").doc(id).delete();
+		await this.dataAccess.deleteDoc(RETOS_COLLECTION_TAG, id);
 	};
 
-	updateReto = async (obj: Reto): Promise<void> => {
-		await this.firestore.collection("Retos").doc(obj.id).update(obj);
-	};
-
-	getAllEventos = async (): Promise<Evento[]> => {
-		const eventos = await this.firestore.collection("Eventos").get();
-		return eventos.docs.map((doc) => this.toEvento(doc));
-	};
+	// Eventos Section
 
 	setNewEvento = async (obj: Evento): Promise<void> => {
 		if (obj.imgFile && typeof obj.imgFile === "object") {
 			obj.img = `${StorageFolders.image}/${obj.imgFile!.name}`;
-			obj.imgFile = await this.uploadFile(obj.imgFile!, StorageFolders.image);
+			obj.imgFile = await this.uploadFile(
+				obj.imgFile!,
+				StorageFolders.image
+			);
 		}
-		await this.firestore.collection("Eventos").add(this.cleanEvento(obj));
+		await this.dataAccess.writeDoc(
+			EVENTOS_COLLECTION_TAG,
+			this.cleanEvento(obj)
+		);
 		console.log("Done");
 	};
 
-	deleteEventoById = async (id: string): Promise<void> => {
-		await this.firestore.collection("Eventos").doc(id).delete();
+	getAllEventos = async (): Promise<Evento[]> => {
+		const eventos = await this.dataAccess.getAllFromCollection(
+			EVENTOS_COLLECTION_TAG
+		);
+		return eventos.docs.map((doc) => this.toEvento(doc));
 	};
 
 	updateEvento = async (obj: Evento): Promise<void> => {
 		if (obj.imgFile && typeof obj.imgFile === "object") {
 			obj.img = `${StorageFolders.image}/${obj.imgFile!.name}`;
-			obj.imgFile = await this.uploadFile(obj.imgFile!, StorageFolders.image);
+			obj.imgFile = await this.uploadFile(
+				obj.imgFile!,
+				StorageFolders.image
+			);
 		}
-		await this.firestore
-			.collection("Eventos")
-			.doc(obj.id)
-			.update(this.cleanEvento(obj));
+		await this.dataAccess.updateDoc(
+			EVENTOS_COLLECTION_TAG,
+			obj.id,
+			this.cleanEvento(obj)
+		);
+	};
+
+	deleteEventoById = async (id: string): Promise<void> => {
+		await this.dataAccess.deleteDoc(EVENTOS_COLLECTION_TAG, id);
+	};
+
+	// Notifications section
+
+	setNewNotificacion = async (obj: Notificacion): Promise<void> => {
+		await this.dataAccess.writeDoc(
+			NOTIFICACIONES_COLLECTION_TAG,
+			this.cleanNotificacion(obj)
+		);
 	};
 
 	getAllNotifications = async (): Promise<Notificacion[]> => {
-		const notifications = await this.firestore
-			.collection("Notificaciones")
-			.get();
+		const notifications = await this.dataAccess.getAllFromCollection(
+			NOTIFICACIONES_COLLECTION_TAG
+		);
 		return notifications.docs.map((doc) => this.toNotificacion(doc));
 	};
 
-	setNewNotificacion = async (obj: Notificacion): Promise<void> => {
-		await this.firestore
-			.collection("Notificaciones")
-			.add(this.cleanNotificacion(obj));
+	updateNotificacion = async (obj: Notificacion): Promise<void> => {
+		await this.dataAccess.updateDoc(
+			NOTIFICACIONES_COLLECTION_TAG,
+			obj.id,
+			this.cleanNotificacion(obj)
+		);
 	};
 
 	deleteNotificacionById = async (id: string): Promise<void> => {
-		await this.firestore.collection("Notificaciones").doc(id).delete();
+		await this.dataAccess.deleteDoc(NOTIFICACIONES_COLLECTION_TAG, id);
 	};
 
-	updateNotificacion = async (obj: Notificacion): Promise<void> => {
-		await this.firestore
-			.collection("Notificacion")
-			.doc(obj.id)
-			.update(this.cleanNotificacion(obj));
+	// Meditaciones section
+
+	setNewMeditacion = async (obj: Meditacion): Promise<void> => {
+		await this.dataAccess.writeDoc(MEDITACIONES_COLLECTION_TAG, obj);
 	};
 
 	getAllMeditacions = async (): Promise<Meditacion[]> => {
-		const meditaciones = await this.firestore.collection("Meditaciones").get();
+		const meditaciones = await this.dataAccess.getAllFromCollection(
+			MEDITACIONES_COLLECTION_TAG
+		);
 		return meditaciones.docs.map((doc) => this.toMeditacion(doc));
 	};
 
-	setNewMeditacion = async (obj: Meditacion): Promise<void> => {
-		await this.firestore.collection("Meditaciones").add(obj);
+	updateMeditacion = async (obj: Meditacion): Promise<void> => {
+		await this.dataAccess.updateDoc(
+			MEDITACIONES_COLLECTION_TAG,
+			obj.id,
+			obj
+		);
 	};
 
 	deleteMeditacionByID = async (id: string): Promise<void> => {
-		await this.firestore.collection("Meditaciones").doc(id).delete();
+		await this.dataAccess.deleteDoc(MEDITACIONES_COLLECTION_TAG, id);
 	};
 
-	updateMeditacion = async (obj: Meditacion): Promise<void> => {
-		await this.firestore.collection("Meditaciones").doc(obj.id).update(obj);
+	// Statistics Section
+
+	getStats = async () => {
+		const values = await this.dataAccess.getAllFromCollection(STATISTICS_COLLECTION_TAG);
+		return values.docs.map(s => this.toStatisticObj(s));
+	}
+
+	// Limited Queries Section Section
+
+	getLimitedNotification = async (
+		limit: number,
+		initial = 0
+	): Promise<Notificacion[]> => {
+		const notif = await this.dataAccess.getLimitedFromCollection(
+			NOTIFICACIONES_COLLECTION_TAG,
+			"fecha",
+			limit,
+			initial,
+			"desc"
+		);
+		return notif.docs.map((n) => this.toNotificacion(n));
+	};
+
+	getLimitedEvento = async (
+		limit: number,
+		initial = 0
+	): Promise<Evento[]> => {
+		const eventos = await this.dataAccess.getLimitedFromCollection(
+			EVENTOS_COLLECTION_TAG,
+			"fecha",
+			limit,
+			initial,
+			"desc"
+		);
+		return eventos.docs.map((n) => this.toEvento(n));
 	};
 
 	/*********************************************Extra UseFul Functions*****************************************/
 
+	/**
+	 * This function sends the file to the Firebase Storage Service and returns the URL to render it
+	 * in the web application.
+	 * 
+	 * @param file File to upload to Firebase Storage
+	 * @param storageFolder Path of firebase where the file will be
+	 * @returns Returns URL where to get the file from.
+	 */
 	private uploadFile = async (
 		file: File,
 		storageFolder: StorageFolders
 	): Promise<string> => {
 		try {
-			const storageRef = this.storage
+			const storageRef = this.dataAccess.storageAccess
 				.ref()
 				.child(`${storageFolder}/${file.name}`);
 			await storageRef.put(file);
@@ -329,9 +389,9 @@ class Firebase {
 		}
 	};
 
-	private deletFile = (path: string): Promise<any> => {
+	private deleteFile = (path: string): Promise<any> => {
 		try {
-			return this.storage.ref().child(path).delete();
+			return this.dataAccess.storageAccess.ref().child(path).delete();
 		} catch (e) {
 			return Promise.reject(e);
 		}

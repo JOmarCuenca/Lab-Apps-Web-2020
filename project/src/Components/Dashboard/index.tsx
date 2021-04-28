@@ -15,18 +15,11 @@ import EventosForm from "../Eventos/EditForm";
 import EventosMenu from "../Eventos/VisualizeMenu";
 import HomeScreen from "../Home";
 import pbIcon from "../../Assets/img/PuntoBlanco_icon.png";
+import Configuracion from "../Configuracion";
+import profilepicture from "../../Assets/img/profilepicture.png";
+import StatsScreen from "../Stats";
 
 interface Props {}
-
-export const UsuarioObj: Usuario = {
-	nombre: "some",
-	id: "joifjoijf",
-	imagen_perfil: "eojoifjiojf",
-	email: "some",
-	rol: "some",
-};
-
-export const UsuarioContext = React.createContext(UsuarioObj);
 
 const Dashboard: React.FC<Props> = () => {
 	const firebase = useContext(FirebaseContext);
@@ -35,15 +28,25 @@ const Dashboard: React.FC<Props> = () => {
 	const size = useWindowSize();
 	const [ready] = useState(true);
 	const [breadCrumb, setBreadCrumb] = useState("Dashboard");
+	const [user, setUser] = useState<Usuario>({
+		nombre: "",
+		uid: "",
+		imagen_perfil: profilepicture,
+		email: "",
+		rol: "",
+	});
 	const minSize = 768;
 
 	useEffect(() => {
 		firebase
 			.getAuthUser()
 			.then((user) => {
-				// console.log(user);
 				if (user === null) {
 					history.push("/login");
+				} else {
+					firebase.getUserByUID(user.uid).then((usuario) => {
+						setUser(usuario);
+					});
 				}
 			})
 			.catch((err) => {
@@ -70,8 +73,6 @@ const Dashboard: React.FC<Props> = () => {
 	return (
 		
 		<div style={{ height: "100%" }}>
-			
-			<UsuarioContext.Provider value={UsuarioObj}>
 				
 				<Navigation />
 				<div className="shadow-dreamy" >
@@ -91,6 +92,13 @@ const Dashboard: React.FC<Props> = () => {
 						paddingBottom: "2.5rem",
 					}}
 				>
+					<h5
+						className={`mb-4 ${
+							size.width && size.width < minSize ? "" : "ml-3"
+						}`}
+					>
+						Dashboard
+					</h5>
 					<div
 						style={{
 							minHeight: "100%",
@@ -110,10 +118,9 @@ const Dashboard: React.FC<Props> = () => {
 								</Link>
 								<Link
 									className='aTag'
-									to='/dashboard'
-									onClick={() => setUnidad(undefined)}
+									to={`/dashboard/${unidad}`}
 								>
-									{breadCrumb}
+									{unidad.toUpperCase()}
 								</Link>
 								{unidad ? (
 									<Link className='aTag' to={`/dashboard/${unidad}`}>
@@ -137,7 +144,35 @@ const Dashboard: React.FC<Props> = () => {
 							</Route>
 						</Switch>
 					</div>
-					{/* <footer
+					<Switch>
+						<Route
+							path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}
+						>
+							<EditForm setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path='/dashboard/notifications'>
+							<NotificationsMenu setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path='/dashboard/stats'>
+							<StatsScreen setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path={`/dashboard/events/${ADD_NEW_ITEM_CODE}`}>
+							<EventosForm />
+						</Route>
+						<Route path='/dashboard/events'>
+							<EventosMenu setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path='/dashboard/configuracion'>
+							{user.nombre !== "" ? (
+								<Configuracion
+									setBreadCrumb={setBreadCrumb}
+									usuario={user}
+								/>
+							) : null}
+						</Route>
+					</Switch>
+				</div>
+				{/* <footer
             style={{
               fontSize: 8,
               color: "grey",
@@ -162,8 +197,7 @@ const Dashboard: React.FC<Props> = () => {
             </div>
           </footer>
          */}
-				</div>
-			</UsuarioContext.Provider>
+			</div>
 		</div>
 	);
 };
