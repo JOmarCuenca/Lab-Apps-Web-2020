@@ -13,7 +13,6 @@ interface Props {
 const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 	const firebase          				= useContext(FirebaseContext);
 	const history 							= useHistory();
-	const [events,setEvents] 				= useState<Evento[]>([]);
 	const [recentEvents,setRecentEvents]    = useState<Evento[]>([]);
 	// const [changeStatus, setChangeStatus] 	= useState("");
 

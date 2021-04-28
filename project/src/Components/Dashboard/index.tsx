@@ -18,6 +18,7 @@ import pbIcon from "../../Assets/img/PuntoBlanco_icon.png";
 import Configuracion from "../Configuracion";
 import profilepicture from "../../Assets/img/profilepicture.png";
 import StatsScreen from "../Stats";
+import NotificationsMenu from "../Notificaciones/VisualizeMenu";
 
 interface Props {}
 
@@ -75,11 +76,9 @@ const Dashboard: React.FC<Props> = () => {
 		<div style={{ height: "100%" }}>
 				
 				<Navigation />
-				<div className="shadow-dreamy" >
-				     <div className="image-container">
-								<img className="imgLogo" src= {pbIcon} alt="Falta logo" />
-								</div>
-					</div>
+				<div className="image-container">
+					<img className="imgLogo" src= {pbIcon} alt="Falta logo" />
+				</div>
 				<div
 					style={{
 						paddingLeft: 30,
@@ -127,12 +126,10 @@ const Dashboard: React.FC<Props> = () => {
 										{unidad.toUpperCase()}
 									</Link>
 								) : null}
-							</Breadcrumbs> */}
+							</Breadcrumbs> 
 						</div>
 						<Switch>
-							<Route exact path='/dashboard'>
-								<HomeScreen setBreadCrumb={setBreadCrumb} />
-							</Route>
+							
 							<Route path='/dashboard/notifications'>
 								<EditForm setBreadCrumb={setBreadCrumb} />
 							</Route>
@@ -143,8 +140,11 @@ const Dashboard: React.FC<Props> = () => {
 								<EventosMenu setBreadCrumb={setBreadCrumb} />
 							</Route>
 						</Switch>
-					</div>
+					</div> */}
 					<Switch>
+					<Route exact path='/dashboard'>
+								<HomeScreen setBreadCrumb={setBreadCrumb} />
+							</Route>
 						<Route
 							path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}
 						>
@@ -198,6 +198,7 @@ const Dashboard: React.FC<Props> = () => {
           </footer>
          */}
 			</div>
+		</div>
 		</div>
 	);
 };
