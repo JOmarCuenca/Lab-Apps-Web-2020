@@ -84,6 +84,7 @@ class Firebase {
 			fecha: data.fecha.toDate(),
 			fecha_delete: data.fecha_delete.toDate(),
 			img: data.img,
+			imgFile : data.imgFile,
 			place: data.place.latitude
 				? {
 						latitude: data.place.latitude,

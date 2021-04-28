@@ -7,8 +7,10 @@
     padding: 14px 28px;
     cursor: pointer;
     border-radius: 12px;
-    
+    margin: auto;
+    justify-content: right;
 }
+
 .submit-button:hover {
     border: none;
     display: inline;
@@ -18,8 +20,10 @@
     font-weight: bold;
     cursor: pointer;
     border-radius: 12px;
-    
+    margin: auto;
+    justify-content: right;
 }
+
 
 .button {
     border: none;

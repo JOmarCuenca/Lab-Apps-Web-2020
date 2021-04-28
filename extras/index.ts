@@ -1,7 +1,5 @@
-import firebase from "firebase";
-
-var admin = require('firebase-admin');
-var serviceAccount = require("./punto-b84a8-firebase-adminsdk-upnf2-5aca4ad96e.json");
+const admin = require('firebase-admin');
+const serviceAccount = require("./punto-b84a8-firebase-adminsdk-upnf2-5aca4ad96e.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -44,7 +42,7 @@ const toEvento = (obj : any) : Evento => {
 
 const getAllEventos = async(): Promise<Evento[]> => {
     const collection = await firestore.collection("Eventos").get();
-    var eventos = collection.docs.map(doc => toEvento(doc));
+    const eventos = collection.docs.map(doc => toEvento(doc));
     return eventos;
 }
 
@@ -88,4 +86,10 @@ function main() {
     //     console.log("Done");
     // });
 }
-main();
+// main();
+
+function batchUpload(){
+    const batch = firestore.batch();
+}
+
+batchUpload()
