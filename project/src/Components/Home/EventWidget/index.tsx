@@ -17,9 +17,17 @@ const EventWidget : FC<Props> = ({event}) => {
         return "Liga Zoom";
     }
 
+    const getImage = () : string => {
+        console.log(event)
+        if ( event.imgFile === undefined || event.imgFile && typeof event.imgFile === "object") {
+              return EXAMPLE_IMG;
+		}
+        return event.imgFile!;
+    }
+
     return <div className="eventWidget">
         <Row>
-        <Col className="disappearable" xs={3}><img src={EXAMPLE_IMG} alt={`Event ${event.id}`} className="eventImg" /></Col>
+        <Col className="disappearable" xs={3}><img src={getImage()} alt={`Event ${event.id}`} className="eventImg" /></Col>
         <Col xs={7}>
             <h3>{event.nombre}</h3>
             <h5>{getPlace(event.place)}</h5>

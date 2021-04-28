@@ -14,28 +14,19 @@ const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 	const firebase          				= useContext(FirebaseContext);
 	const history 							= useHistory();
 	const [events,setEvents] 				= useState<Evento[]>([]);
-	const [recentEvents,setRecentEvents] = useState<Evento[]>([]);
+	const [recentEvents,setRecentEvents]    = useState<Evento[]>([]);
 	// const [changeStatus, setChangeStatus] 	= useState("");
 
 	useEffect(() => {
 		setBreadCrumb("Eventos");
 		firebase.getAllEventos().then(dbEvents => {
-			setEvents(dbEvents);
+			setRecentEvents(dbEvents);
 			console.log(dbEvents);
 		});
 		// eslint-disable-next-line
 	}, []);
 
 
-	// useEffect(() => {
-	// 	if (changeStatus !== "") {
-	// 		// firebase.getProducts().then(menu => setMenu(menu)).catch(e => {
-	// 		//     console.log(e);
-	// 		//     setMenu([]);
-	// 		// }).finally(() => setChangeStatus(""));
-	// 	}
-	// 	// eslint-disable-next-line
-	// }, [changeStatus]);
     const renderItem = () => {
 	return (
 		<Row>

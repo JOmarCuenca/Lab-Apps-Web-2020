@@ -105,7 +105,6 @@ const EventosForm: FC = () => {
 			// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
 			// else await firebase.saveProduct(copy);
 			await firebase.setNewEvento(copy);
-			console.log(copy);
 		} catch (e) {
 			console.log(e);
 			message =
@@ -113,7 +112,7 @@ const EventosForm: FC = () => {
 		}
 		setLoadingSubmit(false);
 		window.alert(message);
-		history.push("/dashboard/notifications");
+		history.push("/dashboard/events");
 	};
 
 	const execDelete = async () => {
