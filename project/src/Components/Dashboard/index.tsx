@@ -18,7 +18,7 @@ import pbIcon from "../../Assets/img/PuntoBlanco_icon.png";
 import Configuracion from "../Configuracion";
 import profilepicture from "../../Assets/img/profilepicture.png";
 import StatsScreen from "../Stats";
-import NotificationsMenu from "../Notificaciones/VisualizeMenu";
+import NotificationForm from "../Notificaciones/EditForm";
 
 interface Props {}
 
@@ -151,7 +151,7 @@ const Dashboard: React.FC<Props> = () => {
 							<EditForm setBreadCrumb={setBreadCrumb} />
 						</Route>
 						<Route path='/dashboard/notifications'>
-							<NotificationsMenu setBreadCrumb={setBreadCrumb} />
+							<NotificationForm setBreadCrumb={setBreadCrumb} />
 						</Route>
 						<Route path='/dashboard/stats'>
 							<StatsScreen setBreadCrumb={setBreadCrumb} />
