@@ -4,7 +4,6 @@ import Navigation from "../Navigation";
 import { Switch, Route } from "react-router-dom";
 import "./style.scss";
 import { useWindowSize } from "../../Constants/functions";
-import { Spinner } from "react-bootstrap";
 import { Usuario } from "../../Constants/interfaces";
 import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
 import { FirebaseContext } from "../../API/Firebase";
@@ -16,6 +15,7 @@ import Configuracion from "../Configuracion";
 import profilepicture from "../../Assets/img/profilepicture.png";
 import StatsScreen from "../Stats";
 import NotificationForm from "../Notificaciones/EditForm";
+import SubAdminWindow from "../SubAdmin";
 
 interface Props {}
 
@@ -23,7 +23,6 @@ const Dashboard: React.FC<Props> = () => {
 	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
 	const size = useWindowSize();
-	const [ready] = useState(true);
 	const [, setBreadCrumb] = useState("Dashboard");
 	const [user, setUser] = useState<Usuario>({
 		nombre: "",
@@ -49,29 +48,14 @@ const Dashboard: React.FC<Props> = () => {
 			.catch((err) => {
 				history.push("/login");
 			});
-	// eslint-disable-next-line
+	    // eslint-disable-next-line
 	}, []);
-
-	if (!ready)
-		return (
-			<div
-				style={{
-					justifyContent: "center",
-					alignItems: "center",
-					display: "flex",
-					height: "100vh",
-					width: "100%",
-				}}
-			>
-				<Spinner animation='border' variant='info' />
-			</div>
-		);
 
 	return (
 		
 		<div style={{ height: "100%" }}>
 				
-				<Navigation />
+				<Navigation user={user} />
 				<div className="image-container">
 					<img className="imgLogo" src= {pbIcon} alt="Falta logo" />
 				</div>
@@ -102,9 +86,12 @@ const Dashboard: React.FC<Props> = () => {
 							}`}
 						>
 					<Switch>
-					<Route exact path='/dashboard'>
-								<HomeScreen setBreadCrumb={setBreadCrumb} />
-							</Route>
+						<Route exact path='/dashboard'>
+							<HomeScreen setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path='/dashboard/administrative_sub_admin'>
+							<SubAdminWindow user={user} />
+						</Route>
 						<Route path='/dashboard/notifications'>
 							<NotificationForm setBreadCrumb={setBreadCrumb} />
 						</Route>

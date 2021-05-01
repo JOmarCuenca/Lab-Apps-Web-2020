@@ -25,6 +25,12 @@
 		"icon": "Retro"
 	},
 	{
+		"title": "Sub-Admins",
+		"action": "/dashboard/administrative_sub_admin",
+		"icon": "Contactos",
+		"reserved" : true
+	},
+	{
 		"title": "Cerrar sesión",
 		"action": {
 			"route": "/login",
