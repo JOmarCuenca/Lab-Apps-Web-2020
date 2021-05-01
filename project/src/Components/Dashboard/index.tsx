@@ -15,6 +15,7 @@ import Configuracion from "../Configuracion";
 import profilepicture from "../../Assets/img/profilepicture.png";
 import StatsScreen from "../Stats";
 import NotificationForm from "../Notificaciones/EditForm";
+import SubAdminWindow from "../SubAdmin";
 
 interface Props {}
 
@@ -85,9 +86,12 @@ const Dashboard: React.FC<Props> = () => {
 							}`}
 						>
 					<Switch>
-					<Route exact path='/dashboard'>
-								<HomeScreen setBreadCrumb={setBreadCrumb} />
-							</Route>
+						<Route exact path='/dashboard'>
+							<HomeScreen setBreadCrumb={setBreadCrumb} />
+						</Route>
+						<Route path='/dashboard/administrative_sub_admin'>
+							<SubAdminWindow user={user} />
+						</Route>
 						<Route path='/dashboard/notifications'>
 							<NotificationForm setBreadCrumb={setBreadCrumb} />
 						</Route>

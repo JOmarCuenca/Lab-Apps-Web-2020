@@ -1,0 +1,8 @@
+
+#subAdminWindow > * {
+    margin-bottom: 20px;
+}
+
+#linkField :hover {
+    cursor: pointer;
+}

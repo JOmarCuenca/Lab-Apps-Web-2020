@@ -20,7 +20,6 @@ const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 		setBreadCrumb("Eventos");
 		firebase.getAllEventos().then(dbEvents => {
 			setRecentEvents(dbEvents);
-			console.log(dbEvents);
 		});
 		// eslint-disable-next-line
 	}, []);

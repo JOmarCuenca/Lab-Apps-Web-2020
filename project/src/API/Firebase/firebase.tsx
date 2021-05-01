@@ -361,6 +361,17 @@ class Firebase {
 		return eventos.docs.map((n) => this.toEvento(n));
 	};
 
+	createPermit = async () : Promise<string> => {
+		try{
+			const doc = (await this.dataAccess.writeDoc(PERMITS_COLLECTION_TAG,{
+				createdAt : new Date()
+			}) as app.firestore.DocumentReference<app.firestore.DocumentData>);
+			return doc.id;
+		} catch (e) {
+			return Promise.reject("Failed");
+		}
+	}
+
 	getPermit = (id : string) : Promise<app.firestore.DocumentSnapshot<app.firestore.DocumentData>> => this.dataAccess.readDoc(PERMITS_COLLECTION_TAG, id);
 
 	registerNewSubAdmin = async (mail : string, pass : string, name : string) : Promise<app.auth.UserCredential> => {

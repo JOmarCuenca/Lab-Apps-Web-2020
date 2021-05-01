@@ -11,7 +11,7 @@ import scheduleIcon from "../../Assets/img/hora.png";
 import orderIcon from "../../Assets/img/purchase.png";
 import rateIcon from "../../Assets/img/rate.png";
 import menuIcon from "../../Assets/img/menu.png";
-import { primaryColor, secondaryColor } from "../../Constants/constants";
+import { primaryColor, secondaryColor, SUPER_ADMIN_TAG } from "../../Constants/constants";
 import { FirebaseContext } from "../../API/Firebase";
 import AvatarIcon from "../../Assets/img/avatar.jpg";
 import DASHBOARD_ICON from "../../Assets/img/dashboard.png";
@@ -112,7 +112,7 @@ const Navigation: React.FC<Props> = (p) => {
 
   const navElements = () => {
     let navItems;
-    if(p.user.rol && p.user.rol === "SUPER_ADMIN")
+    if(p.user.rol && p.user.rol === SUPER_ADMIN_TAG)
       navItems = navigationItems
     else
       navItems = navigationItems.filter((v) => v.reserved === undefined);
