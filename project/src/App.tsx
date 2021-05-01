@@ -7,12 +7,16 @@ import {
 } from "react-router-dom";
 import SignIn from "./Components/SignIn";
 import Dashboard from "./Components/Dashboard";
+import SignUp from './Components/SignIn/SignUp';
 
 
 function App() {
   return (
     <Router>
       <Switch>
+        <Route path="/:id/signup">
+          <SignUp />
+        </Route>
         <Route path="/login">
           <SignIn />
         </Route>

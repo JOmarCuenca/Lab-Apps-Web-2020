@@ -4,7 +4,6 @@ import Navigation from "../Navigation";
 import { Switch, Route } from "react-router-dom";
 import "./style.scss";
 import { useWindowSize } from "../../Constants/functions";
-import { Spinner } from "react-bootstrap";
 import { Usuario } from "../../Constants/interfaces";
 import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
 import { FirebaseContext } from "../../API/Firebase";
@@ -49,23 +48,8 @@ const Dashboard: React.FC<Props> = () => {
 			.catch((err) => {
 				history.push("/login");
 			});
-	// eslint-disable-next-line
+	    // eslint-disable-next-line
 	}, []);
-
-	if (!ready)
-		return (
-			<div
-				style={{
-					justifyContent: "center",
-					alignItems: "center",
-					display: "flex",
-					height: "100vh",
-					width: "100%",
-				}}
-			>
-				<Spinner animation='border' variant='info' />
-			</div>
-		);
 
 	return (
 		
