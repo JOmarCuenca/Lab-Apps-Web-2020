@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
-import { Evento } from "../../Constants/interfaces";
+import { FirebaseContext } from "../../API/Firebase";
+import { Evento, Usuario } from "../../Constants/interfaces";
 import ClockTime from "./Clock";
 import EventWidget from "./EventWidget";
 import NotificationWidget from "./NotificationWidget";
@@ -8,57 +9,24 @@ import NotificationWidget from "./NotificationWidget";
 import "./style.css";
 
 interface Props {
-	setBreadCrumb: (val: string) => void;
+	user : Usuario
 }
-const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
+
+const HomeScreen: React.FC<Props> = (p) => {
 
 	const BORDER_RADIUS = 16;
+
+	const firebase = useContext(FirebaseContext);
 	
 	const [loaded, setLoaded] = useState(false);
-	const [user]	 = useState("Usuario");
 	const [recentEvents,setRecentEvents] = useState<Evento[]>([]);
 
 	useEffect(() => {
-		setLoaded(true);
-		setBreadCrumb("");
 		// load from API las 2 events
-		let loadedEvents : Evento[] = [
-			{
-				id              : "infinite Power!!!!",
-				nombre          : "Somebody",
-				descripcion     : "some... body",
-				fecha           : new Date(),
-				fecha_delete    : new Date(),
-				img             : "some link",
-				place           : "some Link",
-				maxUsers        : 100,
-				currentUsers    : []
-			},
-			{
-				id              : "infinite Power!!!!",
-				nombre          : "Once Told Me..",
-				descripcion     : "some... body",
-				fecha           : new Date(),
-				fecha_delete    : new Date(),
-				img             : "some link",
-				place           : "some Link",
-				maxUsers        : 100,
-				currentUsers    : []
-			},
-			// {
-			// 	id              : "infinite Power!!!!",
-			// 	nombre          : "The world is gonna roll me",
-			// 	descripcion     : "some... body",
-			// 	fecha           : new Date(),
-			// 	fecha_delete    : new Date(),
-			// 	img             : "some link",
-			// 	place           : "some Link",
-			// 	maxUsers        : 100,
-			// 	currentUsers    : []
-			// }
-
-		];
-		setRecentEvents(loadedEvents);
+		firebase.getLimitedEvento(2,0)
+		.then((events) => setRecentEvents(events))
+		.catch((e) => console.log(e))
+		.finally(() => setLoaded(true));
 		// eslint-disable-next-line
 	}, []);
 
@@ -81,7 +49,7 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 		} else {
 			result += "Buenas dias, ";
 		}
-		return result+user+"!";
+		return result+p.user.nombre+"!";
 	}
 
 	const loadingScreen = () => {

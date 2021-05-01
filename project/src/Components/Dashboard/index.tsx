@@ -87,7 +87,7 @@ const Dashboard: React.FC<Props> = () => {
 						>
 					<Switch>
 						<Route exact path='/dashboard'>
-							<HomeScreen setBreadCrumb={setBreadCrumb} />
+							<HomeScreen user={user} />
 						</Route>
 						<Route path='/dashboard/administrative_sub_admin'>
 							<SubAdminWindow user={user} />
