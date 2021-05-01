@@ -1,0 +1,22 @@
+.notificationWidget {
+    background-color: aliceblue;
+    width: 100%;
+    margin: auto;
+    display: inline-block;
+    color: black;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    padding: 4px ;
+}
+
+.notificationWidget h5 {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.infoIconBtnNotif {
+    float: right;
+    margin-right:   5px;
+    cursor: pointer;
+    height: 25px;
+}

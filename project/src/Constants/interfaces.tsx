@@ -1,6 +1,6 @@
-interface Coord {
-	latitude: number;
-	longitude: number;
+export interface Coord {
+    latitude : number,
+    longitude : number
 }
 
 export interface Evento {
