@@ -14,8 +14,10 @@ import menuIcon from "../../Assets/img/menu.png";
 import { primaryColor, secondaryColor } from "../../Constants/constants";
 import { FirebaseContext } from "../../API/Firebase";
 import AvatarIcon from "../../Assets/img/avatar.jpg";
+import DASHBOARD_ICON from "../../Assets/img/dashboard.png";
 
 import "./style.css";
+import { Usuario } from "../../Constants/interfaces";
 
 const useStyles = makeStyles({
   root: {
@@ -48,7 +50,11 @@ const chooseIcon = (s: string) => {
   }
 }
 
-const Navigation: React.FC = () => {
+interface Props {
+  user : Usuario
+}
+
+const Navigation: React.FC<Props> = (p) => {
   const styles = useStyles();
   const firebase = useContext(FirebaseContext);
   const history = useHistory();
@@ -105,7 +111,12 @@ const Navigation: React.FC = () => {
   };
 
   const navElements = () => {
-    return <div>{navigationItems.map((e: any, i) => createElement(e, i))}</div>;
+    let navItems;
+    if(p.user.rol && p.user.rol === "SUPER_ADMIN")
+      navItems = navigationItems
+    else
+      navItems = navigationItems.filter((v) => v.reserved === undefined);
+    return <div>{navItems.map((e: any, i) => createElement(e, i))}</div>;
   };
 
   if (size.width && size.width < 768)
@@ -127,7 +138,7 @@ const Navigation: React.FC = () => {
               borderRadius: 10,
             }}
             alt="logo"
-            src={require("../../Assets/img/dashboard.png")}
+            src={DASHBOARD_ICON}
           />
           <div
             style={{
@@ -146,7 +157,7 @@ const Navigation: React.FC = () => {
                 color: primaryColor,
                 fontSize: 35,
                 fontWeight: 900,
-                marginLeft: -10,
+                marginLeft: 5
               }}
             >
               Dashboard

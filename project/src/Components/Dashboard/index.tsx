@@ -22,7 +22,6 @@ const Dashboard: React.FC<Props> = () => {
 	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
 	const size = useWindowSize();
-	const [ready] = useState(true);
 	const [, setBreadCrumb] = useState("Dashboard");
 	const [user, setUser] = useState<Usuario>({
 		nombre: "",
@@ -55,7 +54,7 @@ const Dashboard: React.FC<Props> = () => {
 		
 		<div style={{ height: "100%" }}>
 				
-				<Navigation />
+				<Navigation user={user} />
 				<div className="image-container">
 					<img className="imgLogo" src= {pbIcon} alt="Falta logo" />
 				</div>
