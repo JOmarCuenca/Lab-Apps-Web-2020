@@ -1,3 +1,16 @@
+#spinnerCenter {
+    height: 40vh;
+    padding: 10px;
+    width: 100%;
+    background-color: red;
+}
+
+#spinnerCenter > * {
+    padding: 10px auto;
+    margin : auto;
+}
+
+
 
 .personalCard {
     background-color: rgb(52, 157, 153);

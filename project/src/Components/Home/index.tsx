@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Row, Spinner } from "react-bootstrap";
 import { FirebaseContext } from "../../API/Firebase";
 import { Evento, Usuario } from "../../Constants/interfaces";
 import ClockTime from "./Clock";
@@ -53,8 +53,8 @@ const HomeScreen: React.FC<Props> = (p) => {
 	}
 
 	const loadingScreen = () => {
-		return <div>
-			<h1>Loading...</h1>
+		return <div id="spinnerCenter">
+			<Spinner animation="border" variant="info" />
 		</div>;
 	}
 
