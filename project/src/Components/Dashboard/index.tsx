@@ -69,7 +69,6 @@ const Dashboard: React.FC<Props> = () => {
 						backgroundColor: "#F5F7FA",
 						flexDirection: "column",
 						position: "relative",
-						// paddingBottom: "2.5rem",
 					}}
 				>
 					<div
