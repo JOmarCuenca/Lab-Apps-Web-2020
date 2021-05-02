@@ -56,7 +56,7 @@ const Dashboard: React.FC<Props> = () => {
 		<div style={{ height: "100%" }}>
 				
 				<Navigation user={user} />
-				<div className="image-container">
+				<div className="disappearable-logo image-container">
 					<img className="imgLogo" src= {pbIcon} alt="Falta logo" />
 				</div>
 				<div
