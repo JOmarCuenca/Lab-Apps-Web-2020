@@ -64,17 +64,19 @@ const HomeScreen: React.FC<Props> = (p) => {
 				<Card className="whitePersonalCard" style={{ borderRadius: BORDER_RADIUS }}>
 					<Card.Body>
 						<Row>
-							<Col md={12} lg={6} style={{textAlign: 'center', margin: "20px auto"}} >
-								<h1>{getGreeting()}</h1>
+							<Col md={12} lg={6} >
+								<div id="greeting">{getGreeting()}</div>
 							</Col>
 							<Col md={12} lg={1} >
-								<img className="dayTime" src="https://www.sunny.pet/wp-content/uploads/2016/08/sunny-articulos-para-mascota-sol.jpg" alt="sunny" />
+								<div id="weatherIcon"><img className="dayTime" src="https://www.sunny.pet/wp-content/uploads/2016/08/sunny-articulos-para-mascota-sol.jpg" alt="sunny" /></div>
 							</Col>
 							<Col md={12} lg={5} >
-								<Row style={{textAlign: 'center', fontSize: '40px'}}>
-									<Col xs={12}><ClockTime /></Col>
-									<Col xs={12}><h3>{getToday()}</h3></Col>
-								</Row>
+								<div id="clockZone">
+									<Row>
+										<Col xs={12}><div id="clock"><ClockTime /></div></Col>
+										<Col xs={12}>{getToday()}</Col>
+									</Row>
+								</div>
 							</Col>
 						</Row>
 					</Card.Body>
