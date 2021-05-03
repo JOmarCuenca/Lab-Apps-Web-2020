@@ -86,10 +86,25 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 	// 	// });
 	// };
 
+	/*const [postsToShow, setPostsToShow] = useState([]);
+
+	const loopWithSlice = (start, end) => {
+		const slicedPosts = NotifWidget.slice(start, end);
+		arrayForHoldingPosts = [...arrayForHoldingPosts, ...slicedPosts];
+		setPostsToShow(arrayForHoldingPosts);
+	  };*/
+
 	const deleteFromList = (index : number) => {
 		const copy = Array.from(historyNotif);
 		copy.splice(index, 1);
 		sethistoryNotif(copy);
+	}
+
+	const cargarMas = () => {
+		var aux = limit + 3;
+		limit = aux;
+		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
+			sethistoryNotif(lista);});
 	}
 
 	const renderItem = () => {
@@ -141,6 +156,11 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
 						{historyNotif.map( (n, i) => <NotifWidget index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
+						<footer>
+							<button className="cargarMas" onClick={cargarMas}>
+								...
+							</button>
+						</footer>
 					</div>
 				</Col>
 			</Row>
