@@ -2,7 +2,6 @@
     height: 40vh;
     padding: 10px;
     width: 100%;
-    background-color: red;
 }
 
 #spinnerCenter > * {
@@ -34,6 +33,14 @@
     font-size: max(4vw,30px);
 }
 
+.inner_center {
+    margin: auto;
+    height: 100%;
+    padding: 10px 0;
+    font-size: 2vw;
+    text-align: center;
+}
+
 .personalCard {
     background-color: rgb(52, 157, 153);
     color: white;
@@ -51,7 +58,7 @@
 
 .verticalHr { 
     border-left:    4px solid white;
-    height:         48px;
+    height:         8vh;
     width:          1px;       
 }
 

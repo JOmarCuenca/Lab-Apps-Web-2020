@@ -114,9 +114,9 @@ const HomeScreen: React.FC<Props> = (p) => {
 						<Card className="personalCard" style={{ borderRadius: BORDER_RADIUS }}>
 							<Card.Body>
 								<Row style={{textAlign: 'center', fontSize: '40px'}}>
-									<Col xs={5}><h3>USUARIOS ACTIVOS</h3></Col>
+									<Col xs={5}><div className="inner_center">USUARIOS ACTIVOS</div></Col>
 									<Col xs={2}><hr className="verticalHr" /></Col>
-									<Col xs={5}><h3>50</h3></Col>
+									<Col xs={5}><div className="inner_center" style={{fontSize : "4vw"}}>50</div></Col>
 								</Row>
 							</Card.Body>
 						</Card>
