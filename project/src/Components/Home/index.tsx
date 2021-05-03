@@ -29,7 +29,7 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 				descripcion     : "some... body",
 				fecha           : new Date(),
 				fecha_delete    : new Date(),
-				img             : "some link",
+				img             : "https://www.bbva.com/wp-content/uploads/2020/07/BBVA-mindfullnes-03082020-1920x1180.jpg",
 				place           : "some Link",
 				maxUsers        : 100,
 				currentUsers    : []

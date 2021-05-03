@@ -6,8 +6,11 @@ import { Evento } from "../../../Constants/interfaces";
 
 import "../style.css";
 
-const EventosForm: FC = () => {
-	// const { id } = useParams<{ id: string }>();
+interface Props {
+	event? : Evento
+}
+
+const EventosForm: FC<Props> = ({event}) => {
 	const [item, setItem] = useState<Evento>({
 		id: "",
 		descripcion: "",
@@ -30,24 +33,20 @@ const EventosForm: FC = () => {
 	const history = useHistory();
 
 	useEffect(() => {
-		// if(id !== ADD_NEW_ITEM_CODE){
-		// 	firebase.getProductFromId("Products/"+id).then(product => setNItem(product)).catch(e => {
-		// 		console.log(e);
-		// 		window.alert("This item appears to be non-existant");
-		// 		history.push("/dashboard/menu");
-		// 	});
-		// } else {
-		setItem({
-			id: "",
-			descripcion: "",
-			img: "",
-			currentUsers: [],
-			maxUsers: 100,
-			fecha: new Date(),
-			fecha_delete: new Date(),
-			nombre: "",
-			place: "",
-		});
+		if(event)
+			setItem(event);
+		else
+			setItem({
+				id: "",
+				descripcion: "",
+				img: "",
+				currentUsers: [],
+				maxUsers: 100,
+				fecha: new Date(),
+				fecha_delete: new Date(),
+				nombre: "",
+				place: "",
+			});
 		// }
 		// eslint-disable-next-line
 	}, []);
@@ -152,6 +151,13 @@ const EventosForm: FC = () => {
 			)}
 		</>
 	);
+
+	const renderImgPreview = () => {
+		if(item.img !== ""){
+			return <img src={item.img} id="imagePreview" alt="eventImg" />;
+		}
+		return <></>;
+	}
 
 	const renderItem = () => {
 		return (
@@ -274,6 +280,7 @@ const EventosForm: FC = () => {
 									/>
 								</Form.Group>
 							</Form.Row>
+							{renderImgPreview()}
 							<button
 								type='submit'
 								disabled={loadingSubmit}
