@@ -1,5 +1,6 @@
 import app from "firebase/app";
 import { StorageFolders } from "../../Constants/constants";
+import { getToday } from "../../Constants/functions";
 import {
 	Reto,
 	Usuario,
@@ -8,9 +9,10 @@ import {
 	Meditacion,
 	StatisticObj,
 } from "../../Constants/interfaces";
-import { DataAccess } from "./data";
+import { DataAccess, QueryCondition } from "./data";
 
 const USER_COLLECTION_TAG = "Usuarios";
+const IOS_USER_COLLECTION_TAG = "users";
 const RETOS_COLLECTION_TAG = "Retos";
 const EVENTOS_COLLECTION_TAG = "Eventos";
 const NOTIFICACIONES_COLLECTION_TAG = "Notificaciones";
@@ -392,6 +394,11 @@ class Firebase {
 		} catch (e) {
 			return Promise.reject(e);
 		}
+	}
+
+	async getActiveUsers(){
+		const activeUsers = await this.dataAccess.getWhere(IOS_USER_COLLECTION_TAG,"lastLogged",QueryCondition.greaterEqualThan,getToday());
+		return activeUsers.docs.length;
 	}
 
 	/*********************************************Extra UseFul Functions*****************************************/
