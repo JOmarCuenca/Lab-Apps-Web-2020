@@ -18,8 +18,9 @@ const HomeScreen: React.FC<Props> = (p) => {
 
 	const firebase = useContext(FirebaseContext);
 	
-	const [loaded, setLoaded] = useState(false);
-	const [recentEvents,setRecentEvents] = useState<Evento[]>([]);
+	const [loaded, setLoaded] 				= useState(false);
+	const [recentEvents,setRecentEvents] 	= useState<Evento[]>([]);
+	const [activeUsers,setActiveUsers] 		= useState(-1);
 
 	useEffect(() => {
 		// load from API las 2 events
@@ -27,6 +28,13 @@ const HomeScreen: React.FC<Props> = (p) => {
 		.then((events) => setRecentEvents(events))
 		.catch((e) => console.log(e))
 		.finally(() => setLoaded(true));
+
+		firebase.getActiveUsers()
+		.then((i) => setActiveUsers(i))
+		.catch(e => {
+			console.log(e);
+			setActiveUsers(0);
+		});
 		// eslint-disable-next-line
 	}, []);
 
@@ -50,6 +58,19 @@ const HomeScreen: React.FC<Props> = (p) => {
 			result += "Buenas dias, ";
 		}
 		return result+p.user.nombre+"!";
+	}
+
+	function getActiveUsers() : string {
+		let users : string;
+		if(activeUsers < 0)
+			return "...";
+		else if(activeUsers > 1000000) // Millions
+			users = `${Math.trunc(activeUsers/1000000)}M`;
+		else if(activeUsers > 1000) // Thousands
+			users = `${Math.trunc(activeUsers/1000)}K`;
+		else
+			users = `${activeUsers}`;
+		return users;
 	}
 
 	const loadingScreen = () => {
@@ -116,7 +137,7 @@ const HomeScreen: React.FC<Props> = (p) => {
 								<Row style={{textAlign: 'center', fontSize: '40px'}}>
 									<Col xs={5}><div className="inner_center">USUARIOS ACTIVOS</div></Col>
 									<Col xs={2}><hr className="verticalHr" /></Col>
-									<Col xs={5}><div className="inner_center" style={{fontSize : "4vw"}}>50</div></Col>
+									<Col xs={5}><div className="inner_center" style={{fontSize : "4vw"}}>{getActiveUsers()}</div></Col>
 								</Row>
 							</Card.Body>
 						</Card>

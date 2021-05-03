@@ -15,6 +15,15 @@ const firebaseConfig = {
 	measurementId: "G-K8E5LDDGY2",
 };
 
+export enum QueryCondition {
+    notEqual,
+    equal,
+    greaterThan,
+    greaterEqualThan,
+    lessThan,
+    lessEqualThan
+}
+
 export class DataAccess {
 
     private auth: firebase.auth.Auth;
@@ -30,6 +39,25 @@ export class DataAccess {
 		// this.types = app.firestore;
 		// this.functions = app.functions();
 		this.storage = app.storage();
+    }
+
+    private QuerytoFirestoreFilter(qc : QueryCondition) : app.firestore.WhereFilterOp {
+        switch(qc){
+            case QueryCondition.equal:
+                return "==";
+            case QueryCondition.notEqual:
+                return "!=";
+            case QueryCondition.greaterThan:
+                return ">";
+            case QueryCondition.greaterEqualThan:
+                return ">=";
+            case QueryCondition.lessThan:
+                return "<";
+            case QueryCondition.lessEqualThan:
+                return "<=";
+            default:
+                return "!=";
+        }
     }
 
     
@@ -141,6 +169,8 @@ export class DataAccess {
             .orderBy(orderAttr,orderDirection)
             .limit(amountLimit)
             .get();
+    
+    getWhere = (coll : string, field : string, condition : QueryCondition, value : any) => this.firestore.collection(coll).where(field,this.QuerytoFirestoreFilter(condition),value).get();
 
     createAuthUser = (mail : string, pass : string) => this.auth.createUserWithEmailAndPassword(mail,pass);
 }
