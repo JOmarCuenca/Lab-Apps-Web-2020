@@ -8,10 +8,11 @@ import { Col, Row } from "react-bootstrap";
 const EXAMPLE_IMG = "https://www.bbva.com/wp-content/uploads/2020/07/BBVA-mindfullnes-03082020-1920x1180.jpg";
 
 interface Props {
-	event : Evento
+	event       : Evento,
+    openEdit    : () => void
 }
 
-const EventWidget : FC<Props> = ({event}) => {
+const EventWidget : FC<Props> = ({event, openEdit}) => {
 
     const getPlace = (place : string | Coord) => {
         return "Liga Zoom";
@@ -31,7 +32,7 @@ const EventWidget : FC<Props> = ({event}) => {
             <h3>{event.nombre}</h3>
             <h5>{getPlace(event.place)}</h5>
         </Col>
-        <Col xs={2}><img src={infoIcon} alt="Info Icon" className="infoIconBtn" /></Col>
+        <Col xs={2}><img src={infoIcon} alt="Info Icon" onClick={openEdit} className="infoIconBtn" /></Col>
         </Row>
     </div>;
 }

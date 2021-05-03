@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { Evento } from "../../Constants/interfaces";
+import EventContainer from "../EventContainer";
 import ClockTime from "./Clock";
-import EventWidget from "./EventWidget";
 import NotificationWidget from "./NotificationWidget";
 
 import "./style.css";
@@ -125,7 +125,7 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 						<Row>
 							{recentEvents.map((e) => {
 								return <Col xs={12}>
-									<EventWidget event={e}/>
+									<EventContainer event={e}/>
 								</Col>;
 							})}
 							<Col xs={12}>

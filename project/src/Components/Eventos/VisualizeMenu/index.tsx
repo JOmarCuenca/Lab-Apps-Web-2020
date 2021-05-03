@@ -3,9 +3,9 @@ import { Card, Col, Row } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { ADD_NEW_ITEM_CODE } from "../../../Constants/constants";
 import { FirebaseContext } from "../../../API/Firebase";
-import EventWidget from "../../Home/EventWidget";
 import "./style.css";
 import { Evento } from "../../../Constants/interfaces";
+import EventContainer from "../../EventContainer";
 
 interface Props {
 	setBreadCrumb: (val: string) => void;
@@ -39,7 +39,7 @@ const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 						<Row>
 							{recentEvents.map((e) => {
 								return <Col xs={12}>
-									<EventWidget event={e}/>
+									<EventContainer event={e}/>
 								</Col>;
 							})}
 							<Col xs={12}>
