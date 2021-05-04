@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { Evento } from "../../Constants/interfaces";
 import EventosForm from "../Eventos/EditForm";
 import EventWidget from "./EventWidget";

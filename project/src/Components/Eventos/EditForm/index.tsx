@@ -153,8 +153,8 @@ const EventosForm: FC<Props> = ({event}) => {
 	);
 
 	const renderImgPreview = () => {
-		if(item.img !== ""){
-			return <img src={item.img} id="imagePreview" alt="eventImg" />;
+		if(item.imgFile && typeof item.imgFile === "string" && item.imgFile !== ""){
+			return <img src={item.imgFile} id="imagePreview" alt="eventImg" />;
 		}
 		return <></>;
 	}

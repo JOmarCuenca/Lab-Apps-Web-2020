@@ -40,7 +40,7 @@ const EventWidget : FC<Props> = ({event, openEdit}) => {
                 <div id="eventName">{event.nombre}</div>
                 <div id="eventLink">{getPlace(event.place)}</div>
             </Col>
-            <Col xs={2}><img src={infoIcon} alt="Info Icon" className="infoIconBtn" /></Col>
+            <Col xs={2}><img src={infoIcon} alt="Info Icon" className="infoIconBtn" onClick={openEdit} /></Col>
         </Row>
     </div>;
 }
