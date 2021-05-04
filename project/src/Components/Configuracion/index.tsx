@@ -152,7 +152,6 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 							<button
 								type='submit'
 								disabled={loadingSubmit}
-								className='submit-button'
 								style={{ float: "right", position: "relative" }}
 							>
 								{loadingSubmit

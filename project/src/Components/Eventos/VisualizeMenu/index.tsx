@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 import { ADD_NEW_ITEM_CODE } from "../../../Constants/constants";
 import { FirebaseContext } from "../../../API/Firebase";
 import EventWidget from "../../Home/EventWidget";
-import "./style.css";
 import { Evento } from "../../../Constants/interfaces";
 
 interface Props {
@@ -54,7 +53,6 @@ const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 			</Col>
 			<Col style={{ paddingBottom: "20px" }} xs='12'>
 				<button
-					className='submit-button'
 					onClick={() =>
 						history.push(`/dashboard/events/${ADD_NEW_ITEM_CODE}`)
 					}
