@@ -2,32 +2,32 @@
 	{
 		"title": "Home",
 		"action": "/dashboard",
-		"icon": "Pedidos"
+		"icon": "Home"
 	},
 	{
 		"title": "Notificaciones",
 		"action": "/dashboard/notifications",
-		"icon": "Pedidos"
+		"icon": "Notificaciones"
 	},
 	{
 		"title": "Eventos",
 		"action": "/dashboard/events",
-		"icon": "Contactos"
+		"icon": "Eventos"
 	},
 	{
 		"title": "Estadisticas",
 		"action": "/dashboard/stats",
-		"icon": "Contactos"
+		"icon": "Estadisticas"
 	},
 	{
 		"title": "Configuracion",
 		"action": "/dashboard/configuracion",
-		"icon": "Retro"
+		"icon": "Configuracion"
 	},
 	{
 		"title": "Sub-Admins",
 		"action": "/dashboard/administrative_sub_admin",
-		"icon": "Contactos",
+		"icon": "Sub-Admins",
 		"reserved" : true
 	},
 	{

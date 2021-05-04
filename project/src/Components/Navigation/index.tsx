@@ -5,12 +5,16 @@ import { useWindowSize } from "../../Constants/functions";
 import { Container, Col, Row } from "react-bootstrap";
 import MenuIcon from "@material-ui/icons/Menu";
 import navigationItems from "../../navigation.json";
-import logoutIcon from "../../Assets/img/logout.png";
-import teamIcon from "../../Assets/img/equipo.png";
-import scheduleIcon from "../../Assets/img/hora.png";
-import orderIcon from "../../Assets/img/purchase.png";
-import rateIcon from "../../Assets/img/rate.png";
-import menuIcon from "../../Assets/img/menu.png";
+
+import logoutIcon from "../../Assets/img/logout-icon.png";
+import HomeIcon from "../../Assets/img/home-icon.png";
+import NotifIcon from "../../Assets/img/notif-icon.png";
+import EventsIcon from "../../Assets/img/events-icon.png";
+import AddIcon from "../../Assets/img/add-icon.png";
+import StatsIcon from "../../Assets/img/stat-icon.png";
+import SettingIcon from "../../Assets/img/setting-icon.png";
+
+
 import { primaryColor, secondaryColor, SUPER_ADMIN_TAG } from "../../Constants/constants";
 import { FirebaseContext } from "../../API/Firebase";
 import AvatarIcon from "../../Assets/img/avatar.jpg";
@@ -35,16 +39,18 @@ const useStyles = makeStyles({
 
 const chooseIcon = (s: string) => {
   switch (s) {
-    case "Pedidos":
-      return orderIcon;
-    case "Contactos":
-      return teamIcon;
-    case "Retro":
-      return rateIcon;
-    case "Menu":
-      return menuIcon;
-    case "Promo":
-      return scheduleIcon;
+    case "Home":
+      return HomeIcon;
+    case "Notificaciones":
+      return NotifIcon;
+    case "Eventos":
+      return EventsIcon;
+    case "Estadisticas":
+      return StatsIcon;
+    case "Configuracion":
+      return SettingIcon;
+    case "Sub-Admins":
+      return AddIcon;
     default:
       return logoutIcon;
   }
