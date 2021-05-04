@@ -1,12 +1,12 @@
 import React, { FC, useContext, useEffect, useRef, useState } from "react";
-import { Card, Col, Form, Image, Modal, Button } from "react-bootstrap";
+import { Card, Col, Form, Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../API/Firebase";
 import { Usuario } from "../../Constants/interfaces";
 import profilepicture from "../../Assets/img/profilepicture.png";
+import LoginModal from "./LoginModal/index";
 
 import "./style.css";
-import { Input } from "@material-ui/core";
 
 interface Props {
 	setBreadCrumb: (val: string) => void;
@@ -17,9 +17,8 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 	// const { id } = useParams<{ id: string }>();
 	const [user, setUser] = useState<Usuario>(usuario);
 	const [image, setImage] = useState<File | undefined>();
-	const [showModal, setShowModal] = useState(false);
-	const modalEmailRef = useRef<HTMLInputElement>(null);
-	const modalPasswordRef = useRef<HTMLInputElement>(null);
+	const [showModal, setShowModal] = useState<boolean>(false);
+	const newPasswordRef = useRef<HTMLInputElement>(null);
 
 	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 
@@ -38,45 +37,16 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 			return;
 		}
 		setImage(files.item(0)!);
-		console.log(files.item(0)?.name);
 		const imgSrc = (window.URL || window.webkitURL).createObjectURL(
 			files.item(0)!
 		);
-		console.log(imgSrc);
 		return imgSrc;
 	};
 
-	const submitModal: React.FormEventHandler = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const email = modalEmailRef.current!.value;
-		const password = modalPasswordRef.current!.value;
-		setLoadingSubmit(true);
-		firebase.doSignInWithEmailAndPassword(email, password).then(() => {
-			setShowModal(false);
-			let message = "Se ha actualizado la información";
-			try {
-				const copy = user!;
-				if (image !== undefined) {
-					copy.imgFile = image;
-				}
-				if (user.email !== usuario.email) {
-					firebase.changeUserEmail(user.email);
-				}
-				firebase.updateUsuario(copy);
-			} catch (e) {
-				console.log(e);
-				message =
-					"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
-			}
-			setLoadingSubmit(false);
-			window.alert(message);
-			history.push("/dashboard/configuracion");
-		})
-	}
-
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		if (user.email !== usuario.email) {
+		const newPassword = newPasswordRef.current!.value;
+		if (user.email !== usuario.email || newPassword !== "") {
 			setShowModal(true);
 		} else {
 			setLoadingSubmit(true);
@@ -100,37 +70,20 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 	};
 
 	const renderItem = () => {
-		console.log(usuario);
 		var imgSrc = usuario.imagen_perfil;
 		var inputElement: HTMLInputElement;
 		var imgElement: HTMLImageElement;
 		return (
 			<div>
-				<Modal show={showModal}>
-					<Modal.Header>
-						<Modal.Title>
-							Login
-						</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<Form.Group onSubmit={submitModal}>
-							<Form.Label>Correo: </Form.Label>
-							<Form.Control type="text" ref={modalEmailRef} />
-						</Form.Group>
-						<Form.Group>
-							<Form.Label>Contraseña: </Form.Label>
-							<Form.Control type="password" ref={modalPasswordRef} />
-						</Form.Group>
-					</Modal.Body>
-					<Modal.Footer>
-						<Button variant="secondary" onClick={() => setShowModal(false)}>
-							Cancelar
-						</Button>
-						<Button variant="primary" type="submit" onClick={() => setShowModal(false)}>
-							Confirmar
-						</Button>
-					</Modal.Footer>
-				</Modal>
+				<LoginModal
+					usuario={usuario}
+					setLoadingSubmit={setLoadingSubmit}
+					newUser={user}
+					newPasswordRef={newPasswordRef}
+					image={image}
+					showModal={showModal}
+					setShowModal={setShowModal}
+				/>
 				<Card style={{ borderRadius: 10 }}>
 					<Card.Body>
 						<Form onSubmit={submitChanges}>
@@ -201,7 +154,7 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} xl={6}>
-									<Form.Label>email</Form.Label>
+									<Form.Label>Correo</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setUser({
@@ -213,6 +166,15 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 										type='text'
 										placeholder='Email'
 										value={user!.email}
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} xl={6}>
+									<Form.Label>Nueva Contraseña</Form.Label>
+									<Form.Control
+										required={false}
+										type='password'
+										placeholder='Contraseña'
+										ref={newPasswordRef}
 									/>
 								</Form.Group>
 							</Form.Row>
