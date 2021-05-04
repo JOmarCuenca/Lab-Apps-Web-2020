@@ -32,3 +32,13 @@ export const useWindowSize = () => {
 
   return windowSize;
 }
+
+/**
+ * This function gets the current date of the pc and returns the date at 0:00.
+ * 
+ * @returns Date
+ */
+export function getToday(){
+  const now = new Date();
+  return new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0);
+}

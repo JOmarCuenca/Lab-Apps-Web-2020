@@ -15,7 +15,15 @@ interface Props {
 const EventWidget : FC<Props> = ({event, openEdit}) => {
 
     const getPlace = (place : string | Coord) => {
-        return "Liga Zoom";
+        if(typeof place === "string"){
+            if(place.includes("zoom")){
+                return <a target="_blank" rel="noreferrer" href={place}>Liga Zoom</a>;
+            } else {
+                return <p>{place}</p>;
+            }
+        } else {
+            return <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/?q=${place.latitude},${place.longitude}`}>Liga Maps</a>;
+        }
     }
 
     const getImage = () : string => {
@@ -27,12 +35,12 @@ const EventWidget : FC<Props> = ({event, openEdit}) => {
 
     return <div className="eventWidget">
         <Row>
-        <Col className="disappearable" xs={3}><img src={getImage()} alt={`Event ${event.id}`} className="eventImg" /></Col>
-        <Col xs={7}>
-            <h3>{event.nombre}</h3>
-            <h5>{getPlace(event.place)}</h5>
-        </Col>
-        <Col xs={2}><img src={infoIcon} alt="Info Icon" onClick={openEdit} className="infoIconBtn" /></Col>
+            <Col className="disappearable" xs={3}><img src={getImage()} alt={`Event ${event.id}`} className="eventImg" /></Col>
+            <Col xs={7}>
+                <div id="eventName">{event.nombre}</div>
+                <div id="eventLink">{getPlace(event.place)}</div>
+            </Col>
+            <Col xs={2}><img src={infoIcon} alt="Info Icon" className="infoIconBtn" /></Col>
         </Row>
     </div>;
 }

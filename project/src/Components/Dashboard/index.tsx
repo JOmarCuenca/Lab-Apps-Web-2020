@@ -56,7 +56,7 @@ const Dashboard: React.FC<Props> = () => {
 		<div style={{ height: "100%" }}>
 				
 				<Navigation user={user} />
-				<div className="image-container">
+				<div className="disappearable-logo image-container">
 					<img className="imgLogo" src= {pbIcon} alt="Falta logo" />
 				</div>
 				<div
@@ -69,7 +69,6 @@ const Dashboard: React.FC<Props> = () => {
 						backgroundColor: "#F5F7FA",
 						flexDirection: "column",
 						position: "relative",
-						// paddingBottom: "2.5rem",
 					}}
 				>
 					<div
@@ -87,7 +86,7 @@ const Dashboard: React.FC<Props> = () => {
 						>
 					<Switch>
 						<Route exact path='/dashboard'>
-							<HomeScreen setBreadCrumb={setBreadCrumb} />
+							<HomeScreen user={user} />
 						</Route>
 						<Route path='/dashboard/administrative_sub_admin'>
 							<SubAdminWindow user={user} />

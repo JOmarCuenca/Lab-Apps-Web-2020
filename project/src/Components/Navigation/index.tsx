@@ -110,6 +110,11 @@ const Navigation: React.FC<Props> = (p) => {
     </Col>;
   };
 
+  function getUserName(){
+    const namesSeparated = p.user.nombre.split(" ");
+    return namesSeparated.length < 1 ? "Usuario" : namesSeparated[0];
+  }
+
   const navElements = () => {
     let navItems;
     if(p.user.rol && p.user.rol === SUPER_ADMIN_TAG)
@@ -198,16 +203,13 @@ const Navigation: React.FC<Props> = (p) => {
         <Row>
           <Col md={3}>
             <img
-              width={35}
-              style={{
-                borderRadius: 10,
-              }}
+              className="userIcon"
               alt="logo"
-              src={AvatarIcon}
+              src={(p.user.imagen_perfil && p.user.imagen_perfil.length > 0) ? p.user.imagen_perfil : AvatarIcon}
             />
           </Col>
           <Col className="userName" md={9}>
-            <p>Usuario</p>
+            <p>{getUserName()}</p>
           </Col>
           <br />
           <br />

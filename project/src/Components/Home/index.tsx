@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
-import { Evento } from "../../Constants/interfaces";
+import React, { useContext, useEffect, useState } from "react";
+import { Card, Col, Row, Spinner } from "react-bootstrap";
+import { FirebaseContext } from "../../API/Firebase";
+import { Evento, Usuario } from "../../Constants/interfaces";
 import EventContainer from "../EventContainer";
 import ClockTime from "./Clock";
 import NotificationWidget from "./NotificationWidget";
@@ -8,57 +9,32 @@ import NotificationWidget from "./NotificationWidget";
 import "./style.css";
 
 interface Props {
-	setBreadCrumb: (val: string) => void;
+	user : Usuario
 }
-const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
+
+const HomeScreen: React.FC<Props> = (p) => {
 
 	const BORDER_RADIUS = 16;
+
+	const firebase = useContext(FirebaseContext);
 	
-	const [loaded, setLoaded] = useState(false);
-	const [user]	 = useState("Usuario");
-	const [recentEvents,setRecentEvents] = useState<Evento[]>([]);
+	const [loaded, setLoaded] 				= useState(false);
+	const [recentEvents,setRecentEvents] 	= useState<Evento[]>([]);
+	const [activeUsers,setActiveUsers] 		= useState(-1);
 
 	useEffect(() => {
-		setLoaded(true);
-		setBreadCrumb("");
 		// load from API las 2 events
-		let loadedEvents : Evento[] = [
-			{
-				id              : "infinite Power!!!!",
-				nombre          : "Somebody",
-				descripcion     : "some... body",
-				fecha           : new Date(),
-				fecha_delete    : new Date(),
-				img             : "https://www.bbva.com/wp-content/uploads/2020/07/BBVA-mindfullnes-03082020-1920x1180.jpg",
-				place           : "some Link",
-				maxUsers        : 100,
-				currentUsers    : []
-			},
-			{
-				id              : "infinite Power!!!!",
-				nombre          : "Once Told Me..",
-				descripcion     : "some... body",
-				fecha           : new Date(),
-				fecha_delete    : new Date(),
-				img             : "some link",
-				place           : "some Link",
-				maxUsers        : 100,
-				currentUsers    : []
-			},
-			// {
-			// 	id              : "infinite Power!!!!",
-			// 	nombre          : "The world is gonna roll me",
-			// 	descripcion     : "some... body",
-			// 	fecha           : new Date(),
-			// 	fecha_delete    : new Date(),
-			// 	img             : "some link",
-			// 	place           : "some Link",
-			// 	maxUsers        : 100,
-			// 	currentUsers    : []
-			// }
+		firebase.getLimitedEvento(2,0)
+		.then((events) => setRecentEvents(events))
+		.catch((e) => console.log(e))
+		.finally(() => setLoaded(true));
 
-		];
-		setRecentEvents(loadedEvents);
+		firebase.getActiveUsers()
+		.then((i) => setActiveUsers(i))
+		.catch(e => {
+			console.log(e);
+			setActiveUsers(0);
+		});
 		// eslint-disable-next-line
 	}, []);
 
@@ -81,12 +57,25 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 		} else {
 			result += "Buenas dias, ";
 		}
-		return result+user+"!";
+		return result+p.user.nombre+"!";
+	}
+
+	function getActiveUsers() : string {
+		let users : string;
+		if(activeUsers < 0)
+			return "...";
+		else if(activeUsers > 1000000) // Millions
+			users = `${Math.trunc(activeUsers/1000000)}M`;
+		else if(activeUsers > 1000) // Thousands
+			users = `${Math.trunc(activeUsers/1000)}K`;
+		else
+			users = `${activeUsers}`;
+		return users;
 	}
 
 	const loadingScreen = () => {
-		return <div>
-			<h1>Loading...</h1>
+		return <div id="spinnerCenter">
+			<Spinner animation="border" variant="info" />
 		</div>;
 	}
 
@@ -96,17 +85,19 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 				<Card className="whitePersonalCard" style={{ borderRadius: BORDER_RADIUS }}>
 					<Card.Body>
 						<Row>
-							<Col md={12} lg={6} style={{textAlign: 'center', margin: "20px auto"}} >
-								<h1>{getGreeting()}</h1>
+							<Col md={12} lg={6} >
+								<div id="greeting">{getGreeting()}</div>
 							</Col>
 							<Col md={12} lg={1} >
-								<img className="dayTime" src="https://www.sunny.pet/wp-content/uploads/2016/08/sunny-articulos-para-mascota-sol.jpg" alt="sunny" />
+								<div id="weatherIcon"><img className="dayTime" src="https://www.sunny.pet/wp-content/uploads/2016/08/sunny-articulos-para-mascota-sol.jpg" alt="sunny" /></div>
 							</Col>
 							<Col md={12} lg={5} >
-								<Row style={{textAlign: 'center', fontSize: '40px'}}>
-									<Col xs={12}><ClockTime /></Col>
-									<Col xs={12}><h3>{getToday()}</h3></Col>
-								</Row>
+								<div id="clockZone">
+									<Row>
+										<Col xs={12}><div id="clock"><ClockTime /></div></Col>
+										<Col xs={12}>{getToday()}</Col>
+									</Row>
+								</div>
 							</Col>
 						</Row>
 					</Card.Body>
@@ -144,9 +135,9 @@ const HomeScreen: React.FC<Props> = ({ setBreadCrumb }) => {
 						<Card className="personalCard" style={{ borderRadius: BORDER_RADIUS }}>
 							<Card.Body>
 								<Row style={{textAlign: 'center', fontSize: '40px'}}>
-									<Col xs={5}><h3>USUARIOS ACTIVOS</h3></Col>
+									<Col xs={5}><div className="inner_center">USUARIOS ACTIVOS</div></Col>
 									<Col xs={2}><hr className="verticalHr" /></Col>
-									<Col xs={5}><h3>50</h3></Col>
+									<Col xs={5}><div className="inner_center" style={{fontSize : "4vw"}}>{getActiveUsers()}</div></Col>
 								</Row>
 							</Card.Body>
 						</Card>

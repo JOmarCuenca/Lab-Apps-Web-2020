@@ -132,6 +132,12 @@ $alert-color-level: 6 !default;
 ==========================  **/
 /* Breadcrumbs */
 
+@media screen and (max-width: 768px) {
+  .disappearable-logo {
+      display: none;
+  }
+}
+
 
 .imgLogo{
   width:100%;
