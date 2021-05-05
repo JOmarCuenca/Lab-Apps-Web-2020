@@ -1,35 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Navigation from "../Navigation";
 import { Switch, Route } from "react-router-dom";
 import "./style.scss";
-import { Breadcrumbs } from "@material-ui/core";
 import { useWindowSize } from "../../Constants/functions";
-import { Spinner } from "react-bootstrap";
 import { Usuario } from "../../Constants/interfaces";
-import homeIcon from "../../Assets/img/home_icon.png";
-// import { FirebaseContext } from "../../API/Firebase";
-// import firebase from "firebase";
-// import Forms from "../Forms";
-import NotificationsMenu from "../Notificaciones/VisualizeMenu";
 import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
-import EditForm from "../Notificaciones/EditForm";
 import { FirebaseContext } from "../../API/Firebase";
 import EventosForm from "../Eventos/EditForm";
 import EventosMenu from "../Eventos/VisualizeMenu";
+import HomeScreen from "../Home";
+import pbIcon from "../../Assets/img/PuntoBlanco_icon.png";
 import Configuracion from "../Configuracion";
 import profilepicture from "../../Assets/img/profilepicture.png";
 import StatsScreen from "../Stats";
+import NotificationForm from "../Notificaciones/EditForm";
+import SubAdminWindow from "../SubAdmin";
 
 interface Props {}
 
 const Dashboard: React.FC<Props> = () => {
 	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
-	const [unidad, setUnidad] = useState<string>();
 	const size = useWindowSize();
-	const [ready, setReady] = useState(true);
-	const [breadCrumb, setBreadCrumb] = useState("Dashboard");
+	const [, setBreadCrumb] = useState("Dashboard");
 	const [user, setUser] = useState<Usuario>({
 		nombre: "",
 		uid: "",
@@ -54,92 +48,51 @@ const Dashboard: React.FC<Props> = () => {
 			.catch((err) => {
 				history.push("/login");
 			});
-		//es-lint: disable
+	    // eslint-disable-next-line
 	}, []);
 
-	if (!ready)
-		return (
-			<div
-				style={{
-					justifyContent: "center",
-					alignItems: "center",
-					display: "flex",
-					height: "100vh",
-					width: "100%",
-				}}
-			>
-				<Spinner animation='border' variant='info' />
-			</div>
-		);
-
 	return (
+		
 		<div style={{ height: "100%" }}>
-			<Navigation />
-			<div
-				style={{
-					padding: 30,
-					minHeight: "100vh",
-					display: "flex",
-					backgroundColor: "#F5F7FA",
-					flexDirection: "column",
-					position: "relative",
-					paddingBottom: "2.5rem",
-				}}
-			>
+				
+				<Navigation user={user} />
+				<div className="disappearable-logo image-container">
+					<img className="imgLogo" src= {pbIcon} alt="Falta logo" />
+				</div>
 				<div
 					style={{
-						minHeight: "100%",
-						display: "block",
-						marginLeft:
-							size.width && size.width < minSize ? "0" : "250px",
-					}} //19%
+						paddingTop: 30,
+						paddingLeft: 30,
+                        paddingRight: 30,
+						minHeight: "80vh",
+						display: "flex",
+						backgroundColor: "#F5F7FA",
+						flexDirection: "column",
+						position: "relative",
+					}}
 				>
-					<h5
-						className={`mb-4 ${
-							size.width && size.width < minSize ? "" : "ml-3"
-						}`}
-					>
-						Dashboard
-					</h5>
 					<div
-						className={`mb-4 ${
-							size.width && size.width < minSize ? "" : "ml-3"
-						}`}
-					>
-						<Breadcrumbs aria-label='breadcrumb'>
-							<Link className='aTag' to='/dashboard'>
-								<img
-									className='mb-1'
-									width={15}
-									alt='home'
-									src={homeIcon}
-								/>
-							</Link>
-							<Link
-								className='aTag'
-								to='/dashboard'
-								onClick={() => setUnidad(undefined)}
-							>
-								{breadCrumb}
-							</Link>
-							{unidad ? (
-								<Link
-									className='aTag'
-									to={`/dashboard/${unidad}`}
-								>
-									{unidad.toUpperCase()}
-								</Link>
-							) : null}
-						</Breadcrumbs>
-					</div>
-					<Switch>
-						<Route
-							path={`/dashboard/notifications/${ADD_NEW_ITEM_CODE}`}
+						style={{
+							minHeight: "100%",
+							display: "block",
+							marginLeft: size.width && size.width < minSize ? "0" : "250px",
+						}} //19%
+					>   
+					
+						<div
+							className={`mb-4 ${
+								size.width && size.width < minSize ? "" : "ml-3"
+							}`}
 						>
-							<EditForm setBreadCrumb={setBreadCrumb} />
+					<Switch>
+						<Route exact path='/dashboard'>
+							<HomeScreen user={user} />
+						</Route>
+						<Route path='/dashboard/administrative_sub_admin'>
+							<SubAdminWindow user={user} />
 						</Route>
 						<Route path='/dashboard/notifications'>
-							<NotificationsMenu setBreadCrumb={setBreadCrumb} />
+							<NotificationForm setBreadCrumb={setBreadCrumb} />
 						</Route>
 						<Route path='/dashboard/stats'>
 							<StatsScreen setBreadCrumb={setBreadCrumb} />
@@ -186,6 +139,7 @@ const Dashboard: React.FC<Props> = () => {
           </footer>
          */}
 			</div>
+		</div>
 		</div>
 	);
 };

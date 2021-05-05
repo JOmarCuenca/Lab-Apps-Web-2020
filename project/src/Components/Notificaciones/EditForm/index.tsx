@@ -1,15 +1,17 @@
-import React, { FC, FormEvent, useContext, useEffect, useState } from "react";
-import { Card, Col, Form, Row } from "react-bootstrap";
-import { useHistory, useParams } from "react-router-dom";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { Col, Form, Row, Button, Modal} from "react-bootstrap";
 import { FirebaseContext } from "../../../API/Firebase";
 import { Notificacion } from "../../../Constants/interfaces";
+import NotifWidget from "./NotifTile";
 
 import "./style.css";
+
+var limit = 6;
 
 interface Props {
 	setBreadCrumb: (val: string) => void;
 }
-const EditForm: FC<Props> = ({ setBreadCrumb }) => {
+const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 	// const { id } = useParams<{ id: string }>();
 	const [item, setItem] = useState<Notificacion>({
 		id: "",
@@ -18,15 +20,11 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 		fecha: new Date(),
 		lifetime: 24,
 	});
-	const [image, setImage] = useState<File | undefined>();
-	const [deleteItem, setDeleteItem] = useState<boolean>(false);
-
 	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 	const [deleting, setDeleting] = useState<boolean>(false);
-	const [changeImage, setChangeImage] = useState<boolean>(false);
+	const [historyNotif, sethistoryNotif] = useState<Notificacion[]>([]);
 
 	const firebase = useContext(FirebaseContext);
-	const history = useHistory();
 
 	useEffect(() => {
 		setBreadCrumb("Notificaciones");
@@ -37,17 +35,20 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 			fecha: new Date(),
 			lifetime: 24,
 		});
+		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
+			sethistoryNotif(lista);});
 		// }
 		// eslint-disable-next-line
 	}, []);
 
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+
 		setLoadingSubmit(true);
 		let message = "Se ha subido la notificación";
 		let failure = false;
-		try {
 		const copy = item!;
+		try {
 			await firebase.setNewNotificacion(copy);
 			console.log(copy);
 		} catch (e) {
@@ -59,6 +60,10 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 		setLoadingSubmit(false);
 		window.alert(message);
 		if(!failure){
+			sethistoryNotif([
+				copy,
+				...historyNotif
+			]);
 			setItem({
 				id: "",
 				title : "",
@@ -81,12 +86,17 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 	// 	// });
 	// };
 
+	const deleteFromList = (index : number) => {
+		const copy = Array.from(historyNotif);
+		copy.splice(index, 1);
+		sethistoryNotif(copy);
+	}
+
 	const renderItem = () => {
 		return (
 			<Row>
 				<Col xl={6} xs={12}>
-					<h4 className="usuario">Usuario</h4>
-					<h4 className="not">Notificaciones</h4>
+					<h4 className="usuario">Notificación</h4>
 				<div className="maindiv">
                     <Form onSubmit={submitChanges}>
                         <p className="parrafo" id="titulo">Titulo</p>
@@ -120,18 +130,6 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 							required={true}
 							type='date'
 						/>
-                        <p className="parrafo" id="hora">Hora</p>
-                        <Form.Control
-							className="select1"
-							// onChange={(str) => {
-							// 	setItem({
-							// 		...item!,
-							// 		fecha: new Date(str.currentTarget.value),
-							// 	});
-							// }}
-							required={true}
-							type='time'
-						/>
                         <hr className="hr1"></hr>
 						<button type="submit" className="publicar">PUBLICAR</button>
 					</Form>
@@ -141,8 +139,8 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 				</Col>
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
-					<div className="maindiv1">
-
+					<div className="maindiv1 overflow-auto">
+						{historyNotif.map( (n, i) => <NotifWidget index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
 					</div>
 				</Col>
 			</Row>
@@ -152,4 +150,4 @@ const EditForm: FC<Props> = ({ setBreadCrumb }) => {
 	return renderItem();
 };
 
-export default EditForm;
+export default NotificationForm;

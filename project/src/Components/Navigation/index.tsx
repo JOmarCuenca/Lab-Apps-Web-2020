@@ -5,20 +5,28 @@ import { useWindowSize } from "../../Constants/functions";
 import { Container, Col, Row } from "react-bootstrap";
 import MenuIcon from "@material-ui/icons/Menu";
 import navigationItems from "../../navigation.json";
-import logoutIcon from "../../Assets/img/logout.png";
-import teamIcon from "../../Assets/img/equipo.png";
-import scheduleIcon from "../../Assets/img/hora.png";
-import orderIcon from "../../Assets/img/purchase.png";
-import rateIcon from "../../Assets/img/rate.png";
-import menuIcon from "../../Assets/img/menu.png";
-import { primaryColor, secondaryColor } from "../../Constants/constants";
+
+import logoutIcon from "../../Assets/img/logout-icon.png";
+import HomeIcon from "../../Assets/img/home-icon.png";
+import NotifIcon from "../../Assets/img/notif-icon.png";
+import EventsIcon from "../../Assets/img/events-icon.png";
+import AddIcon from "../../Assets/img/add-icon.png";
+import StatsIcon from "../../Assets/img/stat-icon.png";
+import SettingIcon from "../../Assets/img/setting-icon.png";
+
+
+import { primaryColor, secondaryColor, SUPER_ADMIN_TAG } from "../../Constants/constants";
 import { FirebaseContext } from "../../API/Firebase";
+import AvatarIcon from "../../Assets/img/avatar.jpg";
+import DASHBOARD_ICON from "../../Assets/img/dashboard.png";
+
+import "./style.css";
+import { Usuario } from "../../Constants/interfaces";
 
 const useStyles = makeStyles({
   root: {
     backgroundColor: secondaryColor,
     height: "100vh",
-    // width: "18%", //Test
     width: "250px",
     boxShadow: "1px 4px 50px 0px rgba(64,77,103,0.88)",
     float: "left",
@@ -31,27 +39,51 @@ const useStyles = makeStyles({
 
 const chooseIcon = (s: string) => {
   switch (s) {
-    case "Pedidos":
-      return orderIcon;
-    case "Contactos":
-      return teamIcon;
-    case "Retro":
-      return rateIcon;
-    case "Menu":
-      return menuIcon;
-    case "Promo":
-      return scheduleIcon;
+    case "Home":
+      return HomeIcon;
+    case "Notificaciones":
+      return NotifIcon;
+    case "Eventos":
+      return EventsIcon;
+    case "Estadisticas":
+      return StatsIcon;
+    case "Configuracion":
+      return SettingIcon;
+    case "Sub-Admins":
+      return AddIcon;
     default:
       return logoutIcon;
   }
 }
 
-const Navigation: React.FC = () => {
+interface Props {
+  user : Usuario
+}
+
+const Navigation: React.FC<Props> = (p) => {
   const styles = useStyles();
   const firebase = useContext(FirebaseContext);
   const history = useHistory();
   const size = useWindowSize();
   const [open, setOpen] = useState(false);
+
+  const [selected, setSelected] = useState(0);
+
+  const clickedNavElement = (i : number, action :
+    | string
+    | {
+      route: string;
+      action: string;
+    }) => {
+    setSelected(i);
+    setOpen(false);
+    if (typeof action === "string") history.push(action);
+    else {
+      if (action.action === "logout") firebase.signout();
+      if (action.action === "logout") history.push("/login");
+      history.push("/login"); //e.action.action
+    }
+  }
 
   const createElement = (
     e: {
@@ -67,62 +99,35 @@ const Navigation: React.FC = () => {
     },
     i: number
   ) => {
-    return (
-      <>
-        <Col key={i} md={12} >
-          <img
-            style={{ filter: primaryColor, cursor: "pointer" }}
-            width="20"
-            alt="icon"
-            src={chooseIcon(e.icon)}
-          // require(e.icon)
-          />
-          &nbsp;&nbsp;
-          <span
-            onClick={() => {
-              setOpen(false);
-              if (typeof e.action === "string") history.push(e.action);
-              else {
-                if (e.action.action === "logout") firebase.signout();
-                if (e.action.action === "logout") history.push("/login");
-                history.push("/login"); //e.action.action
-              }
-            }}
-            style={{ color: primaryColor, fontSize: 18, cursor: "pointer" }}
-          >
-            {e.title}
-          </span>
-        </Col>
-        {/* {e.children ? (
-          <Col className="mt-2" md={12}>
-            <img
-              style={{ filter: primaryColor }}
-              width="15"
-              alt="icon"
-              src={require(e.icon)}
-            />
-            &nbsp;&nbsp;
-            <span
-              onClick={() => {
-                setOpen(false);
-                if (typeof e.action === "string") history.push(e.action);
-                else {
-                  if (e.action.action === "logout") firebase.signout();
-                  history.push(e.action.action);
-                }
-              }}
-              style={{ color: primaryColor, fontSize: 14, cursor: "pointer" }}
-            >
-              Tiempo Real
-            </span>
-          </Col>
-        ) : null} */}
-      </>
-    );
+    return <Col key={i} md={12} className={selected === i ? "navElement elementSelected" : "navElement"} onClick={() => clickedNavElement(i,e.action)} >
+      <img
+        style={{ filter: primaryColor}}
+        width="20"
+        alt="icon"
+        src={chooseIcon(e.icon)}
+      // require(e.icon)
+      />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <span
+        style={{ color: primaryColor}}
+      >
+        {e.title}
+      </span>
+    </Col>;
   };
 
+  function getUserName(){
+    const namesSeparated = p.user.nombre.split(" ");
+    return namesSeparated.length < 1 ? "Usuario" : namesSeparated[0];
+  }
+
   const navElements = () => {
-    return <div>{navigationItems.map((e: any, i) => createElement(e, i))}</div>;
+    let navItems;
+    if(p.user.rol && p.user.rol === SUPER_ADMIN_TAG)
+      navItems = navigationItems
+    else
+      navItems = navigationItems.filter((v) => v.reserved === undefined);
+    return <div>{navItems.map((e: any, i) => createElement(e, i))}</div>;
   };
 
   if (size.width && size.width < 768)
@@ -138,14 +143,14 @@ const Navigation: React.FC = () => {
             padding: 20,
           }}
         >
-          {/* <img
+          <img
             width={35}
             style={{
               borderRadius: 10,
             }}
             alt="logo"
-            src={require("../../Assets/img/dashbooard.png")}
-          /> */}
+            src={DASHBOARD_ICON}
+          />
           <div
             style={{
               display: "inline-block",
@@ -163,7 +168,7 @@ const Navigation: React.FC = () => {
                 color: primaryColor,
                 fontSize: 35,
                 fontWeight: 900,
-                marginLeft: -10,
+                marginLeft: 5
               }}
             >
               Dashboard
@@ -202,27 +207,15 @@ const Navigation: React.FC = () => {
     <div className={styles.root}>
       <Container>
         <Row>
-          {/* <Col md={3}>
+          <Col md={3}>
             <img
-              width={35}
-              style={{
-                borderRadius: 10,
-              }}
+              className="userIcon"
               alt="logo"
-              src={require("../../Assets/img/dashbooard.png")}
+              src={(p.user.imagen_perfil && p.user.imagen_perfil.length > 0) ? p.user.imagen_perfil : AvatarIcon}
             />
-          </Col> */}
-          <Col md={12} className="mt-1">
-            <span
-              style={{
-                color: primaryColor,
-                fontSize: 35,
-                fontWeight: 900,
-                marginLeft: -10,
-              }}
-            >
-              Dashboard
-            </span>
+          </Col>
+          <Col className="userName" md={9}>
+            <p>{getUserName()}</p>
           </Col>
           <br />
           <br />

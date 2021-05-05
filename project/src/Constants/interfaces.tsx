@@ -1,6 +1,6 @@
-interface Coord {
-	latitude: number;
-	longitude: number;
+export interface Coord {
+    latitude : number,
+    longitude : number
 }
 
 export interface Evento {
@@ -60,6 +60,10 @@ export interface StatisticObj {
 	value 		: string,
 	description : string
 }
+
+/**
+ * Ignore this beautiful comment
+ */
 
 /*
 
