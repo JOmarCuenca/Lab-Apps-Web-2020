@@ -55,14 +55,14 @@ const NotifWidget : FC<Props> = (p) => {
             </div> : <></>}
         <div className="divB">
             <button className="Info" onClick={handleShow}>Info</button>
-            <Modal className="modalp" show={show} onHide={handleClose} backdrop="static">
+            <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show} onHide={handleClose} backdrop="static">
                 <Modal.Header closeButton>
                     <Modal.Title>{p.child.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>{p.child.descripcion}</Modal.Body>
                 <Modal.Footer>
                     {isAlive() ? <Button variant="secondary" onClick={handleShow1}>Modificar</Button> : <></>}
-                    <Modal className="modalp" show={show1} onHide={handleClose1} backdrop="static">
+                    <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show1} onHide={handleClose1} backdrop="static">
                         <Modal.Header closeButton>
                             <textarea className="tituloNot" id="tituloNot">{p.child.title}</textarea>
                         </Modal.Header>
