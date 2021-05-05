@@ -97,12 +97,21 @@ async function getLimited(){
 
 async function setActiveUsers(){
     const number = 200;
-    let batch = admin.firestore
+    let batch;
+    for(var i = 0 ; i < number ; i++){
+        if(i%200 === 0){
+            if(batch){
+                await batch.commit();
+            }
+            batch = db.batch();
+        }
+        batch.set(db.collection("users").doc(`stats_test_${i}`),{"lastLogged" : new Date()})
+    }
+    await batch.commit();
 }
 
 function mainFunction(){
-    const future 
-    
+    const future = setActiveUsers();
     future
     .catch((e) => console.log(e))
     .finally(() => console.log("Done"));
