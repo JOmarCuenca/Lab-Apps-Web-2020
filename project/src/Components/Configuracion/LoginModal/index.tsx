@@ -133,6 +133,9 @@ const LoginModal: FC<Props> = ({
 				<Modal.Title>Login</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
+				<div style={{ color: "red" }}>
+					Reingrese sus datos para verificar su identidad
+				</div>
 				<Form id='modalForm' onSubmit={submitModal}>
 					<Form.Group>
 						<Form.Label>Correo: </Form.Label>
