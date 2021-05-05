@@ -84,6 +84,14 @@ export class DataAccess {
     doSignInWithEmailAndPassword = (email: string, password: string) =>
         this.auth.signInWithEmailAndPassword(email, password);
 
+	changeUserPassword = (password: string): Promise<void> => {
+		return this.auth.currentUser!.updatePassword(password);
+	}
+
+	changeUserEmail = (email: string): Promise<void> => {
+		return this.auth.currentUser!.updateEmail(email);
+	}
+
     /**
      * Cierra la sesión actual
      */

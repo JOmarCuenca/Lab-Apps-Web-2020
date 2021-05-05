@@ -40,6 +40,11 @@ class Firebase {
 	doSignInWithEmailAndPassword = (email: string, password: string) =>
 		this.dataAccess.doSignInWithEmailAndPassword(email, password);
 
+	changeUserEmail = (email: string) => this.dataAccess.changeUserEmail(email);
+
+	changeUserPassword = (password: string) =>
+		this.dataAccess.changeUserPassword(password);
+
 	/**
 	 * Cierra la sesión actual
 	 */
@@ -87,7 +92,7 @@ class Firebase {
 			fecha: data.fecha.toDate(),
 			fecha_delete: data.fecha_delete.toDate(),
 			img: data.img,
-			imgFile : data.imgFile,
+			imgFile: data.imgFile,
 			place: data.place.latitude
 				? {
 						latitude: data.place.latitude,
@@ -175,14 +180,20 @@ class Firebase {
 	): StatisticObj => {
 		let data = obj.data();
 		return {
-			value		: data.value,
-			description : data.description
-		}
-	}
+			value: data.value,
+			description: data.description,
+		};
+	};
 
 	// USUARIOS SECTION
 
-	setNewUsuario = (obj: Usuario): Promise<void> | Promise<app.firestore.DocumentReference<app.firestore.DocumentData>> => 
+	setNewUsuario = (
+		obj: Usuario
+	):
+		| Promise<void>
+		| Promise<
+				app.firestore.DocumentReference<app.firestore.DocumentData>
+		  > =>
 		this.dataAccess.writeDoc(
 			USER_COLLECTION_TAG,
 			this.userClean(obj),
@@ -199,10 +210,28 @@ class Firebase {
 	updateUsuario = async (obj: Usuario): Promise<void> => {
 		if (obj.imgFile && typeof obj.imgFile === "object") {
 			const fileName = `${obj.uid}.png`;
-			obj.imagen_perfil = await this.uploadUserProfileImage(obj.uid, obj.imgFile!);		
+			obj.imagen_perfil = await this.uploadUserProfileImage(
+				obj.uid,
+				obj.imgFile!
+			);
 			obj.imgFile = `${StorageFolders.image}/${fileName}`;
 		}
 		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, obj);
+	};
+
+	updateUsuarioEmail = async (uid: string, email: string): Promise<void> => {
+		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, uid, {
+			email: email,
+		});
+	};
+
+	updateUsuarioNombre = async (
+		uid: string,
+		nombre: string
+	): Promise<void> => {
+		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, uid, {
+			nombre: nombre,
+		});
 	};
 
 	deleteUsuariosByID = async (id: string): Promise<void> => {
@@ -329,9 +358,11 @@ class Firebase {
 	// Statistics Section
 
 	getStats = async () => {
-		const values = await this.dataAccess.getAllFromCollection(STATISTICS_COLLECTION_TAG);
-		return values.docs.map(s => this.toStatisticObj(s));
-	}
+		const values = await this.dataAccess.getAllFromCollection(
+			STATISTICS_COLLECTION_TAG
+		);
+		return values.docs.map((s) => this.toStatisticObj(s));
+	};
 
 	// Limited Queries Section Section
 
@@ -363,41 +394,57 @@ class Firebase {
 		return eventos.docs.map((n) => this.toEvento(n));
 	};
 
-	createPermit = async () : Promise<string> => {
-		try{
-			const doc = (await this.dataAccess.writeDoc(PERMITS_COLLECTION_TAG,{
-				createdAt : new Date()
-			}) as app.firestore.DocumentReference<app.firestore.DocumentData>);
+	createPermit = async (): Promise<string> => {
+		try {
+			const doc = (await this.dataAccess.writeDoc(
+				PERMITS_COLLECTION_TAG,
+				{
+					createdAt: new Date(),
+				}
+			)) as app.firestore.DocumentReference<app.firestore.DocumentData>;
 			return doc.id;
 		} catch (e) {
 			return Promise.reject("Failed");
 		}
-	}
+	};
 
-	getPermit = (id : string) : Promise<app.firestore.DocumentSnapshot<app.firestore.DocumentData>> => this.dataAccess.readDoc(PERMITS_COLLECTION_TAG, id);
+	getPermit = (
+		id: string
+	): Promise<app.firestore.DocumentSnapshot<app.firestore.DocumentData>> =>
+		this.dataAccess.readDoc(PERMITS_COLLECTION_TAG, id);
 
-	registerNewSubAdmin = async (mail : string, pass : string, name : string) : Promise<app.auth.UserCredential> => {
+	registerNewSubAdmin = async (
+		mail: string,
+		pass: string,
+		name: string
+	): Promise<app.auth.UserCredential> => {
 		try {
 			// Try to create the new User
-			const authUser = await this.dataAccess.createAuthUser(mail,pass);
-			if(authUser.user === undefined || authUser.user === null) throw new Error("AUTH_ERROR");
+			const authUser = await this.dataAccess.createAuthUser(mail, pass);
+			if (authUser.user === undefined || authUser.user === null)
+				throw new Error("AUTH_ERROR");
 			// Save the new User to the DB.
-			const usuarioObj : Usuario = {
-				email : mail,
-				nombre : name,
-				uid : authUser.user.uid,
-				imagen_perfil : "",
-				rol: "SUB_ADMIN"
+			const usuarioObj: Usuario = {
+				email: mail,
+				nombre: name,
+				uid: authUser.user.uid,
+				imagen_perfil: "",
+				rol: "SUB_ADMIN",
 			};
 			await this.setNewUsuario(usuarioObj);
 			return authUser;
 		} catch (e) {
 			return Promise.reject(e);
 		}
-	}
+	};
 
-	async getActiveUsers(){
-		const activeUsers = await this.dataAccess.getWhere(IOS_USER_COLLECTION_TAG,"lastLogged",QueryCondition.greaterEqualThan,getToday());
+	async getActiveUsers() {
+		const activeUsers = await this.dataAccess.getWhere(
+			IOS_USER_COLLECTION_TAG,
+			"lastLogged",
+			QueryCondition.greaterEqualThan,
+			getToday()
+		);
 		return activeUsers.docs.length;
 	}
 
@@ -406,7 +453,7 @@ class Firebase {
 	/**
 	 * This function sends the file to the Firebase Storage Service and returns the URL to render it
 	 * in the web application.
-	 * 
+	 *
 	 * @param file File to upload to Firebase Storage
 	 * @param storageFolder Path of firebase where the file will be
 	 * @returns Returns URL where to get the file from.
@@ -426,13 +473,13 @@ class Firebase {
 		}
 	};
 
-	private uploadUserProfileImage = async (docId : string, file : File) => {
+	private uploadUserProfileImage = async (docId: string, file: File) => {
 		const fileName = `${docId}.png`;
 		return this.uploadFile(
-			new File([file],fileName, { type: 'image/png' }),
+			new File([file], fileName, { type: "image/png" }),
 			StorageFolders.image
 		);
-	}
+	};
 
 	private deleteFile = (path: string): Promise<any> => {
 		try {

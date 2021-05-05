@@ -1,8 +1,10 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import { Card, Col, Form, Image } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../API/Firebase";
 import { Usuario } from "../../Constants/interfaces";
 import profilepicture from "../../Assets/img/profilepicture.png";
+import LoginModal from "./LoginModal/index";
 
 import "./style.css";
 
@@ -12,12 +14,16 @@ interface Props {
 }
 
 const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
+	// const { id } = useParams<{ id: string }>();
 	const [user, setUser] = useState<Usuario>(usuario);
 	const [image, setImage] = useState<File | undefined>();
+	const [showModal, setShowModal] = useState<boolean>(false);
+	const newPasswordRef = useRef<HTMLInputElement>(null);
 
 	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
 
 	const firebase = useContext(FirebaseContext);
+	const history = useHistory();
 
 	useEffect(() => {
 		setBreadCrumb("Configuración");
@@ -39,20 +45,28 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setLoadingSubmit(true);
-		let message = "Se ha actualizado la información";
-		try {
-			const copy = user!;
-			if (image !== undefined) {
-				copy.imgFile = image;
+		const newPassword = newPasswordRef.current!.value;
+		if (user.email !== usuario.email || newPassword !== "") {
+			setShowModal(true);
+		} else {
+			setLoadingSubmit(true);
+			let message = "Se ha actualizado la información";
+			try {
+				const copy = user!;
+				if (image !== undefined) {
+					copy.imgFile = image;
+				}
+				await firebase.updateUsuario(copy);
+				console.log(copy);
+			} catch (e) {
+				console.log(e);
+				message =
+					"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
 			}
-			await firebase.updateUsuario(copy);
-		} catch (e) {
-			console.log(e);
-			message = "Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
+			setLoadingSubmit(false);
+			window.alert(message);
+			history.push("/dashboard/configuracion");
 		}
-		setLoadingSubmit(false);
-		window.alert(message);
 	};
 
 	const renderItem = () => {
@@ -61,10 +75,16 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 		var imgElement: HTMLImageElement;
 		return (
 			<div>
+				<LoginModal
+					usuario={usuario}
+					setLoadingSubmit={setLoadingSubmit}
+					newUser={user}
+					newPasswordRef={newPasswordRef}
+					image={image}
+					showModal={showModal}
+					setShowModal={setShowModal}
+				/>
 				<Card style={{ borderRadius: 10 }}>
-					<Card.Header>
-						<Card.Title as='h5'>Información</Card.Title>
-					</Card.Header>
 					<Card.Body>
 						<Form onSubmit={submitChanges}>
 							<Form.Row
@@ -134,7 +154,7 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} xl={6}>
-									<Form.Label>Email</Form.Label>
+									<Form.Label>Correo</Form.Label>
 									<Form.Control
 										onChange={(str) => {
 											setUser({
@@ -146,6 +166,15 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 										type='text'
 										placeholder='Email'
 										value={user!.email}
+									/>
+								</Form.Group>
+								<Form.Group as={Col} xs={12} xl={6}>
+									<Form.Label>Nueva Contraseña</Form.Label>
+									<Form.Control
+										required={false}
+										type='password'
+										placeholder='Contraseña'
+										ref={newPasswordRef}
 									/>
 								</Form.Group>
 							</Form.Row>
