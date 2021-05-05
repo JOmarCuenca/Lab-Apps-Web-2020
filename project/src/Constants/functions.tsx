@@ -42,3 +42,20 @@ export function getToday(){
   const now = new Date();
   return new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0);
 }
+
+/**
+ * Returns a more readable form of a big number
+ * @returns string Ej. "2K"
+ */
+export function usersPrettify(numUsers : number) : string {
+  let users : string;
+  if(numUsers < 0)
+    return "...";
+  else if(numUsers > 1000000) // Millions
+    users = `${Math.trunc(numUsers/1000000)}M`;
+  else if(numUsers > 1000) // Thousands
+    users = `${Math.trunc(numUsers/1000)}K`;
+  else
+    users = `${numUsers}`;
+  return users;
+}

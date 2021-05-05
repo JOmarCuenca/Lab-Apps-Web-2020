@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Card, Col, Row, Spinner } from "react-bootstrap";
 import { FirebaseContext } from "../../API/Firebase";
+import { usersPrettify } from "../../Constants/functions";
 import { Evento, Usuario } from "../../Constants/interfaces";
 import ClockTime from "./Clock";
 import EventWidget from "./EventWidget";
@@ -58,19 +59,6 @@ const HomeScreen: React.FC<Props> = (p) => {
 			result += "Buenas dias, ";
 		}
 		return result+p.user.nombre+"!";
-	}
-
-	function getActiveUsers() : string {
-		let users : string;
-		if(activeUsers < 0)
-			return "...";
-		else if(activeUsers > 1000000) // Millions
-			users = `${Math.trunc(activeUsers/1000000)}M`;
-		else if(activeUsers > 1000) // Thousands
-			users = `${Math.trunc(activeUsers/1000)}K`;
-		else
-			users = `${activeUsers}`;
-		return users;
 	}
 
 	const loadingScreen = () => {
@@ -137,7 +125,7 @@ const HomeScreen: React.FC<Props> = (p) => {
 								<Row style={{textAlign: 'center', fontSize: '40px'}}>
 									<Col xs={5}><div className="inner_center">USUARIOS ACTIVOS</div></Col>
 									<Col xs={2}><hr className="verticalHr" /></Col>
-									<Col xs={5}><div className="inner_center" style={{fontSize : "4vw"}}>{getActiveUsers()}</div></Col>
+									<Col xs={5}><div className="inner_center" style={{fontSize : "4vw"}}>{usersPrettify(activeUsers)}</div></Col>
 								</Row>
 							</Card.Body>
 						</Card>

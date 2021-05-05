@@ -103,10 +103,10 @@ const STATS_CATEGORIES = [
 ]
 
 const STATS_GENERAL_OBJ = {
-    "activeUsersPercent"    : {category : 0, description : "Asistentes a eventos esta semana"},
-    "totalActiveUsers"      : {category : 1, description : "Usuarios activos esta semana"},
-    "avgWellBeing"          : {category : 2, description : "Bienestar de los usuarios promedio"},
-    "mostPopularMeditation" : {category : 3, description : "Meditación mas popular esta semana"}
+    "activeUsersPercent"    : {category : 0 },
+    "totalActiveUsers"      : {category : 1 },
+    "avgWellBeing"          : {category : 2 },
+    "mostPopularMeditation" : {category : 3 }
 }
 
 const MEDITATION_TYPES = [

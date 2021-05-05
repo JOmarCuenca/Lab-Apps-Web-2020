@@ -34,7 +34,7 @@ const StatsScreen : FC<Props> = ({ setBreadCrumb }) => {
 
     const pickWidgetColor = (i : number) => STATS_WIDGET_COLORS[i%STATS_WIDGET_COLORS.length];
 
-    const createStatsWidgets = () => stats.map((s,i) => <Col key={`Statistic_Widget_Col_${i}`} xs={6}><StatWidget key={`Statistic_Widget_${i}`} statValue={s.value} color={pickWidgetColor(i)} statDescription={s.description} /></Col>)
+    const createStatsWidgets = () => stats.map((s,i) => <Col key={`Statistic_Widget_Col_${i}`} xs={6}><StatWidget key={`Statistic_Widget_${i}`} stat={s} color={pickWidgetColor(i)} /></Col>)
 
     const createStats = () => <Row>
         {createStatsWidgets()}

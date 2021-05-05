@@ -180,8 +180,9 @@ class Firebase {
 	): StatisticObj => {
 		let data = obj.data();
 		return {
-			value: data.value,
-			description: data.description,
+			category 	: data.category,
+			value		: data.value,
+			createdDate	: data.createdDate
 		};
 	};
 

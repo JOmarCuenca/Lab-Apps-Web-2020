@@ -276,8 +276,8 @@ const StatsGraphsScreen: FC<Props> = ({goBack}) => {
   // }
 
   return <div>
-    <h1>Sup Bitch?</h1>
-    <button onClick={goBack}>Fuck, goBack!</button>
+    <h1>WIP</h1>
+    <button onClick={goBack}>Go Back</button>
   </div>;
 };
 
