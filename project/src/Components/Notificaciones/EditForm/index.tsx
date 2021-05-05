@@ -7,6 +7,7 @@ import NotifWidget from "./NotifTile";
 import "./style.css";
 
 var limit = 6;
+var aux = 0;
 
 interface Props {
 	setBreadCrumb: (val: string) => void;
@@ -98,10 +99,12 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 		const copy = Array.from(historyNotif);
 		copy.splice(index, 1);
 		sethistoryNotif(copy);
+		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
+			sethistoryNotif(lista);});
 	}
 
 	const cargarMas = () => {
-		var aux = limit + 3;
+		aux = limit + 3;
 		limit = aux;
 		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
 			sethistoryNotif(lista);});
