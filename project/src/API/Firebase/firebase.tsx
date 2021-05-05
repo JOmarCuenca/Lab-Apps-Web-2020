@@ -180,8 +180,9 @@ class Firebase {
 	): StatisticObj => {
 		let data = obj.data();
 		return {
-			value: data.value,
-			description: data.description,
+			category 	: data.category,
+			value		: data.value,
+			createdDate	: data.createdDate
 		};
 	};
 
@@ -358,9 +359,15 @@ class Firebase {
 	// Statistics Section
 
 	getStats = async () => {
-		const values = await this.dataAccess.getAllFromCollection(
-			STATISTICS_COLLECTION_TAG
-		);
+		const numberOfWeeklyStats = 4; // This is the number of Stats that the dashboard can handle
+		// This are found in the enum STATS_CATEGORIES
+		const values = await this.dataAccess.getLimitedFromCollection(
+			STATISTICS_COLLECTION_TAG,
+			"createdDate",
+			numberOfWeeklyStats,
+			0,
+			"desc"
+		)
 		return values.docs.map((s) => this.toStatisticObj(s));
 	};
 

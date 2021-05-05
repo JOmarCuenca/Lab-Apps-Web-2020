@@ -17,3 +17,19 @@ export const STATS_WIDGET_COLORS = [
     "#ce3c4b",
     "#a03a99"
 ]
+
+export enum STATS_CATEGORIES {
+    activeUsersPercent,     // Divide by the total number of users in the Db (Percentage)
+    totalActiveUsers,       // Number of active Users per Week  (Number)
+    avgWellBeing,           // Int over 5
+    mostPopularMeditation   // Enum value (Yet to be determined)
+}
+
+export enum MEDITATION_TYPES {
+    ZEN,
+    SHINTO,
+    BUDHA,
+    TIBET,
+    CHAKRA,
+    PSY
+}

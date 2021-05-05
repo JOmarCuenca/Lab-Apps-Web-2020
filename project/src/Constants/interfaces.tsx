@@ -1,3 +1,5 @@
+import { STATS_CATEGORIES } from "./constants";
+
 export interface Coord {
     latitude : number,
     longitude : number
@@ -57,8 +59,9 @@ export interface Notificacion {
 }
 
 export interface StatisticObj {
-	value 		: string,
-	description : string
+	category	: STATS_CATEGORIES,
+	createdDate	: Date,
+	value 		: number
 }
 
 /**

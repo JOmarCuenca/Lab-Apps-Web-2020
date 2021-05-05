@@ -4,33 +4,9 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://punto-b84a8.firebaseio.com"
 });
-function main() {
-    var firestore = admin.firestore();
-    var evento = {
-        nombre: 'a',
-        desc: 'b',
-        fecha: '05-05-2020',
-        fecha_delete: '05-06-2020',
-        img: 'url_here',
-        place: 'ITESM',
-        maxUsers: 10,
-        currentUsers: []
-    };
-    firestore.collection("Eventos").get().then(function (results) {
-        results.forEach(function (result) {
-            console.log(result.data());
-        });
-    });
-    // const docs1 = docs.docs.map(doc => this.toEvento(doc));
-    // console.log(docs);
-    // return docs.docs.map(doc => this.toEvento(doc))
-    // firestore.collection("Eventos").add(evento);
-    // firestore.collection("Meditacion").doc("Example").set({
-    //     "id" : "Example"
-    // }).then(() => {
-    //     console.log("Done");
-    // });
-}
+
+const db = admin.firestore();
+
 async function uploadStatistics() {
     var db = admin.firestore();
     const batch = db.batch();
@@ -39,7 +15,7 @@ async function uploadStatistics() {
         {value : "86%", description : "Asistentes a eventos esta semana"},
         {value : "220", description : "Usuarios activos esta semana"},
         {value : "4/5", description : "Bienestar de los usuarios promedio"},
-        {value : "ZEN", description : "Meditación mas popular esta semana"}
+        {value : "ZEN", description : "Meditación mas popular esta semana"},
     ];
     docs.forEach((d,i) => {
         const temp = {
@@ -117,4 +93,113 @@ async function getLimited(){
 }
 // uploadStatistics().then(() => console.log("Done"));
 // uploadNotif().then(() => console.log("Done"));
-getLimited();
+// getLimited();
+
+const STATS_CATEGORIES = [
+    "activeUsersPercent",     // Divide by the total number of users in the Db (Percentage)
+    "totalActiveUsers",       // Number of active Users per Week  (Number)
+    "avgWellBeing",           // Int over 5
+    "mostPopularMeditation"   // Enum value (Yet to be determined)
+]
+
+const STATS_GENERAL_OBJ = {
+    "activeUsersPercent"    : {category : 0 },
+    "totalActiveUsers"      : {category : 1 },
+    "avgWellBeing"          : {category : 2 },
+    "mostPopularMeditation" : {category : 3 }
+}
+
+const MEDITATION_TYPES = [
+    "ZEN",
+    "SHINTO",
+    "BUDHA",
+    "TIBET",
+    "CHAKRA",
+    "PSY"
+]
+
+const WEEK_NUM = 1*7*24*60*60*1000;
+
+function randomStat(i){
+    const random = Math.random();
+    switch(i){
+        case 0: // Percentage of active Users
+            return random*100;
+        case 1: // Number of active users in the DB
+            return Math.round(random*100000);
+        case 2: // Avg Well being of the users
+            return Math.floor((random*100)%5 + 1);
+        default: // Most popular Meditation
+            return Math.floor((random*100)%(MEDITATION_TYPES.length));
+    }
+}
+
+function genRandomStatObj(i){
+    return {
+        ...STATS_GENERAL_OBJ[STATS_CATEGORIES[i]],
+        value : randomStat(i)
+    }
+}
+
+async function uploadStatsTest(){
+    const now = new Date();
+    const futureWeeks = 4, pastWeeks = 8;
+    let batch, counter = 0;
+    for(var i = 0 ; i < futureWeeks ; i++){
+        if(counter%200 === 0){
+            if(batch){
+                await batch.commit();
+            }
+            batch = db.batch();
+        }
+        for(var s = 0; s < STATS_CATEGORIES.length ; s++){
+            batch.set(db.collection("Statistics").doc(`stats_test_future_${i}_${s}`),{
+            ...genRandomStatObj(s),
+            createdDate : new Date(now.getTime() + WEEK_NUM * (i+1))
+        });
+        }
+        counter++;
+    }
+    for(var i = 0 ; i < pastWeeks ; i++){
+        if(counter%200 === 0){  
+            if(batch){
+                await batch.commit();
+            }
+            batch = db.batch();
+        }
+        for(var s = 0; s < STATS_CATEGORIES.length ; s++){
+            batch.set(db.collection("Statistics").doc(`stats_test_past_${i}_${s}`),{
+            ...genRandomStatObj(s),
+            createdDate : new Date(now.getTime() - WEEK_NUM * i)
+        });
+        }
+        counter++;
+    }
+    await batch.commit();
+}
+
+async function setActiveUsers(){
+    const number = 200;
+    let batch;
+    for(var i = 0 ; i < number ; i++){
+        if(i%200 === 0){
+            if(batch){
+                await batch.commit();
+            }
+            batch = db.batch();
+        }
+        batch.set(db.collection("users").doc(`stats_test_${i}`),{"lastLogged" : new Date()})
+    }
+    await batch.commit();
+}
+
+function mainFunction(){
+    const future = uploadStatsTest();
+    future
+    .catch((e) => console.log(e))
+    .finally(() => console.log("Done"));
+    // const now = new Date();
+    // console.log(`A week into the future is ${new Date(now.getTime() + WEEK_NUM)}`)
+}
+
+mainFunction();

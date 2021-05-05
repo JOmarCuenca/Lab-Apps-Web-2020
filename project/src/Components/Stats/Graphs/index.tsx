@@ -16,36 +16,11 @@ import 'react-widgets/dist/css/react-widgets.css';
 import "./style.css";
 // import GananciaPorDiaChart from "./GananciaPorDiaChart";
 
-/*
- * Ejemplo de como se vera un objeto de tipo log de la base de datos
- * {
- * boletoDesc: 100
- * boletoNorm: 20
- * boletoPreP: 15
- * boletoTrans: 100
- * conductor: DocumentReference(path:"Usuarios/Chuchin")
- * fCorte: 1592935637525
- * fechaInicio: 1592935519765
- * id: "UX-2"
- * moneda1: 400
- * moneda2: 0
- * moneda5: 0
- * moneda5CC: 100
- * moneda5CG: 10
- * moneda10: 200
- * vueltas : 0
- *}
- */
-
-interface barGraphParams {
-  dateInit  : string,
-  dateFinit : string,
-}
-
 interface Props {
-  setBreadCrumb: (val: string) => void;
+  goBack : () => void
 }
-const Graphs: FC<Props> = ({ setBreadCrumb }) => {
+
+const StatsGraphsScreen: FC<Props> = ({goBack}) => {
 
   // const firebase = useContext(FirebaseContext);
   // const history = useHistory();
@@ -105,7 +80,7 @@ const Graphs: FC<Props> = ({ setBreadCrumb }) => {
   // };
 
   useEffect(() => {
-    setBreadCrumb("Histórico");
+
     // eslint-disable-next-line
   }, []);
 
@@ -300,7 +275,10 @@ const Graphs: FC<Props> = ({ setBreadCrumb }) => {
   //   setLinesData(result);
   // }
 
-  return <div></div>;
+  return <div>
+    <h1>WIP</h1>
+    <button onClick={goBack}>Go Back</button>
+  </div>;
 };
 
-export default Graphs;
+export default StatsGraphsScreen;
