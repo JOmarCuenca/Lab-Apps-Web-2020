@@ -65,6 +65,8 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 				copy,
 				...historyNotif
 			]);
+			firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
+				sethistoryNotif(lista);});
 			setItem({
 				id: "",
 				title : "",
