@@ -1,46 +1,46 @@
 import React from 'react';
 import NVD3Chart from 'react-nvd3';
-import {ARRAY_OF_COLORS} from "../../Constants/values";
+import { STATS_GRAPH_COLORS } from '../../../Constants/constants';
 
-// function getDatum() {
-//     var sin = [],
-//         sin2 = [],
-//         cos = [];
-//     for (var i = 0; i < 100; i++) {
-//         sin.push({
-//             'x': i,
-//             'y': Math.sin(i / 10)
-//         });
-//         cos.push({
-//             'x': i,
-//             'y': .5 * Math.cos(i / 10)
-//         });
-//     }
-//     for(let i =0; i<100;i++){
-//         sin2.push({
-//             'x': i,
-//             'y': Math.sin(i / 10) * 0.25 + 0.5
-//         });
-//     }
-//     return [
-//         {
-//             values: sin,
-//             key: 'Sine Wave',
-//             color: '#A389D4'
-//         },
-//         {
-//             values: cos,
-//             key: 'Cosine Wave',
-//             color: '#04a9f5'
-//         },
-//         {
-//             values: sin2,
-//             key: 'Another sine wave',
-//             color: '#1de9b6',
-//             area: true
-//         }
-//     ];
-// }
+function getDatum() {
+    var sin = [],
+        sin2 = [],
+        cos = [];
+    for (var i = 0; i < 100; i++) {
+        sin.push({
+            'x': i,
+            'y': Math.sin(i / 10)
+        });
+        cos.push({
+            'x': i,
+            'y': .5 * Math.cos(i / 10)
+        });
+    }
+    for(let i =0; i<100;i++){
+        sin2.push({
+            'x': i,
+            'y': Math.sin(i / 10) * 0.25 + 0.5
+        });
+    }
+    return [
+        {
+            values: sin,
+            key: 'Sine Wave',
+            color: '#A389D4'
+        },
+        {
+            values: cos,
+            key: 'Cosine Wave',
+            color: '#04a9f5'
+        },
+        {
+            values: sin2,
+            key: 'Another sine wave',
+            color: '#1de9b6',
+            area: true
+        }
+    ];
+}
 
 class LineChart extends React.Component {
 
@@ -56,9 +56,10 @@ class LineChart extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            rawData : (props.data)?props.data:[],
-            yAxis   : (props.yTag)?props.yTag:"Boletos Normales",
-            xAxis   : (props.xTag)?props.xTag:"Fecha",
+            rawData     : (props.data)?props.data:[],
+            yAxis       : (props.yTag)?props.yTag:"",
+            xAxis       : (props.xTag)?props.xTag:"Fecha",
+            colorOffset : (props.colorOffset)?props.colorOffset:0,
         };
     }
 
@@ -75,14 +76,14 @@ class LineChart extends React.Component {
     }
 
     createDatum(){
-        let i = 0;
+        let i = this.state.colorOffset;
         this.state.rawData.forEach(bar => {
-            bar.color = ARRAY_OF_COLORS[i];
+            bar.color = STATS_GRAPH_COLORS[i];
             if(i%3 === 0){
                 bar.area = true;
             }
             i++;
-            if(i>=ARRAY_OF_COLORS.length){
+            if(i>=STATS_GRAPH_COLORS.length){
                 i=0;
             }
         });
@@ -96,7 +97,9 @@ class LineChart extends React.Component {
                 {
                     React.createElement(NVD3Chart, {
                         xAxis: {
-                            tickFormat: function(d){ return d; },
+                            tickFormat: function(d){ 
+                                return (new Date(d)).toLocaleString().split(",")[0]; 
+                            },
                             axisLabel: this.state.xAxis,
                         },
                         yAxis: {

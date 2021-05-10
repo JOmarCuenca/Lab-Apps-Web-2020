@@ -1,20 +1,14 @@
-import React, { FC, useEffect } from "react";
-// import BarChart from "./BarDiscreteChart";
-// import PieChart from "./PieDonutChart";
-// import LineChart from "./LineChart";
-// import { FirebaseContext } from "../../API/Firebase";
-// import { useHistory } from "react-router-dom";
-// import * as XLSX from "xlsx";
+import React, { FC, useContext, useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
 import 'react-widgets/dist/css/react-widgets.css';
-// import { Multiselect } from 'react-widgets'
-
-// import { Container, Row, Col, Card, Dropdown, Button, Form } from "react-bootstrap";
-// import {
-//   Months,
-// } from "../../Constants/values";
+import { FirebaseContext } from "../../../API/Firebase";
+import { MEDITATION_TYPES_ARRAY, STATS_CATEGORIES } from "../../../Constants/constants";
+import { getMeditiationName, getToday } from "../../../Constants/functions";
+import { StatisticObj } from "../../../Constants/interfaces";
+import BarDiscreteChart from "./BarDiscreteChart";
+import LineChart from "./LineChart";
 
 import "./style.css";
-// import GananciaPorDiaChart from "./GananciaPorDiaChart";
 
 interface Props {
   goBack : () => void
@@ -22,7 +16,10 @@ interface Props {
 
 const StatsGraphsScreen: FC<Props> = ({goBack}) => {
 
-  // const firebase = useContext(FirebaseContext);
+  const firebase = useContext(FirebaseContext);
+  const [initialDate] = useState(new Date(getToday().getTime() - 4 * 7 * 24 * 3600 * 1000));
+  // const [initialDate, setInitialDate] = useState(new Date());
+  const [stats,setStats] = useState<StatisticObj[]>([])
   // const history = useHistory();
 
   //Hooks for all the types of Graphs.
@@ -80,203 +77,82 @@ const StatsGraphsScreen: FC<Props> = ({goBack}) => {
   // };
 
   useEffect(() => {
-
+    firebase.getStatsWithDates(initialDate)
+    .then((objs) => setStats(objs));
     // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   filterCronInfo(cronData,cronGraphParams.xAxis,cronUnitsToShow);
-  //   // eslint-disable-next-line
-  // },[cronGraphParams.xAxis]);
+  const graphMostPopularMeditation = () => {
+    const meditationStats = stats.filter((meditation) => meditation.category === STATS_CATEGORIES.mostPopularMeditation);
+    const curatedStats = 
+    MEDITATION_TYPES_ARRAY.map(type => {
+      return {
+        "label" : getMeditiationName(type),
+        "value" : meditationStats.filter(s => s.value === type).length
+      };
+    });
 
-  // useEffect(() => {
-  //   filterCronInfo(cronData,cronGraphParams.xAxis,cronUnitsToShow);
-  //   // eslint-disable-next-line
-  // },[cronUnitsToShow]);
+    return <Col xs={5}>
+      <BarDiscreteChart data={curatedStats} />
+    </Col>
+  }
 
-  // useEffect(() => {
-  //   handleCronGraph();
-  //   // eslint-disable-next-line
-  // },[cronGraphParams.date]);
+  const graphPercentageOfUsers = () => {
+    const activeUsers = stats.filter((stat) => stat.category === STATS_CATEGORIES.activeUsersPercent);
+    const curatedStats = 
+    activeUsers.sort((a,b) => a.createdDate.getTime() - b.createdDate.getTime()).map(stat => {
+      return {
+        "label" : stat.createdDate.toLocaleString().split(",")[0],
+        "value" : stat.value
+      };
+    });
 
-  // function filterForBars(
-  //   rawData: firebase.firestore.QueryDocumentSnapshot[] = [],
-  //   xAxis: Criteria,
-  //   yAxis: Individual_Query_Y
-  // ) {
-  //   setBarsData([]);
-  //   xAxis = xAxis ?? "id";
-  //   yAxis = yAxis ?? "boletoNorm";
-  //   let filter: any = {};
-  //   rawData.forEach((doc) => {
-  //     const data = doc.data();
-  //     const key = (data[xAxis] as string) ?? "";
-  //     const value = (data[yAxis] as number) ?? 0;
-  //     if (!filter[key]) {
-  //       filter[key] = 0;
-  //     }
-  //     filter[key] += value;
-  //   });
-  //   const result = [];
-  //   for (let doc in filter) {
-  //     result.push([doc, filter[doc]]);
-  //   }
-  //   barXAxis.current = xAxis;
-  //   barYAxis.current = yAxis;
-  //   setBarsData(result);
-  // }
+    return <Col xs={7}>
+      <BarDiscreteChart data={curatedStats} width={600} />
+    </Col>
+  }
 
-  // function filterForPie(
-  //   rawData: firebase.firestore.QueryDocumentSnapshot[] = [],
-  //   xAxis: Criteria,
-  //   yAxis: Individual_Query_Y
-  // ) {
-  //   setPieData([]);
-  //   xAxis = xAxis ?? "id";
-  //   yAxis = yAxis ?? "boletoNorm";
-  //   let filter: any = {};
-  //   rawData.forEach((doc) => {
-  //     const data = doc.data();
-  //     const key = (data[xAxis] as string) ?? "";
-  //     const value = (data[yAxis] as number) ?? 0;
-  //     if (!filter[key]) {
-  //       filter[key] = 0;
-  //     }
-  //     filter[key] += value;
-  //   });
-  //   const result = [];
-  //   for (let doc in filter) {
-  //     result.push([doc, filter[doc]]);
-  //   }
-  //   pieXAxis.current = xAxis;
-  //   pieYAxis.current = yAxis;
-  //   setPieData(result);
-  // }
+  const graphActiveUsers = () => {
+    const activeUsersStats = stats.filter((stat) => stat.category === STATS_CATEGORIES.totalActiveUsers);
+    const curatedStats = activeUsersStats.sort((a,b) => b.createdDate.getTime() - a.createdDate.getTime()).map(obj => {return {
+      "x" : obj.createdDate,
+      "y" : obj.value
+    }});
 
-  //V2 of the algorithm
-  // async function filterForLines(
-  //   rawData: firebase.firestore.QueryDocumentSnapshot[],
-  //   yAxis: Individual_Query_Y,
-  //   criteria: Criteria,
-  //   specific: string
-  // ) {
-  //   setLinesData([]);
-  //   const xAxis = Fechas.fechaCorte;
-  //   yAxis = yAxis ?? Individual_Query_Y.boletoNorm;
-  //   //Setting the information
-  //   lineGraphCriteria.current = criteria;
-  //   lineYAxis.current = yAxis;
-  //   let dropDownOptions: any = {};
-  //   for (let doc of rawData) {
-  //     //Establecer el criterio
-  //     const info = doc.data();
-  //     const tag = getTag(info, criteria);
-  //     if (!dropDownOptions[tag]) {
-  //       dropDownOptions[tag] = null;
-  //     }
-  //   }
-  //   const filteredKeys = Object.keys(dropDownOptions);
-  //   if (filteredKeys.length < 1) {
-  //     //There are no options to enlist
-  //     return;
-  //   }
-  //   if (specific === "") {
-  //     //An option hasn't been specified yet.
-  //     specific = filteredKeys[0];
-  //   }
-  //   const monthsCollector: any = {};
-  //   lineOptions.current = filteredKeys;
-  //   lineSpecific.current = specific;
-  //   let filter = {
-  //     key: specific,
-  //     values: monthsCollector,
-  //   };
-  //   /* filter = {
-  //    *  key : x,
-  //    *  values : {
-  //    *      0 :{
-  //    *          1 : valor,
-  //    *          2 : valor,
-  //    *          .
-  //    *          .
-  //    *          .
-  //    *          30 : valor,
-  //    *      }
-  //    *      1 :{
-  //    *          1 : valor,
-  //    *          2 : valor,
-  //    *          .
-  //    *          .
-  //    *          .
-  //    *          30 : valor,
-  //    *      }
-  //    *      2 :{
-  //    *          1 : valor,
-  //    *          2 : valor,
-  //    *          .
-  //    *          .
-  //    *          .
-  //    *          30 : valor,
-  //    *      }
-  //    *      .
-  //    *      .
-  //    *      .
-  //    *      11 : ...,
-  //    *  }
-  //    * }
-  //    *
-  //    */
-  //   rawData.forEach((doc) => {
-  //     const info = doc.data();
-  //     const grafica = getTag(info, criteria);
-  //     if (grafica === specific) {
-  //       let value = 0;
-  //       if (yAxis === Individual_Query_Y.specialSum) {
-  //         value += totalSum(info);
-  //       } else {
-  //         value += (info[yAxis] ?? 0) as number;
-  //       }
-  //       let day = 1;
-  //       let month = 0;
-  //       const temp = firebase.toDateTime(info[xAxis] as number);
-  //       day = temp.getDate();
-  //       month = temp.getMonth();
-  //       if (!filter.values[month]) {
-  //         filter.values[month] = {};
-  //       }
-  //       if (!filter.values[month][day]) {
-  //         filter.values[month][day] = 0;
-  //       }
-  //       filter.values[month][day] += value;
-  //     }
-  //   });
+    return <Col xs={12}>
+        <LineChart data={[
+          {
+            values : curatedStats,
+            key : "Usuarios Activos"
+          },
+        ]} xTag="Fecha" />
+      </Col>;
+  }
 
-  //   //Mandar la informacion filtrada a un Array y lanzar.
-  //   const result = [];
-  //   // (filter[graph].values as any[]).forEach((month : number,dayValues : any) => {//Por cada mes
-  //   for (let monthKey in filter.values) {
-  //     //Por cada mes
-  //     const month = parseInt(monthKey);
-  //     const monthString = Months[month];
-  //     const dayValues = filter.values[month];
-  //     const temp = [];
-  //     if (!dayValues[1]) {
-  //       dayValues[1] = 0;
-  //     }
-  //     for (let day in dayValues) {
-  //       //Por cada dia del mes
-  //       temp.push({ x: parseInt(day), y: dayValues[day] });
-  //     }
-  //     result.push({
-  //       key: monthString,
-  //       values: temp,
-  //     });
-  //   }
-  //   setLinesData(result);
-  // }
+  const graphHealthinessOfUsers = () => {
+    const activeUsersStats = stats.filter((stat) => stat.category === STATS_CATEGORIES.avgWellBeing);
+    const curatedStats = activeUsersStats.sort((a,b) => b.createdDate.getTime() - a.createdDate.getTime()).map(obj => {return {
+      "x" : obj.createdDate,
+      "y" : obj.value
+    }});
+
+    return <Col xs={12}>
+        <LineChart data={[
+          {
+            values : curatedStats,
+            key : "Bienestar General"
+          },
+        ]} xTag="Fecha" colorOffset={1} />
+      </Col>;
+  }
 
   return <div>
-    <h1>WIP</h1>
+    <Row>
+      {graphMostPopularMeditation()}
+      {graphPercentageOfUsers()}
+      {graphActiveUsers()}
+      {graphHealthinessOfUsers()}
+    </Row>
     <button onClick={goBack}>Go Back</button>
   </div>;
 };

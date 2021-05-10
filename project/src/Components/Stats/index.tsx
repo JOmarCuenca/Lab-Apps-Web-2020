@@ -26,7 +26,7 @@ const StatsScreen : FC<Props> = ({ setBreadCrumb }) => {
         setBreadCrumb("Estadística");
 
         // Descargamos las estadisticas de la base de datos para desplegarlas en pantalla.
-        firebase.getStats()
+        firebase.getMostRecentStats()
         .then(statsRemote => setStats(statsRemote))
         .finally(() => setLoaded(true));
     // eslint-disable-next-line

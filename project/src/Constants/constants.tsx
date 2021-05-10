@@ -16,7 +16,14 @@ export const STATS_WIDGET_COLORS = [
     "#227980",
     "#ce3c4b",
     "#a03a99"
-]
+];
+
+export const STATS_GRAPH_COLORS = [
+    "#d1ab2f",
+    "#227980",
+    "#ce3c4b",
+    "#a03a99"
+];
 
 export enum STATS_CATEGORIES {
     activeUsersPercent,     // Divide by the total number of users in the Db (Percentage)
@@ -33,3 +40,12 @@ export enum MEDITATION_TYPES {
     CHAKRA,
     PSY
 }
+
+export const MEDITATION_TYPES_ARRAY = [
+    MEDITATION_TYPES.ZEN,
+    MEDITATION_TYPES.SHINTO,
+    MEDITATION_TYPES.BUDHA,
+    MEDITATION_TYPES.TIBET,
+    MEDITATION_TYPES.CHAKRA,
+    MEDITATION_TYPES.PSY
+];

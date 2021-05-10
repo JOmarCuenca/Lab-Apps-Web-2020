@@ -182,7 +182,7 @@ class Firebase {
 		return {
 			category 	: data.category,
 			value		: data.value,
-			createdDate	: data.createdDate
+			createdDate	: data.createdDate.toDate()
 		};
 	};
 
@@ -358,7 +358,7 @@ class Firebase {
 
 	// Statistics Section
 
-	getStats = async () => {
+	getMostRecentStats = async () => {
 		const numberOfWeeklyStats = 4; // This is the number of Stats that the dashboard can handle
 		// This are found in the enum STATS_CATEGORIES
 		const values = await this.dataAccess.getLimitedFromCollection(
@@ -368,6 +368,11 @@ class Firebase {
 			0,
 			"desc"
 		)
+		return values.docs.map((s) => this.toStatisticObj(s));
+	};
+
+	getStatsWithDates = async (init : Date, finit? : Date) => {
+		const values = await this.dataAccess.getWithParam(STATISTICS_COLLECTION_TAG,"createdDate",init,finit);
 		return values.docs.map((s) => this.toStatisticObj(s));
 	};
 

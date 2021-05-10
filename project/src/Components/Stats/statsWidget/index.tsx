@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { MEDITATION_TYPES, STATS_CATEGORIES } from "../../../Constants/constants";
-import { usersPrettify } from "../../../Constants/functions";
+import { getMeditiationName, usersPrettify } from "../../../Constants/functions";
 import { StatisticObj } from "../../../Constants/interfaces";
 
 import "./style.css";
@@ -30,27 +30,7 @@ const StatWidget: FC<Props> = ({ color, stat }) => {
         }
     }
 
-    /**
-     * Function that returns the name of the meditation desired.
-     * @param m Type of meditation
-     * @returns Name of the meditation
-     */
-    function getMeditiationName(m: MEDITATION_TYPES): string {
-        switch (m) {
-            case MEDITATION_TYPES.ZEN:
-                return "ZEN";
-            case MEDITATION_TYPES.SHINTO:
-                return "SHINTO";
-            case MEDITATION_TYPES.BUDHA:
-                return "BUDHA";
-            case MEDITATION_TYPES.TIBET:
-                return "TIBET";
-            case MEDITATION_TYPES.CHAKRA:
-                return "CHAKRA";
-            case MEDITATION_TYPES.PSY:
-                return "PSY";
-        }
-    }
+    
 
     /**
      * This function reformats the value of the statisctic object 
