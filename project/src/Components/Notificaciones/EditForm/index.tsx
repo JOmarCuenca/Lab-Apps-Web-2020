@@ -77,26 +77,6 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 		}
 	};
 
-	// const execDelete = async () => {
-	// 	setDeleting(true);
-	// 	// firebase.firestore.collection("Products").doc(id).delete().then(e => {
-	// 	// 	window.alert("Objeto borrado");
-	// 	// 	history.push("/dashboard/menu");
-	// 	// }).catch(e => {
-	// 	// 	console.log(e);
-	// 	// 	setDeleting(false);
-	// 	// 	window.alert("Ha ocurrido un error y no se ha podido borrar el objeto.");
-	// 	// });
-	// };
-
-	/*const [postsToShow, setPostsToShow] = useState([]);
-
-	const loopWithSlice = (start, end) => {
-		const slicedPosts = NotifWidget.slice(start, end);
-		arrayForHoldingPosts = [...arrayForHoldingPosts, ...slicedPosts];
-		setPostsToShow(arrayForHoldingPosts);
-	  };*/
-
 	const deleteFromList = (index : number) => {
 		const copy = Array.from(historyNotif);
 		copy.splice(index, 1);
