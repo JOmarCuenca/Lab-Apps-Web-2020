@@ -8,10 +8,11 @@ import { Col, Row } from "react-bootstrap";
 const EXAMPLE_IMG = "https://www.bbva.com/wp-content/uploads/2020/07/BBVA-mindfullnes-03082020-1920x1180.jpg";
 
 interface Props {
-	event : Evento
+	event       : Evento,
+    openEdit    : () => void
 }
 
-const EventWidget : FC<Props> = ({event}) => {
+const EventWidget : FC<Props> = ({event, openEdit}) => {
 
     const getPlace = (place : string | Coord) => {
         if(typeof place === "string"){
@@ -39,7 +40,7 @@ const EventWidget : FC<Props> = ({event}) => {
                 <div id="eventName">{event.nombre}</div>
                 <div id="eventLink">{getPlace(event.place)}</div>
             </Col>
-            <Col xs={2}><img src={infoIcon} alt="Info Icon" className="infoIconBtn" /></Col>
+            <Col xs={2}><img src={infoIcon} alt="Info Icon" className="infoIconBtn" onClick={openEdit} /></Col>
         </Row>
     </div>;
 }

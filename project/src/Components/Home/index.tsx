@@ -4,7 +4,6 @@ import { FirebaseContext } from "../../API/Firebase";
 import { usersPrettify } from "../../Constants/functions";
 import { Evento, Notificacion, Usuario } from "../../Constants/interfaces";
 import ClockTime from "./Clock";
-import EventWidget from "./EventWidget";
 import NotificationWidget from "./NotificationWidget";
 
 import "./style.css";
@@ -110,7 +109,7 @@ const HomeScreen: React.FC<Props> = (p) => {
 						<Row>
 							{recentEvents.map((e) => {
 								return <Col xs={12}>
-									<EventWidget event={e}/>
+									<EventContainer event={e}/>
 								</Col>;
 							})}
 							<Col xs={12}>

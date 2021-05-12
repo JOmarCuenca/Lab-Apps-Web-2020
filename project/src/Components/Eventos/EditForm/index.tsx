@@ -2,12 +2,15 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import { Card, Col, Form } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../../API/Firebase";
-import { Evento } from "../../../Constants/interfaces";
+import { Coord, Evento } from "../../../Constants/interfaces";
 
 import "../style.css";
 
-const EventosForm: FC = () => {
-	// const { id } = useParams<{ id: string }>();
+interface Props {
+	event? : Evento
+}
+
+const EventosForm: FC<Props> = ({event}) => {
 	const [item, setItem] = useState<Evento>({
 		id: "",
 		descripcion: "",
@@ -30,27 +33,44 @@ const EventosForm: FC = () => {
 	const history = useHistory();
 
 	useEffect(() => {
-		// if(id !== ADD_NEW_ITEM_CODE){
-		// 	firebase.getProductFromId("Products/"+id).then(product => setNItem(product)).catch(e => {
-		// 		console.log(e);
-		// 		window.alert("This item appears to be non-existant");
-		// 		history.push("/dashboard/menu");
-		// 	});
-		// } else {
-		setItem({
-			id: "",
-			descripcion: "",
-			img: "",
-			currentUsers: [],
-			maxUsers: 100,
-			fecha: new Date(),
-			fecha_delete: new Date(),
-			nombre: "",
-			place: "",
-		});
+		if(event) {
+			setItem(event);
+		    console.log(event);
+		}
+		else
+			setItem({
+				id: "",
+				descripcion: "",
+				img: "",
+				currentUsers: [],
+				maxUsers: 100,
+				fecha: new Date(),
+				fecha_delete: new Date(),
+				nombre: "",
+				place: "",
+			});
 		// }
 		// eslint-disable-next-line
 	}, []);
+
+	const formatString = (d : Date) => {
+
+		const year = d.getFullYear();
+		let month = d.getMonth().toString();
+	    let day = d.getDate().toString();
+        
+		if(month.length === 1) month = '0' + month; 
+		if(day.length === 1) day = '0' + day;
+
+		return `${year}-${month}-${day}`;
+	}
+
+	const interpretCoord = ( p : Coord | string ) => {
+		if( typeof p === "string" ) return p
+
+		else return `${p.latitude},${p.longitude}`;
+
+	}
 
 	const saveFileLocally = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files;
@@ -93,8 +113,8 @@ const EventosForm: FC = () => {
 		}
 	};
 
-	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
+	const submitChanges = async (eventR: React.FormEvent<HTMLFormElement>) => {
+		eventR.preventDefault();
 		setLoadingSubmit(true);
 		let message = "Se ha actualizado la información";
 		try {
@@ -102,14 +122,18 @@ const EventosForm: FC = () => {
 			if (image !== undefined) {
 				copy.imgFile = image;
 			}
-			// if(id !== ADD_NEW_ITEM_CODE) await firebase.updateProduct(copy);
-			// else await firebase.saveProduct(copy);
-			await firebase.setNewEvento(copy);
+			if (event){
+				copy.id = event.id;
+				await firebase.updateEvento(copy)
+			}
+			else await firebase.setNewEvento(copy);
+			
 		} catch (e) {
 			console.log(e);
 			message =
 				"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
 		}
+
 		setLoadingSubmit(false);
 		window.alert(message);
 		history.push("/dashboard/events");
@@ -153,6 +177,13 @@ const EventosForm: FC = () => {
 		</>
 	);
 
+	const renderImgPreview = () => {
+		if(item.imgFile && typeof item.imgFile === "string" && item.imgFile !== ""){
+			return <img src={item.imgFile} id="imagePreview" alt="eventImg" />;
+		}
+		return <></>;
+	}
+
 	const renderItem = () => {
 		return (
 			<div>
@@ -195,6 +226,8 @@ const EventosForm: FC = () => {
 										required={true}
 										type='textarea'
 										placeholder='Descripcion del evento'
+										value={item!.descripcion}
+										
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} md={8} xl={4}>
@@ -209,6 +242,8 @@ const EventosForm: FC = () => {
 											});
 										}}
 										required={true}
+										value = {formatString(item!.fecha)}
+	
 										type='date'
 										placeholder='Fecha de publicación del evento'
 									/>
@@ -248,6 +283,7 @@ const EventosForm: FC = () => {
 										required={true}
 										type='date'
 										placeholder='Fecha de borrado del evento'
+										value = {formatString(item!.fecha_delete)}
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} md={8} xl={4}>
@@ -262,6 +298,7 @@ const EventosForm: FC = () => {
 										required={true}
 										type='text'
 										placeholder='Lugar del evento'
+										value = {interpretCoord(item!.place)}
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} md={8} xl={4}>
@@ -274,6 +311,7 @@ const EventosForm: FC = () => {
 									/>
 								</Form.Group>
 							</Form.Row>
+							{renderImgPreview()}
 							<button
 								type='submit'
 								disabled={loadingSubmit}
