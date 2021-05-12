@@ -35,8 +35,8 @@
   
   .maindiv {
     white-space: nowrap;
-    overflow-x: auto;
     overflow-y: auto;
+    overflow-x: auto;
     border-color: #3f969c;
     border-style: solid;
     border-radius: 20px;
@@ -50,7 +50,7 @@
     border-radius: 5px;
     padding: 20px;
     height: 352px;
-    width: 100%;
+    width: 383px;
   }
   
   .parrafo {

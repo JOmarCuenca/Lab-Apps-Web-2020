@@ -7,6 +7,7 @@ import NotifWidget from "./NotifTile";
 import "./style.css";
 
 var limit = 6;
+var aux = 0;
 
 interface Props {
 	setBreadCrumb: (val: string) => void;
@@ -64,6 +65,8 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 				copy,
 				...historyNotif
 			]);
+			firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
+				sethistoryNotif(lista);});
 			setItem({
 				id: "",
 				title : "",
@@ -86,10 +89,27 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 	// 	// });
 	// };
 
+	/*const [postsToShow, setPostsToShow] = useState([]);
+
+	const loopWithSlice = (start, end) => {
+		const slicedPosts = NotifWidget.slice(start, end);
+		arrayForHoldingPosts = [...arrayForHoldingPosts, ...slicedPosts];
+		setPostsToShow(arrayForHoldingPosts);
+	  };*/
+
 	const deleteFromList = (index : number) => {
 		const copy = Array.from(historyNotif);
 		copy.splice(index, 1);
 		sethistoryNotif(copy);
+		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
+			sethistoryNotif(lista);});
+	}
+
+	const cargarMas = () => {
+		aux = limit + 3;
+		limit = aux;
+		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
+			sethistoryNotif(lista);});
 	}
 
 	const renderItem = () => {
@@ -141,6 +161,11 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
 						{historyNotif.map( (n, i) => <NotifWidget index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
+						<footer>
+							<button className="cargarMas" onClick={cargarMas}>
+								...
+							</button>
+						</footer>
 					</div>
 				</Col>
 			</Row>
