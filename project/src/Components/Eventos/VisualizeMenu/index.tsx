@@ -3,7 +3,6 @@ import { Card, Col, Row } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { ADD_NEW_ITEM_CODE } from "../../../Constants/constants";
 import { FirebaseContext } from "../../../API/Firebase";
-import EventWidget from "../../Home/EventWidget";
 import { Evento } from "../../../Constants/interfaces";
 import EventContainer from "../../EventContainer";
 

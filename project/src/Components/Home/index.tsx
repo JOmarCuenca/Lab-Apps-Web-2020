@@ -3,6 +3,7 @@ import { Card, Col, Row, Spinner } from "react-bootstrap";
 import { FirebaseContext } from "../../API/Firebase";
 import { usersPrettify } from "../../Constants/functions";
 import { Evento, Notificacion, Usuario } from "../../Constants/interfaces";
+import EventContainer from "../EventContainer";
 import ClockTime from "./Clock";
 import NotificationWidget from "./NotificationWidget";
 
@@ -109,7 +110,7 @@ const HomeScreen: React.FC<Props> = (p) => {
 						<Row>
 							{recentEvents.map((e) => {
 								return <Col xs={12}>
-									<EventContainer event={e}/>
+									<EventContainer event={e} />
 								</Col>;
 							})}
 							<Col xs={12}>
