@@ -45,29 +45,30 @@ const NotifWidget : FC<Props> = (p) => {
         setShow1(false);
     } 
 
-    return <><li className="NotifWidget" id="list">
+    return <li className="NotifWidget" id="list">
         <div className="divB">
             <h5 className="Child">{p.child.title}</h5>
         </div>
-        {isAlive() ?
-            <div className="divB">
-                <button className="On">ON</button>
-            </div> : <></>}
+            {isAlive() ? 
+                <div className="divB">
+                    <button className="On">ON</button>
+                </div>  : <></>
+            }
         <div className="divB">
             <button className="Info" onClick={handleShow}>Info</button>
-            <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show} onHide={handleClose} backdrop="static">
+            <Modal className="modalp" show={show} onHide={handleClose} backdrop="static">
                 <Modal.Header closeButton>
-                    <Modal.Title>{p.child.title}</Modal.Title>
+                        <Modal.Title>{p.child.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>{p.child.descripcion}</Modal.Body>
                 <Modal.Footer>
                     {isAlive() ? <Button variant="secondary" onClick={handleShow1}>Modificar</Button> : <></>}
-                    <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show1} onHide={handleClose1} backdrop="static">
+                    <Modal className="modalp" show={show1} onHide={handleClose1} backdrop="static">
                         <Modal.Header closeButton>
-                            <textarea className="tituloNot" id="tituloNot">{p.child.title}</textarea>
+                                <textarea className="tituloNot" id="tituloNot">{p.child.title}</textarea>
                         </Modal.Header>
                         <Modal.Body>
-                            <textarea className="descNot" id="descNot">{p.child.descripcion}</textarea>
+                            <textarea className="descNot" id="descNot" >{p.child.descripcion}</textarea>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose1}>
@@ -83,8 +84,8 @@ const NotifWidget : FC<Props> = (p) => {
                 X
             </button>
         </div>
-    </li>
-        <hr></hr></>;
+        <hr></hr>
+    </li>;
 };
 
 export default NotifWidget;
