@@ -64,13 +64,16 @@ const StatsScreen : FC<Props> = ({ setBreadCrumb }) => {
 
     const renderStats = () => <Row>
         <Col xs={12}>
-            <div style={{width : "100%"}}>
-                <div className="statsTitle">
-                    Estadisticas
-                </div>
-            </div>
+            <Row>
+                <Col xs={showGraphs ? 2 : 0} >{showGraphs ? <button onClick={() => setShowGraphs(false)} >Go Back</button> : <></>}</Col>
+                <Col xs={showGraphs ? 10 : 12} >
+                    <div className="statsTitle">
+                        Estadisticas
+                    </div>
+                </Col>
+            </Row>
         </Col>
-        {showGraphs ? <StatsGraphsScreen goBack={() => setShowGraphs(false)} /> : renderRecentStats}
+        {showGraphs ? <StatsGraphsScreen /> : renderRecentStats}
     </Row>;
 
     const renderLoading = () => <div><h1>Loading...</h1></div>

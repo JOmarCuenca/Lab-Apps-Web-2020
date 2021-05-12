@@ -10,11 +10,7 @@ import LineChart from "./LineChart";
 
 import "./style.css";
 
-interface Props {
-  goBack : () => void
-}
-
-const StatsGraphsScreen: FC<Props> = ({goBack}) => {
+const StatsGraphsScreen: FC = () => {
 
   const firebase = useContext(FirebaseContext);
   const [initialDate] = useState(new Date(getToday().getTime() - 4 * 7 * 24 * 3600 * 1000));
@@ -93,6 +89,7 @@ const StatsGraphsScreen: FC<Props> = ({goBack}) => {
     });
 
     return <Col xs={5}>
+      <h3>Meditación más Popular</h3>
       <BarDiscreteChart data={curatedStats} />
     </Col>
   }
@@ -108,6 +105,7 @@ const StatsGraphsScreen: FC<Props> = ({goBack}) => {
     });
 
     return <Col xs={7}>
+      <h3>Porcentaje de Asistencia a Eventos</h3>
       <BarDiscreteChart data={curatedStats} width={600} />
     </Col>
   }
@@ -120,6 +118,7 @@ const StatsGraphsScreen: FC<Props> = ({goBack}) => {
     }});
 
     return <Col xs={12}>
+      <h3>Número de Usuarios Activos</h3>
         <LineChart data={[
           {
             values : curatedStats,
@@ -137,6 +136,7 @@ const StatsGraphsScreen: FC<Props> = ({goBack}) => {
     }});
 
     return <Col xs={12}>
+      <h3>Promedio de Bienestar General</h3>
         <LineChart data={[
           {
             values : curatedStats,
@@ -146,14 +146,13 @@ const StatsGraphsScreen: FC<Props> = ({goBack}) => {
       </Col>;
   }
 
-  return <div>
+  return <div id="Charts" >
     <Row>
       {graphMostPopularMeditation()}
       {graphPercentageOfUsers()}
       {graphActiveUsers()}
       {graphHealthinessOfUsers()}
     </Row>
-    <button onClick={goBack}>Go Back</button>
   </div>;
 };
 
