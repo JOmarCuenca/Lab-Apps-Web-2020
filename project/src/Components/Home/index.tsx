@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Card, Col, Row, Spinner } from "react-bootstrap";
 import { FirebaseContext } from "../../API/Firebase";
 import { usersPrettify } from "../../Constants/functions";
-import { Evento, Usuario } from "../../Constants/interfaces";
+import { Evento, Notificacion, Usuario } from "../../Constants/interfaces";
 import ClockTime from "./Clock";
 import EventWidget from "./EventWidget";
 import NotificationWidget from "./NotificationWidget";
@@ -21,12 +21,18 @@ const HomeScreen: React.FC<Props> = (p) => {
 	
 	const [loaded, setLoaded] 				= useState(false);
 	const [recentEvents,setRecentEvents] 	= useState<Evento[]>([]);
+	const [recentNotifs,setRecentNotifs] 	= useState<Notificacion[]>([]);
 	const [activeUsers,setActiveUsers] 		= useState(-1);
 
 	useEffect(() => {
 		// load from API las 2 events
 		firebase.getLimitedEvento(2,0)
 		.then((events) => setRecentEvents(events))
+		.catch((e) => console.log(e))
+		.finally(() => setLoaded(true));
+
+		firebase.getLimitedNotification(2,0)
+		.then((notifs) => setRecentNotifs(notifs))
 		.catch((e) => console.log(e))
 		.finally(() => setLoaded(true));
 
@@ -139,22 +145,9 @@ const HomeScreen: React.FC<Props> = (p) => {
 								{/* <img height="300px" src="https://thumbs.gfycat.com/AccurateUnfinishedBergerpicard-size_restricted.gif" alt="travolta" /> */}
 								{/* <h3>De momento no hay notificaciones...</h3> */}
 								<Row>
-									<Col xs={12}>
-										<NotificationWidget notification={{
-											id : "someId",
-											descripcion : "Some Text",
-											fecha : new Date(),
-											title : "The Title"
-										}}/>
-									</Col>
-									<Col xs={12}>
-										<NotificationWidget notification={{
-											id : "someId",
-											descripcion : "Some Text",
-											fecha : new Date(),
-											title : "The Title"
-										}}/>
-									</Col>
+									{recentNotifs.map((n,i) => <Col xs={12} key={`Recent_Notif_${i}`} >
+										<NotificationWidget notification={n}/>
+									</Col>)}
 									<Col xs={12}>
 										<div className="expanded">
 											<h1 className="moreEventsBtn">...</h1>

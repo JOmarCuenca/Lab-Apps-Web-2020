@@ -1,6 +1,6 @@
 import React from 'react';
 import NVD3Chart from 'react-nvd3';
-import * as Values from "../../Constants/values";
+import * as Values from "../../../Constants/constants"
 
 // const datum = [
 //     {
@@ -49,11 +49,18 @@ class BarDiscreteChart extends React.Component {
 
     /*
     rawData = [
-        ["Conductor 1", 150],
-        ["Condcutor 2", 300],
-        ["Conductor 3", 450],
-        ["Conductor 4", 600],
-        ["Conductor 5", 750],
+        {
+            "label" : getMeditiationName(type),
+            "value" : meditationStats.filter(s => s.value === type).length
+        },
+        {
+            "label" : getMeditiationName(type),
+            "value" : meditationStats.filter(s => s.value === type).length
+        },
+        {
+            "label" : getMeditiationName(type),
+            "value" : meditationStats.filter(s => s.value === type).length
+        }
     ];
     */
 
@@ -61,7 +68,9 @@ class BarDiscreteChart extends React.Component {
         super(props);
         this.state = {
             rawData : (props.data)?props.data:[],
+            width : (props.width)?props.width:500,
         };
+        console.log(props);
     }
 
     componentDidUpdate(){
@@ -74,15 +83,13 @@ class BarDiscreteChart extends React.Component {
         const result = [{key : "Cumulative Return",values : []}];
         let i = 0;
         this.state.rawData.forEach(bar => {
-            const label = (bar[0]) ? bar[0]:"";
-            const value = (bar[1]) ? bar[1]:0 ;
             result[0].values.push({
-                "label" : label,
-                "value" : value,
-                "color" : Values.ARRAY_OF_COLORS[i]
+                "label" : bar.label,
+                "value" : bar.value,
+                "color" : Values.STATS_GRAPH_COLORS[i]
             });
             i++;
-            if(i>=Values.ARRAY_OF_COLORS.length){
+            if(i>=Values.STATS_GRAPH_COLORS.length){
                 i=0;
             }
         })
@@ -91,8 +98,7 @@ class BarDiscreteChart extends React.Component {
 
     render() {
         const datum = this.createDatum();
-        // console.log(this.datum);
-        return <NVD3Chart tooltip={{enabled: true}} type="discreteBarChart" datum={datum} x="label" y="value" height={300} showValues />
+        return <NVD3Chart tooltip={{enabled: true}} type="discreteBarChart" datum={datum} yTag="Percentage" y="value" x="label" width={this.state.width} height={300} showValues />
     }
 }
 

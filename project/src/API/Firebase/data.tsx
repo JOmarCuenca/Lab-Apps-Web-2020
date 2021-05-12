@@ -180,5 +180,13 @@ export class DataAccess {
     
     getWhere = (coll : string, field : string, condition : QueryCondition, value : any) => this.firestore.collection(coll).where(field,this.QuerytoFirestoreFilter(condition),value).get();
 
+    getWithParam = (coll : string, queryString : string, limitLow : any, limitUp? : any) => {
+        let initialQuery = this.firestore.collection(coll).where(queryString, ">=", limitLow);
+        if(limitUp) {
+            initialQuery = initialQuery.where(queryString, "<=", limitUp);
+        }
+        return initialQuery.get();
+    }
+
     createAuthUser = (mail : string, pass : string) => this.auth.createUserWithEmailAndPassword(mail,pass);
 }

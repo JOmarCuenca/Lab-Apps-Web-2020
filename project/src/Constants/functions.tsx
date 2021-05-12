@@ -1,4 +1,5 @@
 import { useState, useEffect} from 'react';
+import { MEDITATION_TYPES } from './constants';
 
 /**
  * Está función se encarga de calcular
@@ -58,4 +59,26 @@ export function usersPrettify(numUsers : number) : string {
   else
     users = `${numUsers}`;
   return users;
+}
+
+/**
+     * Function that returns the name of the meditation desired.
+     * @param m Type of meditation
+     * @returns Name of the meditation
+     */
+export function getMeditiationName(m: MEDITATION_TYPES): string {
+  switch (m) {
+      case MEDITATION_TYPES.ZEN:
+          return "ZEN";
+      case MEDITATION_TYPES.SHINTO:
+          return "SHINTO";
+      case MEDITATION_TYPES.BUDHA:
+          return "BUDHA";
+      case MEDITATION_TYPES.TIBET:
+          return "TIBET";
+      case MEDITATION_TYPES.CHAKRA:
+          return "CHAKRA";
+      case MEDITATION_TYPES.PSY:
+          return "PSY";
+  }
 }
