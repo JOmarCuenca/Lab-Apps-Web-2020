@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Card, Col, Row, Spinner } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../API/Firebase";
 import { usersPrettify } from "../../Constants/functions";
 import { Evento, Notificacion, Usuario } from "../../Constants/interfaces";
@@ -17,7 +18,8 @@ const HomeScreen: React.FC<Props> = (p) => {
 
 	const BORDER_RADIUS = 16;
 
-	const firebase = useContext(FirebaseContext);
+	const firebase 	= useContext(FirebaseContext);
+	const history 	= useHistory();
 	
 	const [loaded, setLoaded] 				= useState(false);
 	const [recentEvents,setRecentEvents] 	= useState<Evento[]>([]);
@@ -115,7 +117,7 @@ const HomeScreen: React.FC<Props> = (p) => {
 							})}
 							<Col xs={12}>
 								<div className="expanded">
-									<h1 className="moreEventsBtn"><a href="/dashboard/events">...</a></h1>
+									<h1 className="moreEventsBtn"><p onClick={() => history.push("dashboard/events")}>...</p></h1>
 								</div>
 							</Col>
 						</Row>
@@ -150,7 +152,7 @@ const HomeScreen: React.FC<Props> = (p) => {
 									</Col>)}
 									<Col xs={12}>
 										<div className="expanded">
-											<h1 className="moreEventsBtn">...</h1>
+										<h1 className="moreEventsBtn"><p onClick={() => history.push("dashboard/notifications")}>...</p></h1>
 										</div>
 									</Col>
 								</Row>

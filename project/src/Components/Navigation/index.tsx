@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { makeStyles, Collapse } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { useWindowSize } from "../../Constants/functions";
@@ -69,13 +69,29 @@ const Navigation: React.FC<Props> = (p) => {
 
   const [selected, setSelected] = useState(0);
 
-  const clickedNavElement = (i : number, action :
+  useEffect(() => {
+
+    setCorrectHighLight(window.location);
+
+    const unlisten = history.listen((location, action) => {
+      setCorrectHighLight(location);
+    });
+
+    return () => unlisten();
+    // eslint-disable-next-line
+  },[]);
+
+  function setCorrectHighLight(location : any){
+    const navItems : string[] = (getAccesibleNavItems().filter(nav => typeof nav.action === "string").map( nav => nav.action ) as string[]);
+    setSelected(navItems.indexOf(location.pathname));
+  }
+
+  const clickedNavElement = (action :
     | string
     | {
       route: string;
       action: string;
     }) => {
-    setSelected(i);
     setOpen(false);
     if (typeof action === "string") history.push(action);
     else {
@@ -99,7 +115,7 @@ const Navigation: React.FC<Props> = (p) => {
     },
     i: number
   ) => {
-    return <Col key={i} md={12} className={selected === i ? "navElement elementSelected" : "navElement"} onClick={() => clickedNavElement(i,e.action)} >
+    return <Col key={i} md={12} className={selected === i ? "navElement elementSelected" : "navElement"} onClick={() => clickedNavElement(e.action)} >
       <img
         style={{ filter: primaryColor}}
         width="20"
@@ -121,12 +137,15 @@ const Navigation: React.FC<Props> = (p) => {
     return namesSeparated.length < 1 ? "Usuario" : namesSeparated[0];
   }
 
+  function getAccesibleNavItems(){
+    return (p.user.rol && p.user.rol === SUPER_ADMIN_TAG) ? 
+      navigationItems
+    :
+      navigationItems.filter((v) => v.reserved === undefined);
+  }
+
   const navElements = () => {
-    let navItems;
-    if(p.user.rol && p.user.rol === SUPER_ADMIN_TAG)
-      navItems = navigationItems
-    else
-      navItems = navigationItems.filter((v) => v.reserved === undefined);
+    const navItems = getAccesibleNavItems();
     return <div>{navItems.map((e: any, i) => createElement(e, i))}</div>;
   };
 

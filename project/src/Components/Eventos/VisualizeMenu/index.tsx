@@ -37,7 +37,7 @@ const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 					{recentEvents === undefined || recentEvents.length === 0 ? <p></p> : 
 						<Row>
 							{recentEvents.map((e) => {
-								return <Col xs={12}>
+								return <Col lg={12} xl={6}>
 									<EventContainer event={e}/>
 								</Col>;
 							})}

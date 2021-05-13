@@ -70,7 +70,6 @@ class BarDiscreteChart extends React.Component {
             rawData : (props.data)?props.data:[],
             width : (props.width)?props.width:500,
         };
-        console.log(props);
     }
 
     componentDidUpdate(){
