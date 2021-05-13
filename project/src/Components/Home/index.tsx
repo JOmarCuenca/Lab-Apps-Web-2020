@@ -110,8 +110,8 @@ const HomeScreen: React.FC<Props> = (p) => {
 
 					{recentEvents === undefined || recentEvents.length === 0 ? <p></p> : 
 						<Row>
-							{recentEvents.map((e) => {
-								return <Col xs={12}>
+							{recentEvents.map((e,i) => {
+								return <Col key={`recentEvent_${i}`} xs={12}>
 									<EventContainer event={e} />
 								</Col>;
 							})}

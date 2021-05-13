@@ -88,7 +88,7 @@ const StatsGraphsScreen: FC = () => {
       };
     });
 
-    return <Col xs={5}>
+    return <Col lg={12} xl={5}>
       <h3>Meditación más Popular</h3>
       <BarDiscreteChart data={curatedStats} />
     </Col>
@@ -104,7 +104,7 @@ const StatsGraphsScreen: FC = () => {
       };
     });
 
-    return <Col xs={7}>
+    return <Col lg={12} xl={7} >
       <h3>Porcentaje de Asistencia a Eventos</h3>
       <BarDiscreteChart data={curatedStats} width={600} />
     </Col>

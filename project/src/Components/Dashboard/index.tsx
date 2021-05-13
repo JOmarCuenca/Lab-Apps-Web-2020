@@ -23,7 +23,6 @@ const Dashboard: React.FC<Props> = () => {
 	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
 	const size = useWindowSize();
-	const [, setBreadCrumb] = useState("Dashboard");
 	const [user, setUser] = useState<Usuario>({
 		nombre: "",
 		uid: "",
@@ -92,21 +91,20 @@ const Dashboard: React.FC<Props> = () => {
 							<SubAdminWindow user={user} />
 						</Route>
 						<Route path='/dashboard/notifications'>
-							<NotificationForm setBreadCrumb={setBreadCrumb} />
+							<NotificationForm />
 						</Route>
 						<Route path='/dashboard/stats'>
-							<StatsScreen setBreadCrumb={setBreadCrumb} />
+							<StatsScreen/>
 						</Route>
 						<Route path={`/dashboard/events/${ADD_NEW_ITEM_CODE}`}>
 							<EventosForm />
 						</Route>
 						<Route path='/dashboard/events'>
-							<EventosMenu setBreadCrumb={setBreadCrumb} />
+							<EventosMenu />
 						</Route>
 						<Route path='/dashboard/configuracion'>
 							{user.nombre !== "" ? (
 								<Configuracion
-									setBreadCrumb={setBreadCrumb}
 									usuario={user}
 								/>
 							) : null}

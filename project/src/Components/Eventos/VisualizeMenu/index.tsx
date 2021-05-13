@@ -6,17 +6,13 @@ import { FirebaseContext } from "../../../API/Firebase";
 import { Evento } from "../../../Constants/interfaces";
 import EventContainer from "../../EventContainer";
 
-interface Props {
-	setBreadCrumb: (val: string) => void;
-}
-const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
+const EventosMenu: React.FC = () => {
 	const firebase          				= useContext(FirebaseContext);
 	const history 							= useHistory();
 	const [recentEvents,setRecentEvents]    = useState<Evento[]>([]);
 	// const [changeStatus, setChangeStatus] 	= useState("");
 
 	useEffect(() => {
-		setBreadCrumb("Eventos");
 		firebase.getAllEventos().then(dbEvents => {
 			setRecentEvents(dbEvents);
 		});
@@ -36,8 +32,8 @@ const EventosMenu: React.FC<Props> = ({ setBreadCrumb }) => {
 
 					{recentEvents === undefined || recentEvents.length === 0 ? <p></p> : 
 						<Row>
-							{recentEvents.map((e) => {
-								return <Col lg={12} xl={6}>
+							{recentEvents.map((e,i) => {
+								return <Col lg={12} xl={6} key={`event_${i}`} >
 									<EventContainer event={e}/>
 								</Col>;
 							})}

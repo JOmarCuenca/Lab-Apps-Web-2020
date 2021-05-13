@@ -8,10 +8,7 @@ import StatWidget from "./statsWidget";
 
 import "./style.css";
 
-interface Props {
-	setBreadCrumb: (val: string) => void;
-}
-const StatsScreen : FC<Props> = ({ setBreadCrumb }) => {
+const StatsScreen : FC = () => {
 
     const firebase = useContext(FirebaseContext);
 
@@ -22,8 +19,6 @@ const StatsScreen : FC<Props> = ({ setBreadCrumb }) => {
     const [loaded,setLoaded] = useState(false);
 
     useEffect(() => {
-        // Cambiamos el titulo que el dashboard tiene
-        setBreadCrumb("Estadística");
 
         // Descargamos las estadisticas de la base de datos para desplegarlas en pantalla.
         firebase.getMostRecentStats()
@@ -34,7 +29,7 @@ const StatsScreen : FC<Props> = ({ setBreadCrumb }) => {
 
     const pickWidgetColor = (i : number) => STATS_WIDGET_COLORS[i%STATS_WIDGET_COLORS.length];
 
-    const createStatsWidgets = () => stats.map((s,i) => <Col key={`Statistic_Widget_Col_${i}`} xs={6}><StatWidget key={`Statistic_Widget_${i}`} stat={s} color={pickWidgetColor(i)} /></Col>)
+    const createStatsWidgets = () => stats.map((s,i) => <Col key={`Statistic_Widget_Col_${i}`} xs={6}><StatWidget stat={s} color={pickWidgetColor(i)} /></Col>)
 
     const createStats = () => <Row>
         {createStatsWidgets()}

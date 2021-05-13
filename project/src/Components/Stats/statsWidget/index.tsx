@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { MEDITATION_TYPES, STATS_CATEGORIES } from "../../../Constants/constants";
+import { STATS_CATEGORIES } from "../../../Constants/constants";
 import { getMeditiationName, usersPrettify } from "../../../Constants/functions";
 import { StatisticObj } from "../../../Constants/interfaces";
 

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useRef, useState } from "react";
+import React, { FC, useContext, useRef, useState } from "react";
 import { Card, Col, Form, Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../API/Firebase";
@@ -9,11 +9,10 @@ import LoginModal from "./LoginModal/index";
 import "./style.css";
 
 interface Props {
-	setBreadCrumb: (val: string) => void;
 	usuario: Usuario;
 }
 
-const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
+const Configuracion: FC<Props> = ({ usuario }) => {
 	// const { id } = useParams<{ id: string }>();
 	const [user, setUser] = useState<Usuario>(usuario);
 	const [image, setImage] = useState<File | undefined>();
@@ -24,11 +23,6 @@ const Configuracion: FC<Props> = ({ setBreadCrumb, usuario }) => {
 
 	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
-
-	useEffect(() => {
-		setBreadCrumb("Configuración");
-		// eslint-disable-next-line
-	}, []);
 
 	const saveFileLocally = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files;

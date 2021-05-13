@@ -9,10 +9,7 @@ import "./style.css";
 var limit = 6;
 var aux = 0;
 
-interface Props {
-	setBreadCrumb: (val: string) => void;
-}
-const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
+const NotificationForm: FC = () => {
 	// const { id } = useParams<{ id: string }>();
 	const [item, setItem] = useState<Notificacion>({
 		id: "",
@@ -28,7 +25,6 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 	const firebase = useContext(FirebaseContext);
 
 	useEffect(() => {
-		setBreadCrumb("Notificaciones");
 		setItem({
 			id: "",
 			title : "",
@@ -150,7 +146,7 @@ const NotificationForm: FC<Props> = ({ setBreadCrumb }) => {
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
-						{historyNotif.map( (n, i) => <NotifWidget index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
+						{historyNotif.map( (n, i) => <NotifWidget key={`notification_${i}`} index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
 						<footer>
                             <button className="cargarMas" onClick={cargarMas}>
                                 ...
