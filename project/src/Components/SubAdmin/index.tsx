@@ -3,7 +3,7 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import { Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { FirebaseContext } from "../../API/Firebase";
-import { CURRENT_DNS, SUPER_ADMIN_TAG } from "../../Constants/constants";
+import { SUPER_ADMIN_TAG } from "../../Constants/constants";
 import { Usuario } from "../../Constants/interfaces";
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -64,7 +64,8 @@ const SubAdminWindow : FC<Props> = (p) => {
     }
 
     function createLink(subRoute : string){
-        return `https://${CURRENT_DNS}/${subRoute}/signup`;
+        const currentDNS = window.location.hostname;
+        return `https://${currentDNS}/${subRoute}/signup`;
     }
 
     function copyToClipBoard(){
