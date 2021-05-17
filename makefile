@@ -15,5 +15,5 @@ buildAndDeploy:
 
 compile-deploy-action:
 	@echo "################## Building the new Compiled Site ##########################"
-	cd project && yarn && yarn build
+	cd project && yarn && yarn upgrade && yarn build
 	mv project/build firebase/public
