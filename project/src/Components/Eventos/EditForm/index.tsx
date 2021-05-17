@@ -2,6 +2,7 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import { Card, Col, Form } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../../../API/Firebase";
+import { formatDateString, formatStringDate } from "../../../Constants/functions";
 import { Coord, Evento } from "../../../Constants/interfaces";
 
 import "../style.css";
@@ -23,11 +24,8 @@ const EventosForm: FC<Props> = ({event}) => {
 		place: "",
 	});
 	const [image, setImage] = useState<File | undefined>();
-	const [deleteItem, setDeleteItem] = useState<boolean>(false);
 
 	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
-	const [deleting, setDeleting] = useState<boolean>(false);
-	const [changeImage, setChangeImage] = useState<boolean>(false);
 
 	const firebase = useContext(FirebaseContext);
 	const history = useHistory();
@@ -53,18 +51,6 @@ const EventosForm: FC<Props> = ({event}) => {
 		// eslint-disable-next-line
 	}, []);
 
-	const formatString = (d : Date) => {
-
-		const year = d.getFullYear();
-		let month = d.getMonth().toString();
-	    let day = d.getDate().toString();
-        
-		if(month.length === 1) month = '0' + month; 
-		if(day.length === 1) day = '0' + day;
-
-		return `${year}-${month}-${day}`;
-	}
-
 	const interpretCoord = ( p : Coord | string ) => {
 		if( typeof p === "string" ) return p
 
@@ -81,36 +67,6 @@ const EventosForm: FC<Props> = ({event}) => {
 		setImage(files.item(0)!);
 		console.log(files.item(0)?.name);
 		return;
-	};
-
-	const changeOnlyImage = async () => {
-		if (image !== undefined && image !== null) {
-			setChangeImage(true);
-			// firebase.uploadImage(image).then(url => {
-			// 	if (typeof url === "string") {
-			// 		if(id !== ADD_NEW_ITEM_CODE){
-			// 			firebase.firestore.collection("Products").doc(id).update({ imageURL: url })
-			// 			.then(a => {
-			// 				window.alert("La imagen se ha cambiado con exito");
-			// 				setNItem({
-			// 					...item!,
-			// 					imageURL : url
-			// 				})
-			// 			})
-			// 			.catch(e => {console.log(e);window.alert("La imagen no ha podido actualizarse");});
-			// 		} else {
-			// 			window.alert("La imagen se ha cambiado con exito");
-			// 			setNItem({
-			// 				...item!,
-			// 				imageURL : url
-			// 			})
-			// 		}
-			// 	} else {
-			// 		console.log(url);
-			// 	}
-			// }).catch(e => {console.log(e);window.alert("La imagen no ha podido cargarse");})
-			// .finally(() => setChangeImage(false));
-		}
 	};
 
 	const submitChanges = async (eventR: React.FormEvent<HTMLFormElement>) => {
@@ -138,44 +94,6 @@ const EventosForm: FC<Props> = ({event}) => {
 		window.alert(message);
 		history.push("/dashboard/events");
 	};
-
-	const execDelete = async () => {
-		setDeleting(true);
-		// firebase.firestore.collection("Products").doc(id).delete().then(e => {
-		// 	window.alert("Objeto borrado");
-		// 	history.push("/dashboard/menu");
-		// }).catch(e => {
-		// 	console.log(e);
-		// 	setDeleting(false);
-		// 	window.alert("Ha ocurrido un error y no se ha podido borrar el objeto.");
-		// });
-	};
-
-	const deleteItemButtons = (
-		<>
-			<button
-				disabled={deleting}
-				className='button warning-button'
-				onClick={() => setDeleteItem(true)}
-			>
-				{deleting ? "Borrando..." : "Borrar Producto"}
-			</button>
-			{deleteItem ? (
-				<div style={{ paddingTop: "10px" }}>
-					<h5>¿Seguro?</h5>
-					<button
-						disabled={deleting}
-						className='button danger-button'
-						onClick={execDelete}
-					>
-						{deleting ? "Borrando..." : "Borrar Definitivamente"}
-					</button>
-				</div>
-			) : (
-				<></>
-			)}
-		</>
-	);
 
 	const renderImgPreview = () => {
 		if(item.imgFile && typeof item.imgFile === "string" && item.imgFile !== ""){
@@ -236,13 +154,11 @@ const EventosForm: FC<Props> = ({event}) => {
 										onChange={(str) => {
 											setItem({
 												...item!,
-												fecha: new Date(
-													str.currentTarget.value
-												),
+												fecha: formatStringDate(str.currentTarget.value),
 											});
 										}}
 										required={true}
-										value = {formatString(item!.fecha)}
+										value = {formatDateString(item!.fecha)}
 	
 										type='date'
 										placeholder='Fecha de publicación del evento'
@@ -275,15 +191,13 @@ const EventosForm: FC<Props> = ({event}) => {
 										onChange={(str) => {
 											setItem({
 												...item!,
-												fecha_delete: new Date(
-													str.currentTarget.value
-												),
+												fecha_delete: formatStringDate(str.currentTarget.value),
 											});
 										}}
 										required={true}
 										type='date'
 										placeholder='Fecha de borrado del evento'
-										value = {formatString(item!.fecha_delete)}
+										value = {formatDateString(item!.fecha_delete)}
 									/>
 								</Form.Group>
 								<Form.Group as={Col} xs={12} md={8} xl={4}>

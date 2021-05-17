@@ -35,6 +35,34 @@ export const useWindowSize = () => {
 }
 
 /**
+ * Formats a Date into a string readable by an input field.
+ * @param d Date
+ * @returns Date as String format YYYY-MM-DD
+ */
+export function formatDateString(d : Date){
+
+  const year = d.getFullYear();
+  let month = d.getMonth().toString();
+  let day = d.getDate().toString();
+      
+  if(month.length === 1) month = '0' + month; 
+  if(day.length === 1) day = '0' + day;
+
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * This functions recieves a String in format "2021-03-29"
+ * and returns the correct date without bullshit!
+ * @param str Date in String Format
+ * @returns Date
+ */
+export function formatStringDate(str : string){
+  const parts = str.split("-");
+  return new Date(parseInt(parts[0]),parseInt(parts[1]),parseInt(parts[2]));
+}
+
+/**
  * This function gets the current date of the pc and returns the date at 0:00.
  * 
  * @returns Date

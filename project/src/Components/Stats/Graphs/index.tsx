@@ -1,9 +1,9 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import 'react-widgets/dist/css/react-widgets.css';
 import { FirebaseContext } from "../../../API/Firebase";
 import { MEDITATION_TYPES_ARRAY, STATS_CATEGORIES } from "../../../Constants/constants";
-import { getMeditiationName, getToday } from "../../../Constants/functions";
+import { formatDateString, formatStringDate, getMeditiationName, getToday } from "../../../Constants/functions";
 import { StatisticObj } from "../../../Constants/interfaces";
 import BarDiscreteChart from "./BarDiscreteChart";
 import LineChart from "./LineChart";
@@ -13,16 +13,15 @@ import "./style.css";
 const StatsGraphsScreen: FC = () => {
 
   const firebase = useContext(FirebaseContext);
-  const [initialDate] = useState(new Date(getToday().getTime() - 4 * 7 * 24 * 3600 * 1000));
-  // const [initialDate, setInitialDate] = useState(new Date());
-  const [stats,setStats] = useState<StatisticObj[]>([])
-  // const history = useHistory();
+  const [initialDate, setInitialDate] = useState(new Date(getToday().getTime() - 4 * 7 * 24 * 3600 * 1000));
+  const [finalDate, setFinalDate]     = useState(new Date());
+  const [stats,setStats] = useState<StatisticObj[]>([]);
 
-  //Hooks for all the types of Graphs.
-  // const [barsData, setBarsData]   = useState(Array<Array<any>>());
-  // const [pieData, setPieData]     = useState(Array<Array<any>>());
-  // const [linesData, setLinesData] = useState(Array<any>());
-  // const [queryBarsData,setQueyBarsData] = useState<Array<any>>([]);
+  useEffect(() => {
+    firebase.getStatsWithDates(initialDate,finalDate)
+    .then((objs) => setStats(objs));
+    // eslint-disable-next-line
+  },[initialDate,finalDate]);
 
   // const downloadExcel = (e: any) => {
   //   e.preventDefault();
@@ -71,12 +70,6 @@ const StatsGraphsScreen: FC = () => {
   //   /* generate XLSX file and send to client */
   //   XLSX.writeFile(wb, `Data.xlsx`);
   // };
-
-  useEffect(() => {
-    firebase.getStatsWithDates(initialDate)
-    .then((objs) => setStats(objs));
-    // eslint-disable-next-line
-  }, []);
 
   const graphMostPopularMeditation = () => {
     const meditationStats = stats.filter((meditation) => meditation.category === STATS_CATEGORIES.mostPopularMeditation);
@@ -146,7 +139,32 @@ const StatsGraphsScreen: FC = () => {
       </Col>;
   }
 
+  const createDatePicker = (id: string, dateValue: Date, setValue : (a : Date) => void) => {
+    return <
+      Form.Control
+      type="date"
+      value={formatDateString(dateValue)}
+      onChange={(val) => setValue(formatStringDate(val.currentTarget.value))}
+    />;
+  }
+
   return <div id="Charts" >
+    <div id="datesPicker" >
+      <Row>
+        <Col xs={12} md={6}>
+          <div>
+            <h3>Fecha inicial</h3>
+            {createDatePicker("Initial Date Picker", initialDate, setInitialDate)}
+          </div>
+        </Col>
+        <Col xs={12} md={6}>
+          <div>
+            <h3>Fecha final</h3>
+            {createDatePicker("Initial Date Picker", finalDate, setFinalDate)}
+          </div>
+        </Col>
+      </Row>
+    </div>
     <Row>
       {graphMostPopularMeditation()}
       {graphPercentageOfUsers()}
