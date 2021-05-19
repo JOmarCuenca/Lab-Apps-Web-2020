@@ -5,7 +5,7 @@ import { Switch, Route } from "react-router-dom";
 import "./style.scss";
 import { useWindowSize } from "../../Constants/functions";
 import { Usuario } from "../../Constants/interfaces";
-import { ADD_NEW_ITEM_CODE } from "../../Constants/constants";
+import { ADD_NEW_ITEM_CODE, SUB_ADMIN_TAG } from "../../Constants/constants";
 import { FirebaseContext } from "../../API/Firebase";
 import EventosForm from "../Eventos/EditForm";
 import EventosMenu from "../Eventos/VisualizeMenu";
@@ -39,8 +39,18 @@ const Dashboard: React.FC<Props> = () => {
 				if (user === null) {
 					history.push("/login");
 				} else {
-					firebase.getUserByUID(user.uid).then((usuario) => {
+					firebase.getUserByUID(user.uid)
+					.then( async (usuario) => {
+						if(usuario.rol && usuario.rol === SUB_ADMIN_TAG && (usuario.delete_date! as any).toDate().getTime() < Date.now()){
+							await firebase.removeSubAdmin(usuario.uid);
+							window.alert("You no longer have access to this dashboard :(");
+							throw new Error("YOU SHALL NOT PASS!");
+						}
 						setUser(usuario);
+					})
+					.catch((err) => {
+						firebase.signout();
+						history.push("/login");
 					});
 				}
 			})

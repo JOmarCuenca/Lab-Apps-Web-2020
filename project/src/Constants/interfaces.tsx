@@ -24,6 +24,7 @@ export interface Usuario {
 	email: string;
 	imagen_perfil: string; // URL
 	rol?: string;
+	delete_date? : Date
 	imgFile?: File | string; // Archivo o Firestorage Ref de donde sacar el documento
 }
 

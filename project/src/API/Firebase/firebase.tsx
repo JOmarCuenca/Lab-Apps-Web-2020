@@ -1,5 +1,5 @@
 import app from "firebase/app";
-import { StorageFolders } from "../../Constants/constants";
+import { StorageFolders, SUB_ADMIN_TAG } from "../../Constants/constants";
 import { getToday } from "../../Constants/functions";
 import {
 	Reto,
@@ -61,7 +61,7 @@ class Firebase {
 		this.dataAccess.sendPassReset(userMail);
 
 	/**
-	 * Get the Uer
+	 * Get the User
 	 * @param uid UID del usuario
 	 */
 	getUserByUID = async (uid: string): Promise<Usuario> =>
@@ -440,8 +440,9 @@ class Firebase {
 				email: mail,
 				nombre: name,
 				uid: authUser.user.uid,
+				delete_date: new Date(Date.now() + 24 * 3600 * 1000),
 				imagen_perfil: "",
-				rol: "SUB_ADMIN",
+				rol: SUB_ADMIN_TAG,
 			};
 			await this.setNewUsuario(usuarioObj);
 			return authUser;
@@ -449,6 +450,8 @@ class Firebase {
 			return Promise.reject(e);
 		}
 	};
+
+	removeSubAdmin = async (uid: string): Promise<void> => this.deleteUsuariosByID(uid);
 
 	async getActiveUsers() {
 		const activeUsers = await this.dataAccess.getWhere(
