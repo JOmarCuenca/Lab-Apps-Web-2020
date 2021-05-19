@@ -117,7 +117,7 @@ const HomeScreen: React.FC<Props> = (p) => {
 							})}
 							<Col xs={12}>
 								<div className="expanded">
-									<h1 className="moreEventsBtn"><p onClick={() => history.push("dashboard/events")}>...</p></h1>
+									<h1 className="moreEventsBtn white"><p onClick={() => history.push("dashboard/events")}>...</p></h1>
 								</div>
 							</Col>
 						</Row>
@@ -152,7 +152,7 @@ const HomeScreen: React.FC<Props> = (p) => {
 									</Col>)}
 									<Col xs={12}>
 										<div className="expanded">
-										<h1 className="moreEventsBtn"><p onClick={() => history.push("dashboard/notifications")}>...</p></h1>
+										<h1 className="moreEventsBtn white"><p onClick={() => history.push("dashboard/notifications")}>...</p></h1>
 										</div>
 									</Col>
 								</Row>
