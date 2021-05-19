@@ -46,9 +46,13 @@ const NotifWidget : FC<Props> = (p) => {
     } 
 
     return <li className="NotifWidget" id="list">
+        <Row>
+        <Col xs={4}>
         <div className="divB">
             <h5 className="Child">{p.child.title}</h5>
         </div>
+        </Col>
+        <Col xs={8}>
             {isAlive() ? 
                 <div className="divB">
                     <button className="On">ON</button>
@@ -84,6 +88,8 @@ const NotifWidget : FC<Props> = (p) => {
                 X
             </button>
         </div>
+        </Col>
+        </Row>
         <hr></hr>
     </li>;
 };

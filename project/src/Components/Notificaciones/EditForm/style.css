@@ -136,17 +136,6 @@
     list-style-type: none;
   }
   
-  .ON {
-    background-color: #11a81f;
-    border-color: #11a81f;
-    border-radius: 5px;
-    color: white;
-  }
-  
-  .OFF {
-    border-color: black;
-    border-radius: 5px;
-  }
   
   .title2 {
     background-color: #3f969c;

@@ -12,32 +12,42 @@
 .Info {
     background: gray;
     color: white;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 14px;
+    padding-right: 14px;
 }
 
 .Info:hover {
     background: darkgray;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 14px;
+    padding-right: 14px;
 }
 
 .On {
     background: green;
     color: white;
-    border-radius: 50%;
-    width: 100%;
-    height: 100%;
-    font-weight: bold;
+    text-align: center;
+    padding: 7px;
     pointer-events: none;
 }
 
 .X {
     background: red;
-    border-radius: 50%;
-    width: 100%;
-    height: 100%;
-    font-weight: bold;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 14px;
+    padding-right: 14px;
 }
 
 .X:hover {
-    background: darkred;
+    background: rgb(161, 3, 3);
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 14px;
+    padding-right: 14px;
 }
 
 .tituloNot {
