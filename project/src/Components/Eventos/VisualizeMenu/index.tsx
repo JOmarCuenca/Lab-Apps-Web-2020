@@ -6,19 +6,34 @@ import { FirebaseContext } from "../../../API/Firebase";
 import { Evento } from "../../../Constants/interfaces";
 import EventContainer from "../../EventContainer";
 
+const EVENT_INCREASE_RATE = 4;
+
 const EventosMenu: React.FC = () => {
 	const firebase          				= useContext(FirebaseContext);
 	const history 							= useHistory();
 	const [recentEvents,setRecentEvents]    = useState<Evento[]>([]);
-	// const [changeStatus, setChangeStatus] 	= useState("");
+	const [numEvents,setNumEvents]			= useState(EVENT_INCREASE_RATE);
 
 	useEffect(() => {
-		firebase.getAllEventos().then(dbEvents => {
-			setRecentEvents(dbEvents);
-		});
+		firebase.getLimitedEvento(numEvents)
+		.then((events) => setRecentEvents(events))
+		.catch(err => console.log(err));
 		// eslint-disable-next-line
-	}, []);
+	}, [numEvents]);
 
+	function askForMoreEvents(){
+		if(recentEvents.length >= numEvents){
+			setNumEvents(numEvents + EVENT_INCREASE_RATE);
+		}
+	}
+
+	const moreEventsBtn = (recentEvents.length >= numEvents) ?
+		<Col xs={12}>
+			<div className="expanded">
+				<h1 className="moreEventsBtn" onClick={askForMoreEvents} >...</h1>
+			</div>
+		</Col> :
+		<></>;
 
     const renderItem = () => {
 	return (
@@ -37,11 +52,7 @@ const EventosMenu: React.FC = () => {
 									<EventContainer event={e}/>
 								</Col>;
 							})}
-							<Col xs={12}>
-								<div className="expanded">
-									<h1 className="moreEventsBtn"><a href="/dashboard/events">...</a></h1>
-								</div>
-							</Col>
+							{moreEventsBtn}
 						</Row>
 					}
 					</Card.Body>
