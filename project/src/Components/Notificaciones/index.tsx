@@ -19,6 +19,7 @@ const NotificationForm: FC = () => {
 	});
 	const [historyNotif, sethistoryNotif] = useState<Notificacion[]>([]);
 	const [notifsToShow, setNotifsToShow] = useState(NOTIFS_INCREASE_RATE);
+	const [searchTerm, setSearchTerm] = useState("");
 
 	const firebase = useContext(FirebaseContext);
 
@@ -38,6 +39,14 @@ const NotificationForm: FC = () => {
 		.then((notifications) => sethistoryNotif(notifications));
 		// eslint-disable-next-line
 	}, [notifsToShow]);
+
+	useEffect(() => {
+		sethistoryNotif((historyNotif) => {return historyNotif.filter((val) => {
+			if(val.title.toLowerCase().includes(searchTerm.toLowerCase())){
+				return val;
+			}
+		})})
+	}, [searchTerm]);
 
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -138,6 +147,13 @@ const NotificationForm: FC = () => {
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
+						<input 
+							type="text" 
+							placeholder="Buscar..." 
+							onChange={event => 
+								{setSearchTerm(event.target.value)
+							}}
+						/>
 						{historyNotif.map( (n, i) => <NotifWidget key={`notification_${i}`} index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
 						{createFooter}
 					</div>
