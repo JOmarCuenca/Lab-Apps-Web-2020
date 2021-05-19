@@ -64,6 +64,7 @@
 
 .moreEventsBtn {
     cursor: pointer;
+    color:rgb(52, 157, 153);
     margin: auto;
     padding: 1px;
     width: 50%;

@@ -1,9 +1,7 @@
-import { TextareaAutosize } from "@material-ui/core";
-import firebase from "firebase";
 import React, { FC, useState,  useContext} from "react";
-import { FirebaseContext } from "../../../../API/Firebase";
-import { Col, Form, Row, Button, Modal} from "react-bootstrap";
-import { Notificacion } from "../../../../Constants/interfaces";
+import { FirebaseContext } from "../../../API/Firebase";
+import { Col, Row, Button, Modal} from "react-bootstrap";
+import { Notificacion } from "../../../Constants/interfaces";
 
 import "./style.css";
 

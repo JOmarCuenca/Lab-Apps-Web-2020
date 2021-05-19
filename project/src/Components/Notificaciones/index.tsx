@@ -1,13 +1,12 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { Col, Form, Row, Button, Modal} from "react-bootstrap";
-import { FirebaseContext } from "../../../API/Firebase";
-import { Notificacion } from "../../../Constants/interfaces";
+import { Col, Form, Row } from "react-bootstrap";
+import { FirebaseContext } from "../../API/Firebase";
+import { Notificacion } from "../../Constants/interfaces";
 import NotifWidget from "./NotifTile";
 
 import "./style.css";
 
-var limit = 6;
-var aux = 0;
+const NOTIFS_INCREASE_RATE = 4;
 
 const NotificationForm: FC = () => {
 	// const { id } = useParams<{ id: string }>();
@@ -18,9 +17,8 @@ const NotificationForm: FC = () => {
 		fecha: new Date(),
 		lifetime: 24,
 	});
-	const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
-	const [deleting, setDeleting] = useState<boolean>(false);
 	const [historyNotif, sethistoryNotif] = useState<Notificacion[]>([]);
+	const [notifsToShow, setNotifsToShow] = useState(NOTIFS_INCREASE_RATE);
 
 	const firebase = useContext(FirebaseContext);
 
@@ -32,16 +30,18 @@ const NotificationForm: FC = () => {
 			fecha: new Date(),
 			lifetime: 24,
 		});
-		firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
-			sethistoryNotif(lista);});
-		// }
 		// eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		firebase.getLimitedNotification(notifsToShow, historyNotif.length)
+		.then((notifications) => sethistoryNotif(notifications));
+		// eslint-disable-next-line
+	}, [notifsToShow]);
 
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		setLoadingSubmit(true);
 		let message = "Se ha subido la notificación";
 		let failure = false;
 		const copy = item!;
@@ -54,7 +54,6 @@ const NotificationForm: FC = () => {
 			message =
 				"Ha ocurrido un error, revise que toda la información sea correcta,\nY que tiene buena conexión de internet.";
 		}
-		setLoadingSubmit(false);
 		window.alert(message);
 		if(!failure){
 			sethistoryNotif([
@@ -71,32 +70,25 @@ const NotificationForm: FC = () => {
 		}
 	};
 
-	// const execDelete = async () => {
-	// 	setDeleting(true);
-	// 	// firebase.firestore.collection("Products").doc(id).delete().then(e => {
-	// 	// 	window.alert("Objeto borrado");
-	// 	// 	history.push("/dashboard/menu");
-	// 	// }).catch(e => {
-	// 	// 	console.log(e);
-	// 	// 	setDeleting(false);
-	// 	// 	window.alert("Ha ocurrido un error y no se ha podido borrar el objeto.");
-	// 	// });
-	// };
-
 	const deleteFromList = (index : number) => {
         const copy = Array.from(historyNotif);
         copy.splice(index, 1);
         sethistoryNotif(copy);
-        firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
-            sethistoryNotif(lista);});
     }
 
 	const cargarMas = () => {
-        aux = limit + 3;
-        limit = aux;
-        firebase.getLimitedNotification(limit, historyNotif.length).then((lista) => { 
-            sethistoryNotif(lista);});
+        if(historyNotif.length >= notifsToShow){
+			setNotifsToShow(notifsToShow + NOTIFS_INCREASE_RATE);
+		}
     }
+
+	const createFooter = (historyNotif.length >= notifsToShow) ?
+	<footer className="expanded">
+		<h1 className="moreEventsBtn" onClick={cargarMas}>
+			...
+		</h1>
+	</footer> :
+	<></>;
 
 	const renderItem = () => {
 		return (
@@ -147,11 +139,7 @@ const NotificationForm: FC = () => {
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
 						{historyNotif.map( (n, i) => <NotifWidget key={`notification_${i}`} index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
-						<footer>
-                            <button className="cargarMas" onClick={cargarMas}>
-                                ...
-                            </button>
-                        </footer>
+						{createFooter}
 					</div>
 				</Col>
 			</Row>

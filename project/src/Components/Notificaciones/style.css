@@ -35,6 +35,7 @@
   
   .maindiv {
     white-space: nowrap;
+    justify-content: center;
     overflow-x: auto;
     overflow-y: auto;
     border-color: #3f969c;
