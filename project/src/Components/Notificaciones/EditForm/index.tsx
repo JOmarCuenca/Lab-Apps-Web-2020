@@ -147,10 +147,10 @@ const NotificationForm: FC = () => {
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
 						{historyNotif.map( (n, i) => <NotifWidget key={`notification_${i}`} index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
-						<footer>
-                            <button className="cargarMas" onClick={cargarMas}>
+						<footer className="expanded">
+                            <h1 className="moreEventsBtn" onClick={cargarMas}>
                                 ...
-                            </button>
+                            </h1>
                         </footer>
 					</div>
 				</Col>
