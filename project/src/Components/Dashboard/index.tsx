@@ -14,7 +14,7 @@ import pbIcon from "../../Assets/img/PuntoBlanco_icon.png";
 import Configuracion from "../Configuracion";
 import profilepicture from "../../Assets/img/profilepicture.png";
 import StatsScreen from "../Stats";
-import NotificationForm from "../Notificaciones/EditForm";
+import NotificationForm from "../Notificaciones";
 import SubAdminWindow from "../SubAdmin";
 
 interface Props {}
