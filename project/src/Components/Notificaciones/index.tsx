@@ -83,6 +83,10 @@ const NotificationForm: FC = () => {
 				copy,
 				...historyNotif
 			]);
+			sethistoryNotifC([
+				copy,
+				...historyNotif
+			])
 			setItem({
 				id: "",
 				title : "",
@@ -91,6 +95,7 @@ const NotificationForm: FC = () => {
 				lifetime: 24
 			});
 		}
+		window.location.reload();
 	};
 	
 	const deleteFromList = (index : number) => {
