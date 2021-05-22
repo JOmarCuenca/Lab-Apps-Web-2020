@@ -102,10 +102,14 @@ const NotificationForm: FC = () => {
         const copy = Array.from(historyNotif);
         copy.splice(index, 1);
         sethistoryNotif(copy);
+		sethistoryNotifC(copy);
 		if(deleteInSearch == 0){
 			firebase.getAllNotifications().then((notifications) => sethistoryNotif(notifications))
 			setSearchTerm("");
+			firebase.getAllNotifications().then((notifications) => sethistoryNotifC(notifications))
+			setSearchTerm("");
 			(document.getElementById("searchInput") as HTMLInputElement).value = "";
+			deleteInSearch = 1;
 		}
     }
 
