@@ -7,6 +7,8 @@ import NotifWidget from "./NotifTile";
 import "./style.css";
 
 const NOTIFS_INCREASE_RATE = 4;
+var a = 1;
+var deleteInSearch = 1;
 
 const NotificationForm: FC = () => {
 	// const { id } = useParams<{ id: string }>();
@@ -19,6 +21,8 @@ const NotificationForm: FC = () => {
 	});
 	const [historyNotif, sethistoryNotif] = useState<Notificacion[]>([]);
 	const [notifsToShow, setNotifsToShow] = useState(NOTIFS_INCREASE_RATE);
+	const [searchTerm, setSearchTerm] = useState("");
+	const [historyNotifC, sethistoryNotifC] = useState<Notificacion[]>([]);
 
 	const firebase = useContext(FirebaseContext);
 
@@ -34,10 +38,29 @@ const NotificationForm: FC = () => {
 	}, []);
 
 	useEffect(() => {
-		firebase.getLimitedNotification(notifsToShow, historyNotif.length)
-		.then((notifications) => sethistoryNotif(notifications));
+		/*firebase.getLimitedNotification(notifsToShow, historyNotif.length)
+		.then((notifications) => sethistoryNotif(notifications));*/
+		firebase.getAllNotifications().then((notifications) => sethistoryNotif(notifications));
+		firebase.getAllNotifications().then((notifications) => sethistoryNotifC(notifications));
 		// eslint-disable-next-line
-	}, [notifsToShow]);
+	}, []);
+
+
+	useEffect(() => {
+		sethistoryNotif((historyNotif) => {return historyNotifC.filter((val) => {
+			if(searchTerm == "" && a == 1){
+				console.log("A");
+				a = 0;
+				return historyNotifC;
+			}
+			else if(val.title.toLowerCase().includes(searchTerm.toLowerCase())){
+				console.log("B");
+				deleteInSearch = 0;
+				return val;
+			}
+		})})
+		a = 1;
+	}, [searchTerm]);
 
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -60,6 +83,10 @@ const NotificationForm: FC = () => {
 				copy,
 				...historyNotif
 			]);
+			sethistoryNotifC([
+				copy,
+				...historyNotif
+			])
 			setItem({
 				id: "",
 				title : "",
@@ -68,15 +95,21 @@ const NotificationForm: FC = () => {
 				lifetime: 24
 			});
 		}
+		window.location.reload();
 	};
-
+	
 	const deleteFromList = (index : number) => {
         const copy = Array.from(historyNotif);
         copy.splice(index, 1);
         sethistoryNotif(copy);
+		if(deleteInSearch == 0){
+			firebase.getAllNotifications().then((notifications) => sethistoryNotif(notifications))
+			setSearchTerm("");
+			(document.getElementById("searchInput") as HTMLInputElement).value = "";
+		}
     }
 
-	const cargarMas = () => {
+	/*const cargarMas = () => {
         if(historyNotif.length >= notifsToShow){
 			setNotifsToShow(notifsToShow + NOTIFS_INCREASE_RATE);
 		}
@@ -88,7 +121,7 @@ const NotificationForm: FC = () => {
 			...
 		</h1>
 	</footer> :
-	<></>;
+	<></>;*/
 
 	const renderItem = () => {
 		return (
@@ -138,8 +171,16 @@ const NotificationForm: FC = () => {
 				<Col xl={4} xs={12}>
 					<h4 className="h">Historial</h4>
 					<div className="maindiv1 overflow-auto">
+						<input 
+							type="text" 
+							id = "searchInput"
+							placeholder="Buscar..." 
+							onChange={event => 
+								{setSearchTerm(event.target.value)
+							}}
+						/>
 						{historyNotif.map( (n, i) => <NotifWidget key={`notification_${i}`} index={i} child={n} alterScreen={setItem} deleteFromList={deleteFromList} />)}
-						{createFooter}
+						
 					</div>
 				</Col>
 			</Row>
