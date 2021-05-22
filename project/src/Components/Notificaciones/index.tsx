@@ -109,6 +109,7 @@ const NotificationForm: FC = () => {
 			firebase.getAllNotifications().then((notifications) => sethistoryNotifC(notifications))
 			setSearchTerm("");
 			(document.getElementById("searchInput") as HTMLInputElement).value = "";
+			deleteInSearch = 1;
 		}
     }
 
