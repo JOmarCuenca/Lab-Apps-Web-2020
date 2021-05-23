@@ -6,12 +6,11 @@ import NotifWidget from "./NotifTile";
 
 import "./style.css";
 
-const NOTIFS_INCREASE_RATE = 4;
 var a = 1;
 var deleteInSearch = 1;
 
 const NotificationForm: FC = () => {
-	// const { id } = useParams<{ id: string }>();
+
 	const [item, setItem] = useState<Notificacion>({
 		id: "",
 		title : "",
@@ -20,7 +19,6 @@ const NotificationForm: FC = () => {
 		lifetime: 24,
 	});
 	const [historyNotif, sethistoryNotif] = useState<Notificacion[]>([]);
-	const [notifsToShow, setNotifsToShow] = useState(NOTIFS_INCREASE_RATE);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [historyNotifC, sethistoryNotifC] = useState<Notificacion[]>([]);
 
@@ -34,33 +32,30 @@ const NotificationForm: FC = () => {
 			fecha: new Date(),
 			lifetime: 24,
 		});
+		getRemoteNotifications();
 		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
-		/*firebase.getLimitedNotification(notifsToShow, historyNotif.length)
-		.then((notifications) => sethistoryNotif(notifications));*/
-		firebase.getAllNotifications().then((notifications) => sethistoryNotif(notifications));
-		firebase.getAllNotifications().then((notifications) => sethistoryNotifC(notifications));
-		// eslint-disable-next-line
-	}, []);
-
-
-	useEffect(() => {
-		sethistoryNotif((historyNotif) => {return historyNotifC.filter((val) => {
-			if(searchTerm == "" && a == 1){
-				console.log("A");
-				a = 0;
-				return historyNotifC;
-			}
-			else if(val.title.toLowerCase().includes(searchTerm.toLowerCase())){
-				console.log("B");
-				deleteInSearch = 0;
-				return val;
-			}
-		})})
+		if(searchTerm === "" && a === 1){
+			a = 0;
+			sethistoryNotif(historyNotifC);
+		}
+		sethistoryNotif(historyNotifC.filter((val) => {
+			deleteInSearch = 0;
+			return (val.title.toLowerCase().includes(searchTerm.toLowerCase()));
+		}));
 		a = 1;
+		// eslint-disable-next-line
 	}, [searchTerm]);
+
+	function getRemoteNotifications(){
+		firebase.getAllNotifications().then((notifications) => {
+			const orderedNotifs = notifications.sort((a,b) => b.fecha.getTime() - a.fecha.getTime());
+			sethistoryNotifC(orderedNotifs);
+			sethistoryNotif(orderedNotifs);
+		});
+	}
 
 	const submitChanges = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -69,8 +64,7 @@ const NotificationForm: FC = () => {
 		let failure = false;
 		const copy = item!;
 		try {
-			await firebase.setNewNotificacion(copy);
-			console.log(copy);
+			copy.id = await firebase.setNewNotificacion(copy);
 		} catch (e) {
 			console.log(e);
 			failure = true;
@@ -95,7 +89,7 @@ const NotificationForm: FC = () => {
 				lifetime: 24
 			});
 		}
-		window.location.reload();
+		// window.location.reload();
 	};
 	
 	const deleteFromList = (index : number) => {
@@ -103,29 +97,13 @@ const NotificationForm: FC = () => {
         copy.splice(index, 1);
         sethistoryNotif(copy);
 		sethistoryNotifC(copy);
-		if(deleteInSearch == 0){
-			firebase.getAllNotifications().then((notifications) => sethistoryNotif(notifications))
-			setSearchTerm("");
-			firebase.getAllNotifications().then((notifications) => sethistoryNotifC(notifications))
+		if(deleteInSearch === 0){
+			getRemoteNotifications();
 			setSearchTerm("");
 			(document.getElementById("searchInput") as HTMLInputElement).value = "";
 			deleteInSearch = 1;
 		}
     }
-
-	/*const cargarMas = () => {
-        if(historyNotif.length >= notifsToShow){
-			setNotifsToShow(notifsToShow + NOTIFS_INCREASE_RATE);
-		}
-    }
-
-	const createFooter = (historyNotif.length >= notifsToShow) ?
-	<footer className="expanded">
-		<h1 className="moreEventsBtn" onClick={cargarMas}>
-			...
-		</h1>
-	</footer> :
-	<></>;*/
 
 	const renderItem = () => {
 		return (
