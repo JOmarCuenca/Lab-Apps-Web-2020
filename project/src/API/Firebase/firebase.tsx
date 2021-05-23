@@ -305,11 +305,12 @@ class Firebase {
 
 	// Notifications section
 
-	setNewNotificacion = async (obj: Notificacion): Promise<void> => {
-		await this.dataAccess.writeDoc(
+	setNewNotificacion = async (obj: Notificacion): Promise<string> => {
+		const result = (await this.dataAccess.writeDoc(
 			NOTIFICACIONES_COLLECTION_TAG,
 			this.cleanNotificacion(obj)
-		);
+		)) as app.firestore.DocumentReference<app.firestore.DocumentData>;
+		return result.id;
 	};
 
 	getAllNotifications = async (): Promise<Notificacion[]> => {

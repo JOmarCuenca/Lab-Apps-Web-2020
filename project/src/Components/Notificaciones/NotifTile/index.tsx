@@ -11,6 +11,7 @@ interface Props {
     deleteFromList : (i: number) => void,
     alterScreen : (val: Notificacion) => void;
 }
+
 const NotifWidget : FC<Props> = (p) => {
 
     const firebase = useContext(FirebaseContext);
