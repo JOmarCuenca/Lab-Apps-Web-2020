@@ -160,7 +160,7 @@ const SignUp: React.FC = () => {
 
             <button
               onClick={signUpBtn}
-              className="btn btn-primary-new shadow-2 mb-4"
+              className="shy shadow-2 mb-4"
               style={{ backgroundColor: "#04a9f5", color: "white" }}
             >
               {loading ? 
