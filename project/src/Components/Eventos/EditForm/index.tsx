@@ -31,10 +31,8 @@ const EventosForm: FC<Props> = ({event}) => {
 	const history = useHistory();
 
 	useEffect(() => {
-		if(event) {
+		if(event)
 			setItem(event);
-		    console.log(event);
-		}
 		else
 			setItem({
 				id: "",
@@ -65,7 +63,6 @@ const EventosForm: FC<Props> = ({event}) => {
 			return;
 		}
 		setImage(files.item(0)!);
-		console.log(files.item(0)?.name);
 		return;
 	};
 
@@ -121,7 +118,6 @@ const EventosForm: FC<Props> = ({event}) => {
 												...item!,
 												nombre: str.currentTarget.value,
 											});
-											console.log(item!.nombre);
 										}}
 										required={true}
 										type='text'

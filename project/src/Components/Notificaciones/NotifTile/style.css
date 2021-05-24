@@ -34,7 +34,7 @@
     pointer-events: none;
 }
 
-.X {
+#closeBtn {
     background: red;
     padding-top: 7px;
     padding-bottom: 7px;
@@ -42,7 +42,7 @@
     padding-right: 14px;
 }
 
-.X:hover {
+#closeBtn:hover {
     background: rgb(161, 3, 3);
     padding-top: 7px;
     padding-bottom: 7px;

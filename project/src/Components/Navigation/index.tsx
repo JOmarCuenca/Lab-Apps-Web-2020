@@ -134,7 +134,9 @@ const Navigation: React.FC<Props> = (p) => {
 
   function getUserName(){
     const namesSeparated = p.user.nombre.split(" ");
-    return namesSeparated.length < 1 ? "Usuario" : namesSeparated[0];
+    if(namesSeparated.length < 1)
+      return "User";
+    return namesSeparated[0];
   }
 
   function getAccesibleNavItems(){
@@ -233,8 +235,9 @@ const Navigation: React.FC<Props> = (p) => {
               src={(p.user.imagen_perfil && p.user.imagen_perfil.length > 0) ? p.user.imagen_perfil : AvatarIcon}
             />
           </Col>
-          <Col className="userName" md={9}>
+          <Col id="userName" md={9}>
             <p>{getUserName()}</p>
+            {/* <p>Admin</p> */}
           </Col>
           <br />
           <br />

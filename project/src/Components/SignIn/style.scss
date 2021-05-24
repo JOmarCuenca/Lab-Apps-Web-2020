@@ -11,7 +11,7 @@ $success-color: #1de9b6;
 /**  =====================
       Authentication css start
 ==========================  **/
-*{
+* {
     font-family: 'Roboto', sans-serif;
 }
 
@@ -19,6 +19,15 @@ $success-color: #1de9b6;
     height: 100vh;
     padding: 10px;
     width: 100vw;
+}
+
+.shy {
+    font-weight: normal;
+}
+
+.shy:hover {
+	background-color: $primary-color-darker !important;
+    font-weight: bold;
 }
 
 .center > * {
@@ -163,17 +172,6 @@ $success-color: #1de9b6;
     }
 }
 
-.btn-primary-new{
-    padding: 10px 23px;
-    background-color: $primary-color;
-    color: white;
-}
-
-.btn-primary-new:hover{
-    background-color: $primary-color-darker;
-    color: white;
-}
-
 .input-group {
     background: $theme-background;
 
@@ -188,11 +186,6 @@ $success-color: #1de9b6;
 
     .custom-file-label {
         margin-bottom: 0;
-    }
-
-    .btn {
-        margin-bottom: 0;
-        margin-right: 0;
     }
 }
 
