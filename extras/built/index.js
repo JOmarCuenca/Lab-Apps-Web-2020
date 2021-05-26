@@ -178,8 +178,7 @@ async function uploadStatsTest(){
     await batch.commit();
 }
 
-async function setActiveUsers(){
-    const number = 200;
+async function setActiveUsers(number){
     let batch;
     for(var i = 0 ; i < number ; i++){
         if(i%200 === 0){
@@ -194,7 +193,8 @@ async function setActiveUsers(){
 }
 
 function mainFunction(){
-    const future = uploadStatsTest();
+    // const future = uploadStatsTest();
+    const future = setActiveUsers(2800);
     future
     .catch((e) => console.log(e))
     .finally(() => console.log("Done"));
