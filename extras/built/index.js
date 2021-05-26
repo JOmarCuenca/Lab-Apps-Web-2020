@@ -192,9 +192,23 @@ async function setActiveUsers(number){
     await batch.commit();
 }
 
+async function deleteActiveUsers(number){
+    let batch;
+    for(var i = 0 ; i < number ; i++){
+        if(i%200 === 0){
+            if(batch){
+                await batch.commit();
+            }
+            batch = db.batch();
+        }
+        batch.delete(db.collection("users").doc(`stats_test_${i}`));
+    }
+    await batch.commit();
+}
+
 function mainFunction(){
     // const future = uploadStatsTest();
-    const future = setActiveUsers(2800);
+    const future = deleteActiveUsers(2800);
     future
     .catch((e) => console.log(e))
     .finally(() => console.log("Done"));
