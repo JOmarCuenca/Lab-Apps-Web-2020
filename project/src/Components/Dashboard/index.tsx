@@ -41,7 +41,7 @@ const Dashboard: React.FC<Props> = () => {
 				} else {
 					firebase.getUserByUID(user.uid)
 					.then( async (usuario) => {
-						if(usuario.rol && usuario.rol === SUB_ADMIN_TAG && (usuario.delete_date! as any).toDate().getTime() < Date.now()){
+						if(usuario.rol && usuario.rol === SUB_ADMIN_TAG && (usuario.delete_date!).getTime() < Date.now()){
 							await firebase.removeSubAdmin(usuario.uid);
 							window.alert("You no longer have access to this dashboard :(");
 							throw new Error("YOU SHALL NOT PASS!");
@@ -49,6 +49,7 @@ const Dashboard: React.FC<Props> = () => {
 						setUser(usuario);
 					})
 					.catch((err) => {
+						console.log(err);
 						firebase.signout();
 						history.push("/login");
 					});

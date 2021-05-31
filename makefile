@@ -2,7 +2,7 @@ buildAndDeploy:
 	@echo "######################## Building Project ###################################"
 	@echo ""
 	@echo ""
-	cd project && yarn && yarn build
+	cd project && yarn && yarn upgrade && yarn build
 	@echo "#################### Replacing Firebase Public Directory ####################"
 	@echo ""
 	@echo ""

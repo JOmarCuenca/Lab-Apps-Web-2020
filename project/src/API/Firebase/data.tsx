@@ -5,15 +5,14 @@ import "firebase/storage";
 import { Usuario } from "../../Constants/interfaces";
 
 const firebaseConfig = {
-	apiKey: "AIzaSyCplhL4TQUpmTDmgDGUXzC6ipykmQ6HM_E",
-	authDomain: "punto-b84a8.firebaseapp.com",
-	databaseURL: "https://punto-b84a8.firebaseio.com",
-	projectId: "punto-b84a8",
-	storageBucket: "punto-b84a8.appspot.com",
-	messagingSenderId: "597623444685",
-	appId: "1:597623444685:web:87028dc2feeacaf6794584",
-	measurementId: "G-K8E5LDDGY2",
-};
+    apiKey: "AIzaSyBAVX3_Gwe3ucuMOvSocvezLf5cgSf6suo",
+    authDomain: "punto-dev-d9d2c.firebaseapp.com",
+    projectId: "punto-dev-d9d2c",
+    storageBucket: "punto-dev-d9d2c.appspot.com",
+    messagingSenderId: "462541076427",
+    appId: "1:462541076427:web:dd4aacd73cb5cc9c18284e",
+    measurementId: "G-CC9JSXYSQL"
+  };
 
 export enum QueryCondition {
     notEqual,
@@ -60,7 +59,19 @@ export class DataAccess {
         }
     }
 
-    
+    private toUsuario = (
+		obj: app.firestore.DocumentData
+	): Usuario => {
+		return {
+			uid: obj.uid,
+			nombre: obj.nombre,
+			email: obj.email,
+			imagen_perfil: obj.imagen_perfil,
+			rol: obj.rol ?? "",
+            delete_date : (obj.delete_date) ? new Date(obj.delete_date as string) : undefined
+		};
+	}
+
     public get storageAccess() {
         return this.storage;
     }
@@ -127,7 +138,7 @@ export class DataAccess {
             const user = (
                 await this.firestore.collection("Usuarios").doc(uid).get()
             ).data();
-            return user as Usuario;
+            return this.toUsuario(user!);
         } catch (err) {
             return Promise.reject(err);
         }

@@ -208,7 +208,7 @@ async function deleteActiveUsers(number){
 
 function mainFunction(){
     // const future = uploadStatsTest();
-    const future = deleteActiveUsers(2800);
+    const future = setActiveUsers(100);
     future
     .catch((e) => console.log(e))
     .finally(() => console.log("Done"));

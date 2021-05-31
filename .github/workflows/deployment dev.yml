@@ -1,0 +1,22 @@
+name: Deployment To Firebase WebSite
+
+on:
+  push:
+    branches : [dev]
+    paths :
+     - project/**
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: buildAndDeploy
+        run: 
+          make compile-deploy-action
+      - uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.DEV_FIREBASE_TOKEN }}
+          PROJECT_PATH: firebase
