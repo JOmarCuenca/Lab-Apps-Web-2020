@@ -50,8 +50,8 @@ const Configuracion: FC<Props> = ({ usuario }) => {
 				if (image !== undefined) {
 					copy.imgFile = image;
 				}
+				// console.log(copy);
 				await firebase.updateUsuario(copy);
-				console.log(copy);
 			} catch (e) {
 				console.log(e);
 				message =

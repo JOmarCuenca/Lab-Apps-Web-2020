@@ -209,6 +209,13 @@ class Firebase {
 	};
 
 	updateUsuario = async (obj: Usuario): Promise<void> => {
+		let cleanObj : any = {
+			uid: obj.uid,
+			nombre: obj.nombre,
+			email: obj.email,
+			rol: obj.rol ?? "",
+		}
+
 		if (obj.imgFile && typeof obj.imgFile === "object") {
 			const fileName = `${obj.uid}.png`;
 			obj.imagen_perfil = await this.uploadUserProfileImage(
@@ -216,8 +223,13 @@ class Firebase {
 				obj.imgFile!
 			);
 			obj.imgFile = `${StorageFolders.image}/${fileName}`;
+			cleanObj = {
+				...cleanObj,
+				imgFile : obj.imgFile,
+				imagen_perfil : obj.imagen_perfil
+			}
 		}
-		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, obj);
+		return this.dataAccess.updateDoc(USER_COLLECTION_TAG, obj.uid, cleanObj);
 	};
 
 	updateUsuarioEmail = async (uid: string, email: string): Promise<void> => {
